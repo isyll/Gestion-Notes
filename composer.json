@@ -1,0 +1,17 @@
+{
+    "name": "isyll/gestion-notes",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/",
+            "Core\\": "core/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Ibrahima Sylla",
+            "email": "syllaisa6@gmail.com"
+        }
+    ],
+    "require": {}
+}
