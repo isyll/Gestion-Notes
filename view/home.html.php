@@ -1,3 +1,3 @@
-<div>
-  okok
-</div>
+<?php
+include 'parts/dashboard.html.php';
+?>

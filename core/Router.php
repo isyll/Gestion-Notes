@@ -98,7 +98,8 @@ class Router
         $urls = [];
 
         foreach ($this->path as $path => $values) {
-            $urls[$values['name']] = $path;
+            if (!empty($values['name']))
+                $urls[$values['name']] = $path;
         }
 
         return $urls;

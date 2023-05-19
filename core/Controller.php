@@ -11,7 +11,7 @@ class Controller
         $this->db = $db;
     }
 
-    public function render(string $file, array $data = [], bool $extendLayout = true) : string
+    public function render(string $file, array $data = [], bool $extendLayout = true): string
     {
         if (!empty($data) && !array_is_list($data))
             extract($data);
@@ -29,7 +29,7 @@ class Controller
         return $content;
     }
 
-    public static function getBaseURL() : string
+    public static function getBaseURL(): string
     {
         if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
             $url = 'https';
@@ -38,5 +38,29 @@ class Controller
 
         $url .= "://{$_SERVER['HTTP_HOST']}";
         return $url;
+    }
+
+    public function jsonDecode()
+    {
+        $jsonDatas = file_get_contents('php://input');
+        return json_decode($jsonDatas, true);
+    }
+
+    public function jsonResponse(
+        int $code,
+        string $codeMsg,
+        string $msg,
+        array $datas = null
+    ) {
+        header($codeMsg);
+
+        $results = [
+            "code" => $code,
+            "message" => $msg,
+            "datas" => $datas ?? []
+        ];
+
+        header('content-type:application/json;charset=utf-8');
+        echo json_encode($results);
     }
 }
