@@ -7,54 +7,46 @@
   <hr>
   <ul class="nav nav-pills flex-column mb-auto">
     <li class="nav-item">
-      <a href="<?= $urls['students'] ?>" class="nav-link {{ current == 'students' ? 'active' : '' }}"
+      <a href="<?= $urls['students'] ?>" class="text-white nav-link <?= $current == 'students' ? 'active' : '' ?>"
         aria-current="page">
-        {# <svg class="bi me-2" width="16" height="16">
+        <!-- <svg class="bi me-2" width="16" height="16">
           <use xlink:href=""></use>
-        </svg> #}
+        </svg>  -->
         &Eacute;lèves
       </a>
     </li>
     <li>
-      <a href="{{ getURL('classes') }}" class="nav-link text-white {{ current == 'classes' ? 'active' : '' }}">
-        {# <svg class="bi me-2" width="16" height="16">
+      <a href="<?= $urls['classes'] ?>" class="nav-link text-white <?= $current == 'classes' ? 'active' : '' ?>">
+        <!-- <svg class="bi me-2" width="16" height="16">
           <use xlink:href="#speedometer2"></use>
-        </svg> #}
+        </svg> -->
         Classes
       </a>
     </li>
     <li>
-      <a href="{{ getURL('niveaux') }}" class="nav-link text-white {{ current == 'niveaux' ? 'active' : '' }}">
-        {# <svg class="bi me-2" width="16" height="16">
+      <a href="<?= $urls['niveaux'] ?>" class="nav-link text-white <?= $current == 'niveaux' ? 'active' : '' ?>">
+        <!-- <svg class="bi me-2" width="16" height="16">
           <use xlink:href="#speedometer2"></use>
-        </svg> #}
+        </svg> -->
         Niveaux
       </a>
     </li>
     <li>
-      <a href="{{ getURL('teachers') }}" class="nav-link text-white {{ current == 'teachers' ? 'active' : '' }}">
-        {# <svg class="bi me-2" width="16" height="16">
+      <a href="<?= $urls['teachers'] ?>" class="nav-link text-white <?= $current == 'teachers' ? 'active' : '' ?>">
+        <!-- <svg class="bi me-2" width="16" height="16">
           <use xlink:href="#table"></use>
-        </svg> #}
+        </svg> -->
         Professeurs
       </a>
     </li>
     <li>
-      <a href="{{ getURL('courses') }}" class="nav-link text-white {{ current == 'students' ? 'courses' : '' }}">
-        {# <svg class="bi me-2" width="16" height="16">
+      <a href="<?= $urls['courses'] ?>" class="nav-link text-white <?= $current == 'students' ? 'courses' : '' ?>">
+        <!-- <svg class="bi me-2" width="16" height="16">
           <use xlink:href="#grid"></use>
-        </svg> #}
+        </svg> -->
         Cours
       </a>
     </li>
-    {# <li>
-      <a href="#" class="nav-link text-white">
-        <svg class="bi me-2" width="16" height="16">
-          <use xlink:href="#people-circle"></use>
-        </svg>
-        Customers
-      </a>
-    </li> #}
   </ul>
   <hr>
   <div class="dropdown">
