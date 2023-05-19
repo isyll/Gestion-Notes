@@ -1,4 +1,4 @@
-<form action="/login" method="post">
+<form action="<?= $urls['login'] ?>" method="post">
   <div class="mb-3">
     <label for="email" class="form-label">Adresse email</label>
     <input type="email" class="form-control" id="email">
