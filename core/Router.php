@@ -74,7 +74,7 @@ class Router
                 (!empty($request_methods) && in_array($method, $request_methods))
             ) {
                 try {
-                    eval("use {$this->ns}\\$class;(new $class(\$this->db))->$action();");
+                    eval("use {$this->ns}\\$class;(new $class(\$this->db, \$this))->$action();");
                 }
                 catch (\Exception $e) {
                     echo $e->getMessage();
@@ -91,6 +91,17 @@ class Router
 
             eval("use {$this->ns}\\$class;(new $class(\$this->db))->$action();");
         }
+    }
+
+    public function getURLs()
+    {
+        $urls = [];
+
+        foreach ($this->path as $path => $values) {
+            $urls[$values['name']] = $path;
+        }
+
+        return $urls;
     }
 
     public function getURL(string $name)
