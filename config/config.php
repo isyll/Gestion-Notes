@@ -12,23 +12,17 @@ $GLOBALS['baseURL']   = Controller::getBaseURL();
 
 $db = new Database(dbname: 'gnotes', user: 'isyll', password: 'xCplm_');
 
-$router = new Router(ns: 'App\Controller', db: $db);
-$router->register(name: 'home', path: '/', handler: ['HomeController', 'index']);
-$router->register(name: 'students', handler: ['AdminController', 'students']);
-$router->register(name: 'niveaux', handler: ['AdminController', 'niveaux']);
-$router->register(name: 'classes', handler: ['AdminController', 'classes']);
-$router->add404(['Page404Controller', 'index']);
-$router->execute();
+Router::$db        = $db;
+Router::$namespace = 'App\\Controller';
+Router::register(name: 'home', path: '/', handler: ['HomeController', 'index']);
+Router::register(name: 'students', handler: ['AdminController', 'students']);
+Router::register(name: 'niveaux', handler: ['AdminController', 'niveaux']);
+Router::register(name: 'classes', handler: ['AdminController', 'classes']);
+Router::add404(['Page404Controller', 'index']);
+Router::execute();
 
 $acdbTable = 'accesscontrol';
-
-if ($pos = AccessControl::dbUp($db, $acdbTable)) {
-  AccessControl::loadFromDatabase($db, $acdbTable);
-} else {
-  AccessControl::loadFromJSON(dirname(__DIR__) . '/config/permissions.json');
-  AccessControl::update($db, $acdbTable);
-}
-
+AccessControl::loadFromDatabase($db, $acdbTable);
 $GLOBALS['access'] = AccessControl::getDatas();
 
 set_error_handler(function ($errno, $errstr, $errfile, $errline) {

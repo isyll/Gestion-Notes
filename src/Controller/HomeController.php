@@ -10,16 +10,15 @@ class HomeController extends Controller
 {
   private Router $router;
 
-  public function __construct(Database $db, Router $router)
+  public function __construct(Database $db)
   {
     parent::__construct($db);
-    $this->router = $router;
   }
 
   public function index()
   {
     $data['title'] = 'Accueil ' . $GLOBALS['siteName'];
-    $data['urls']  = $this->router->getURLs();
+    $data['urls']  = Router::getURLs();
     echo $this->render('login', $data);
   }
 }

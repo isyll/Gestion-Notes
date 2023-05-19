@@ -4,15 +4,10 @@ namespace Core;
 
 class Router
 {
-    private Database $db;
-    private array $path;
-    private string $ns;
+    private static array $paths;
 
-    public function __construct(string $ns, Database $db)
-    {
-        $this->db = $db;
-        $this->ns = $ns;
-    }
+    public static $namespace;
+    public static Database $db;
 
     public static function resolve(): array
     {
@@ -26,7 +21,7 @@ class Router
         return [$method, $uri];
     }
 
-    public function register(
+    public static function register(
         string $name,
         array $handler,
         array $methods = [],
@@ -38,15 +33,15 @@ class Router
 
         $path = $path ?? "/$name";
 
-        $this->path[$path] = array_combine(
+        self::$paths[$path] = array_combine(
             ['name', 'class', 'action', 'request_methods'],
             [$name, $handler[0], $handler[1], $methods]
         );
     }
 
-    public function get(string $name): string|false
+    public static function get(string $name): string|false
     {
-        foreach ($this->path as $path => $value) {
+        foreach (self::$paths as $path => $value) {
             if ($value['name'] === $name)
                 return $value['name'];
         }
@@ -54,27 +49,30 @@ class Router
         return false;
     }
 
-    public function add404(array $handler)
+    public static function add404(array $handler)
     {
-        $this->path['page404']['class']  = $handler[0];
-        $this->path['page404']['action'] = $handler[1];
+        self::$paths['page404']['class']  = $handler[0];
+        self::$paths['page404']['action'] = $handler[1];
     }
 
-    public function execute()
+    public static function execute()
     {
         [$method, $uri] = self::resolve();
 
-        if (isset($this->path[$uri])) {
-            $class           = $this->path[$uri]['class'];
-            $action          = $this->path[$uri]['action'];
-            $request_methods = $this->path[$uri]['request_methods'];
+        if (isset(self::$paths[$uri])) {
+            $class           = self::$paths[$uri]['class'];
+            $action          = self::$paths[$uri]['action'];
+            $request_methods = self::$paths[$uri]['request_methods'];
+
+            $ns = self::$namespace;
+            $db = self::$db;
 
             if (
                 empty($request_methods) ||
                 (!empty($request_methods) && in_array($method, $request_methods))
             ) {
                 try {
-                    eval("use {$this->ns}\\$class;(new $class(\$this->db, \$this))->$action();");
+                    eval("use $ns\\$class;(new $class(\$db))->$action();");
                 }
                 catch (\Exception $e) {
                     echo $e->getMessage();
@@ -85,19 +83,19 @@ class Router
 
         header('HTTP/1.1 404 Not Found');
 
-        if (isset($this->path['page404'])) {
-            $class  = $this->path['page404']['class'];
-            $action = $this->path['page404']['action'];
+        if (isset(self::$paths['page404'])) {
+            $class  = self::$paths['page404']['class'];
+            $action = self::$paths['page404']['action'];
 
-            eval("use {$this->ns}\\$class;(new $class(\$this->db))->$action();");
+            eval("use $ns\\$class;(new $class(\$db, self))->$action();");
         }
     }
 
-    public function getURLs()
+    public static function getURLs()
     {
         $urls = [];
 
-        foreach ($this->path as $path => $values) {
+        foreach (self::$paths as $path => $values) {
             if (!empty($values['name']))
                 $urls[$values['name']] = $path;
         }
@@ -107,7 +105,7 @@ class Router
 
     public function getURL(string $name)
     {
-        foreach ($this->path as $path => $values) {
+        foreach (self::$paths as $path => $values) {
             if ($values['name'] && $path !== 'page404')
                 return $path;
         }
