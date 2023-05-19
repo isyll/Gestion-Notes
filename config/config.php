@@ -1,10 +1,13 @@
 <?php
 
+use Core\Controller;
 use Core\Database;
 use Core\Router;
 use Core\ErrorHandler;
 
 $GLOBALS['viewsPath'] = dirname(__DIR__) . '/view';
+$GLOBALS['siteName'] = "Breukh School";
+$GLOBALS['baseURL'] = Controller::getBaseURL();
 
 $db     = new Database(dbname: 'gnotes', user: 'isyll', password: 'xCplm_');
 $router = new Router(ns: 'App\Controller', db: $db);

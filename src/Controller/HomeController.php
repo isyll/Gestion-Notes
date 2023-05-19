@@ -11,6 +11,7 @@ class HomeController extends Controller
   }
 
   public function index() {
-    echo $this->render('home');
+    $data['title'] = 'Accueil ' . $GLOBALS['siteName'];
+    echo $this->render('home', $data);
   }
 }
