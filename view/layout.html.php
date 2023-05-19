@@ -21,7 +21,7 @@
 
 <body>
     <?= $content; ?>
-    <script src="./build/main.js"></script>
+    <script src="/build/main.js"></script>
 </body>
 
 </html>

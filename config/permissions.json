@@ -1,0 +1,13 @@
+{
+    "admin": ["all"],
+
+    "user": [
+        "viewStudents",
+        "viewClasses",
+        "viewTeachers",
+        "viewNiveaux",
+        "viewAnneescolaires"
+    ],
+
+    "visitor": []
+}
