@@ -1,16 +1,19 @@
 <?php
 
 use Core\AccessControl;
-use Core\Controller;
 use Core\Database;
+use Core\Helpers;
 use Core\Router;
 use Core\ErrorHandler;
 
+$db = new Database(dbname: 'gnotes', user: 'isyll', password: 'xCplm_');
+
+AccessControl::loadFromDatabase($db, 'accesscontrol');
+
+$GLOBALS['access'] = AccessControl::getDatas();
 $GLOBALS['viewsPath'] = dirname(__DIR__) . '/view';
 $GLOBALS['siteName']  = "Breukh School";
-$GLOBALS['baseURL']   = Controller::getBaseURL();
-
-$db = new Database(dbname: 'gnotes', user: 'isyll', password: 'xCplm_');
+$GLOBALS['baseURL']   = Helpers::getBaseURL();
 
 Router::$db        = $db;
 Router::$namespace = 'App\\Controller';
@@ -22,9 +25,6 @@ Router::register(name: 'niveaux', handler: ['AdminController', 'niveaux']);
 Router::register(name: 'classes', handler: ['AdminController', 'classes']);
 Router::execute();
 
-AccessControl::loadFromDatabase($db, 'accesscontrol');
-$GLOBALS['access'] = AccessControl::getDatas();
-
 set_error_handler(function ($errno, $errstr, $errfile, $errline) {
-  ErrorHandler::logError($errno, $errstr, $errfile, $errline);
+    ErrorHandler::logError($errno, $errstr, $errfile, $errline);
 });
