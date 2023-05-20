@@ -9,21 +9,9 @@ class Router
     public static $namespace;
     public static Database $db;
 
-    public static function resolve(): array
-    {
-        $method = $_SERVER['REQUEST_METHOD'];
-        $uri    = $_SERVER['REQUEST_URI'];
-
-        if (false !== $pos = strpos($uri, '?')) {
-            $uri = substr($uri, 0, $pos);
-        }
-
-        return [$method, $uri];
-    }
-
     public static function register(
         string $name,
-        array $handler,
+        string $handler,
         array $methods = [],
         string $path = null
     ): void {
@@ -33,39 +21,30 @@ class Router
 
         $path = $path ?? "/$name";
 
-        self::$paths[$path] = array_combine(
-            ['name', 'class', 'action', 'request_methods'],
-            [$name, $handler[0], $handler[1], $methods]
-        );
+        self::$paths[$path] = self::combine([
+            'name' => $name,
+            'handler' => $handler,
+            'request_methods' => $methods
+        ]);
     }
 
-    public static function get(string $name): string|false
+    public static function loadConfig(array $config)
     {
-        foreach (self::$paths as $path => $value) {
-            if ($value['name'] === $name)
-                return $value['name'];
-        }
-
-        return false;
-    }
-
-    public static function add404(array $handler)
-    {
-        self::$paths['page404']['class']  = $handler[0];
-        self::$paths['page404']['action'] = $handler[1];
+        foreach ($config as $route => $data)
+            self::$paths[$route] = self::combine($data);
     }
 
     public static function execute()
     {
-        [$method, $uri] = self::resolve();
+        [$method, $uri] = array_values(Helpers::resolveRequest());
+
+        $ns = self::$namespace;
+        $db = self::$db;
 
         if (isset(self::$paths[$uri])) {
             $class           = self::$paths[$uri]['class'];
             $action          = self::$paths[$uri]['action'];
             $request_methods = self::$paths[$uri]['request_methods'];
-
-            $ns = self::$namespace;
-            $db = self::$db;
 
             if (
                 empty($request_methods) ||
@@ -87,7 +66,7 @@ class Router
             $class  = self::$paths['page404']['class'];
             $action = self::$paths['page404']['action'];
 
-            eval("use $ns\\$class;(new $class(\$db, self))->$action();");
+            eval("use $ns\\$class;(new $class(\$db))->$action();");
         }
     }
 
@@ -103,7 +82,7 @@ class Router
         return $urls;
     }
 
-    public function getURL(string $name)
+    public static function getURL(string $name): string
     {
         foreach (self::$paths as $path => $values) {
             if ($values['name'] && $path !== 'page404')
@@ -111,5 +90,21 @@ class Router
         }
 
         return '';
+    }
+
+    private static function combine(array $data): array
+    {
+        extract($data);
+
+        $handler = explode('@', $handler);
+        return array_combine(
+            [
+                'name',
+                'class',
+                'action',
+                'request_methods',
+            ],
+            [$name, $handler[0], $handler[1], $methods ?? []]
+        );
     }
 }
