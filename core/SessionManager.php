@@ -29,4 +29,9 @@ class SessionManager
         session_destroy();
         $_SESSION = [];
     }
+
+    public static function newId() : bool
+    {
+        return session_regenerate_id();
+    }
 }
