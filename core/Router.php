@@ -125,6 +125,9 @@ class Router
                         } else {
                             $data['arg'] = $uriParts[$i];
                         }
+                    } else {
+                        $tmp = true;
+                        break;
                     }
                 }
 
