@@ -118,6 +118,8 @@ class Router
                             $tmp = true;
                             break;
                         }
+                    } else {
+                        $data['arg'] = $uriParts[$i];
                     }
                 }
 
