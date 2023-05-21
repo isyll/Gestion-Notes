@@ -23,6 +23,6 @@ class HomeController extends Controller
 
     public function page404()
     {
-        echo "page 404";
+        echo $this->render('404.html.php');
     }
 }
