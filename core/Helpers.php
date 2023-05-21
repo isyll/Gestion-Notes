@@ -27,6 +27,11 @@ class Helpers
         return ['method' => $method, 'uri' => $uri];
     }
 
+    public static function rms(string $str): string
+    {
+        return preg_replace('/\s/', '', $str);
+    }
+
     public static function msg(string $value, string $type = 'success'): array
     {
         return [
