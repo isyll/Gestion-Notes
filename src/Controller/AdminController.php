@@ -18,16 +18,45 @@ class AdminController extends Controller
         $this->model = new AdminModel($db);
     }
 
+    public function schoolYears()
+    {
+        $y = (int) date('Y');
+        for ($i = $y; $i < $y + 10; $i++) {
+            $i2                      = $i + 1;
+            $this->data['periods'][] = "$i - $i2";
+        }
+
+        if ($this->request['method'] === 'POST') {
+            $fv = new FormValidator([
+                [
+                    'name' => 'period',
+                    'required' => true,
+                    'value' => $_POST['period'] ?? '',
+                    'regex' => '/^[0-9]{4}\s?-\s?[0-9]{4}$/',
+                ]
+            ]);
+
+            if (count($this->data['errors'] = $fv->getErrors()) > 0) {
+                $this->data['msg'] = Helpers::msg('danger', 'Formulaire invalide');
+            } else {
+                $this->model->saveYear([
+                    'period' => $_POST['period']
+                ]);
+                $this->data['msg'] = Helpers::msg('success', 'Année créée avec succès');
+            }
+        }
+
+        echo $this->render('admin', $this->data);
+    }
+
     public function createUser()
     {
-        $request = Helpers::resolveRequest();
-
         $datasForm = [
             [
                 'name' => 'username',
                 'required' => true,
                 'value' => $_POST['username'] ?? '',
-                'regex' => '/^[a-zA-Z]{1,}[a-zA-Z1-9]*$/',
+                'regex' => '/^[a-zA-Z]{1,}[a-zA-Z0-9]*$/',
                 'min_length' => 5,
                 'max_length' => 25
             ],
@@ -72,15 +101,15 @@ class AdminController extends Controller
             ],
         ];
 
-        if ($request['method'] === 'POST') {
+        if ($this->request['method'] === 'POST') {
 
             $fv = new FormValidator($datasForm);
 
             $fv->validate();
-            $data['errors'] = $fv->getErrors();
+            $this->data['errors'] = $fv->getErrors();
 
-            if (count($data['errors']) > 0) {
-                $data['msg'] = [
+            if (count($this->data['errors']) > 0) {
+                $this->data['msg'] = [
                     'type' => 'danger',
                     'value' => "Erreur de validation des champs"
                 ];
@@ -100,15 +129,15 @@ class AdminController extends Controller
                         'address' => $_POST['address'] ?? NULL
                     ]
                 );
-                $data['msg'] = [
+                $this->data['msg'] = [
                     'type' => 'success',
                     'value' => "Utilisateur créé avec succès"
                 ];
             }
         } else {
-            $data = [];
+            $this->data = [];
         }
 
-        echo $this->render('create-user', $data);
+        echo $this->render('create-user', $this->data);
     }
 }

@@ -5,6 +5,7 @@ namespace Core;
 class Controller
 {
     private Database $db;
+    protected array $request;
     protected array $data;
 
     public function __construct(Database $db)
@@ -12,6 +13,7 @@ class Controller
         $this->db            = $db;
         $this->data['title'] = 'Accueil ' . $GLOBALS['siteName'];
         $this->data['urls']  = Router::getURLs();
+        $this->request = Helpers::resolveRequest();
     }
 
     public function render(string $file, array $data = [], bool $extendLayout = true): string

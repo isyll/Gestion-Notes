@@ -13,6 +13,13 @@ class AdminModel
         $this->db = $db;
     }
 
+    public function saveYear($data)
+    {
+        $this->db->getPDO()
+            ->prepare("INSERT INTO annee_scolaire(periode) VALUES(?)")
+            ->execute([$data['period']]);
+    }
+
     public function saveUser(array $datas)
     {
         $this->db->getPDO()->query("BEGIN");

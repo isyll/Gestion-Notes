@@ -17,9 +17,6 @@ class HomeController extends Controller
 
     public function index()
     {
-        $data['title'] = 'Accueil ' . $GLOBALS['siteName'];
-        $data['urls']  = Router::getURLs();
-        echo $this->render('login', $data);
     }
 
     public function page404()
