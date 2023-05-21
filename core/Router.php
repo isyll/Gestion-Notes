@@ -47,9 +47,10 @@ class Router
             $request_methods = $match['request_methods'];
             $arg             = $match['arg'] ?? '';
 
+            $empty = empty($request_methods);
             if (
-                empty($request_methods) ||
-                (!empty($request_methods) && in_array($method, $request_methods))
+                $empty ||
+                (!$empty && in_array($method, $request_methods))
             ) {
                 try {
                     eval("use $ns\\$class;(new $class(\$db))->$action('$arg');");
@@ -96,6 +97,9 @@ class Router
 
     private static function match(string $uri): array|false
     {
+        if ($uri === '')
+            $uri = '/';
+
         if (isset(self::$paths[$uri]))
             return self::$paths[$uri];
         else {
