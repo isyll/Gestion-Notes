@@ -18,10 +18,12 @@ class AdminController extends Controller
         $this->model = new AdminModel($db);
     }
 
-    public function schoolYears()
+    public function schoolYears(string $period)
     {
-        $y = (int) date('Y');
-        for ($i = $y; $i < $y + 10; $i++) {
+        $this->data['schoolYears'] = $this->model->getYears();
+
+        $y = ((int) date('Y')) - 5;
+        for ($i = $y; $i < $y + 15; $i++) {
             $i2                      = $i + 1;
             $this->data['periods'][] = "$i - $i2";
         }
@@ -36,16 +38,30 @@ class AdminController extends Controller
                 ]
             ]);
 
+            $fv->validate();
+
             if (count($this->data['errors'] = $fv->getErrors()) > 0) {
-                $this->data['msg'] = Helpers::msg('danger', 'Formulaire invalide');
+                $this->data['msg'] = Helpers::msg('Formulaire invalide', 'danger');
             } else {
-                $this->model->saveYear([
-                    'period' => $_POST['period']
-                ]);
-                $this->data['msg'] = Helpers::msg('success', 'Année créée avec succès');
+                $error = false;
+                foreach ($this->data['schoolYears'] as $period) {
+                    if ($period['periode'] == strtolower(trim($_POST['period']))) {
+                        $this->data['msg'] = Helpers::msg('Année déjà existante', 'danger');
+                        $error             = true;
+                        break;
+                    }
+                }
+
+                if (!$error) {
+                    $this->model->saveYear([
+                        'period' => $_POST['period']
+                    ]);
+                    $this->data['msg'] = Helpers::msg('Année créée avec succès');
+                }
             }
         }
 
+        echo $period;
         echo $this->render('admin', $this->data);
     }
 

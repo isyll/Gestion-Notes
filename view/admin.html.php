@@ -6,9 +6,33 @@
     <div id="main" class="w-100">
         <?php include 'parts/header.html.php' ?>
         <div id="content">
+            <?php if (isset($msg)): ?>
+                <div class="text-<?= $msg['type'] ?>">
+                    <?= $msg['value'] ?>
+                </div>
+            <?php endif ?>
             <div class="row ms-1">
+                <div class="col-8">
+                    <div class="row">
+                        <?php foreach ($schoolYears as $y): ?>
+                            <div class="card col-4">
+                                <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                                    <h5 role="btn" class="card-title text-center">
+                                        <?= $y['periode'] ?>
+                                    </h5>
+                                    <a href="#" class="card-link">
+                                        <button type="button" class="btn btn-secondary text-white">
+                                            Sélectionner</button>
+                                    </a>
+                                </div>
+                            </div>
+                        <?php endforeach ?>
+                    </div>
+                </div>
+                <div class="col-2"></div>
+
                 <button data-bs-toggle="modal" data-bs-target="#modalAnneeScolaire"
-                    class=" btn btn-light rounded col-2">Créer une année scolaire</button>
+                    class="h-auto btn btn-light rounded col-2">Créer une année scolaire</button>
             </div>
         </div>
     </div>
@@ -24,8 +48,6 @@
                     <?php include 'parts/forms/anneeform.html.php'; ?>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal">Fermer</button>
-                    <button type="button" class="text-white btn btn-primary">Valider</button>
                 </div>
             </div>
         </div>
