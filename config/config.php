@@ -31,11 +31,11 @@ $routes = [
     ],
     '/school-years/{period}' => [
         'name' => 'classes',
-        'handler' => 'AdminController@schoolYears',
+        'handler' => 'SchoolYearsController@schoolYears',
     ],
     '/school-years' => [
         'name' => 'classes',
-        'handler' => 'AdminController@schoolYears',
+        'handler' => 'SchoolYearsController@schoolYears',
     ],
 ];
 
