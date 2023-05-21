@@ -29,6 +29,8 @@ class AdminController extends Controller
         }
 
         if ($this->request['method'] === 'POST') {
+            $_POST['period'] = Helpers::rms($_POST['period']);
+
             $fv = new FormValidator([
                 [
                     'name' => 'period',
@@ -43,25 +45,24 @@ class AdminController extends Controller
             if (count($this->data['errors'] = $fv->getErrors()) > 0) {
                 $this->data['msg'] = Helpers::msg('Formulaire invalide', 'danger');
             } else {
-                $error = false;
-                foreach ($this->data['schoolYears'] as $period) {
-                    if ($period['periode'] == strtolower(trim($_POST['period']))) {
-                        $this->data['msg'] = Helpers::msg('Année déjà existante', 'danger');
-                        $error             = true;
-                        break;
-                    }
-                }
-
-                if (!$error) {
+                if ($this->model->periodExist($_POST['period'])) {
+                    $this->data['msg'] = Helpers::msg('Année déjà existante', 'danger');
+                } else {
                     $this->model->saveYear([
                         'period' => $_POST['period']
                     ]);
                     $this->data['msg'] = Helpers::msg('Année créée avec succès');
+                    $this->data['schoolYears'] = $this->model->getYears();
                 }
+
+            }
+        } else {
+            if ($period !== '') {
+                if (!$this->model->periodExist($period))
+                    $this->data['msg'] = Helpers::msg("L'année $period n'existe pas!", 'danger');
             }
         }
 
-        echo $period;
         echo $this->render('admin', $this->data);
     }
 
