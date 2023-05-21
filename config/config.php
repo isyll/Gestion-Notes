@@ -29,6 +29,14 @@ $routes = [
         'name' => 'classes',
         'handler' => 'AdminController@classes',
     ],
+    '/school-years/{period}' => [
+        'name' => 'classes',
+        'handler' => 'AdminController@schoolYears',
+    ],
+    '/school-years' => [
+        'name' => 'classes',
+        'handler' => 'AdminController@schoolYears',
+    ],
 ];
 
 $config = [
