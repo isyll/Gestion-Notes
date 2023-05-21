@@ -17,6 +17,8 @@ class HomeController extends Controller
 
     public function index()
     {
+        $this->data['current'] = 'home';
+        echo $this->render('home', $this->data);
     }
 
     public function page404()
