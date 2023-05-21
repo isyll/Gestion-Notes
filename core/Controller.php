@@ -5,10 +5,13 @@ namespace Core;
 class Controller
 {
     private Database $db;
+    protected array $data;
 
     public function __construct(Database $db)
     {
-        $this->db = $db;
+        $this->db            = $db;
+        $this->data['title'] = 'Accueil ' . $GLOBALS['siteName'];
+        $this->data['urls']  = Router::getURLs();
     }
 
     public function render(string $file, array $data = [], bool $extendLayout = true): string
