@@ -41,17 +41,18 @@ class Router
         $ns = self::$namespace;
         $db = self::$db;
 
-        if (isset(self::$paths[$uri])) {
-            $class           = self::$paths[$uri]['class'];
-            $action          = self::$paths[$uri]['action'];
-            $request_methods = self::$paths[$uri]['request_methods'];
+        if ($match = self::match($uri)) {
+            $class           = $match['class'];
+            $action          = $match['action'];
+            $request_methods = $match['request_methods'];
+            $arg             = $match['arg'];
 
             if (
                 empty($request_methods) ||
                 (!empty($request_methods) && in_array($method, $request_methods))
             ) {
                 try {
-                    eval("use $ns\\$class;(new $class(\$db))->$action();");
+                    eval("use $ns\\$class;(new $class(\$db))->$action('$arg');");
                 }
                 catch (\Exception $e) {
                     echo $e->getMessage();
@@ -85,11 +86,49 @@ class Router
     public static function getURL(string $name): string
     {
         foreach (self::$paths as $path => $values) {
-            if ($values['name'] && $path !== 'page404')
+            if ($values['name'] === $name && $path !== 'page404')
                 return $path;
         }
 
         return '';
+    }
+
+    private static function match(string $uri): array|false
+    {
+        if (isset(self::$paths[$uri]))
+            return self::$paths[$uri];
+        else {
+            foreach (self::$paths as $path => $data) {
+                $parts    = explode('/', $path);
+                $uriParts = explode('/', $uri);
+
+                if (count($parts) !== count($uriParts)) {
+                    continue;
+                }
+
+                $tmp   = false;
+                $count = 0;
+                $arg   = '';
+
+                for ($i = 0, $c = count($parts); $i < $c; $i++) {
+                    $parts[$i] = preg_replace('/^\{.*\}$/', $parts[$i], $uriParts[$i], -1, $count);
+                    if (strtolower(trim($uriParts[$i])) !== strtolower(trim($parts[$i]))) {
+                        $tmp = true;
+                        break;
+                    }
+
+                    $arg = $uriParts[$i];
+                }
+
+                if ($tmp)
+                    continue;
+
+                $data['arg'] = $arg;
+                return $data;
+            }
+
+            return false;
+        }
     }
 
     private static function combine(array $data): array
