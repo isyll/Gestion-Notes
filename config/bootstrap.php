@@ -22,7 +22,7 @@ AccessControl::loadFromDatabase($db, $config['accessDbName']);
 
 $GLOBALS['access']    = AccessControl::getDatas();
 $GLOBALS['viewsPath'] = dirname(__DIR__) . '/view';
-$GLOBALS['siteName']  = "Breukh School";
+$GLOBALS['siteName']  = "Breukh'S School";
 $GLOBALS['baseURL']   = Helpers::getBaseURL();
 
 Router::$db        = $db;
