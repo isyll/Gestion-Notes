@@ -45,7 +45,7 @@ class Router
             $class           = $match['class'];
             $action          = $match['action'];
             $request_methods = $match['request_methods'];
-            $arg             = $match['arg'];
+            $arg             = $match['arg'] ?? '';
 
             if (
                 empty($request_methods) ||
