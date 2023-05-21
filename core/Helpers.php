@@ -15,7 +15,7 @@ class Helpers
         return $url;
     }
 
-    public static function resolveRequest() : array
+    public static function resolveRequest(): array
     {
         $method = $_SERVER['REQUEST_METHOD'];
         $uri    = $_SERVER['REQUEST_URI'];
@@ -25,5 +25,13 @@ class Helpers
         }
 
         return ['method' => $method, 'uri' => $uri];
+    }
+
+    public static function msg(string $value, string $type = 'success'): array
+    {
+        return [
+            'type' => $type,
+            'value' => $value
+        ];
     }
 }
