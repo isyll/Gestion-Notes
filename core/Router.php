@@ -53,6 +53,7 @@ class Router
             ) {
                 try {
                     eval("use $ns\\$class;(new $class(\$db))->$action('$arg');");
+                    echo ("use $ns\\$class;(new $class(\$db))->$action('$arg');");
                 }
                 catch (\Exception $e) {
                     echo $e->getMessage();
@@ -106,24 +107,28 @@ class Router
                     continue;
                 }
 
-                $tmp   = false;
-                $count = 0;
-                $arg   = '';
+                $tmp = false;
 
                 for ($i = 0, $c = count($parts); $i < $c; $i++) {
-                    $parts[$i] = preg_replace('/^\{.*\}$/', $parts[$i], $uriParts[$i], -1, $count);
-                    if (strtolower(trim($uriParts[$i])) !== strtolower(trim($parts[$i]))) {
-                        $tmp = true;
-                        break;
+                    if (strlen($parts[$i]) && strlen($uriParts[$i])) {
+                        if (
+                            $parts[$i][0] !== '{' &&
+                            $parts[$i][strlen($parts[$i]) - 1] !== '}'
+                        ) {
+                            if (strtolower(trim($uriParts[$i])) !== strtolower(trim($parts[$i]))) {
+                                $tmp = true;
+                                break;
+                            }
+                        } else {
+                            $data['arg'] = $uriParts[$i];
+                        }
                     }
-
-                    $arg = $uriParts[$i];
                 }
 
-                if ($tmp)
+                if ($tmp) {
                     continue;
+                }
 
-                $data['arg'] = $arg;
                 return $data;
             }
 
