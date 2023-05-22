@@ -20,7 +20,7 @@
                                     <h5 role="btn" class="card-title text-center">
                                         <?= $y['periode'] ?>
                                     </h5>
-                                    <a href="#" class="card-link">
+                                    <a href="/school-year/<?= $y['periode'] ?>" class="card-link">
                                         <button type="button" class="btn btn-secondary text-white">
                                             Sélectionner</button>
                                     </a>
@@ -32,24 +32,26 @@
                 <div class="col-2"></div>
 
                 <button data-bs-toggle="modal" data-bs-target="#modalAnneeScolaire"
-                    class="h-auto btn btn-light rounded col-2">Créer une année scolaire</button>
+                    class="h-auto btn btn-light rounded col-2">Créer
+                    une année scolaire</button>
             </div>
-        </div>
-    </div>
-    <div class="modal fade" id="modalAnneeScolaire" tabindex="-1" aria-labelledby="modalAnneeScolaireLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="modalAnneeScolaireLabel">Modal title</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <?php include 'parts/forms/anneeform.html.php'; ?>
-                </div>
-                <div class="modal-footer">
+            <div class="modal fade" id="modalAnneeScolaire" tabindex="-1" aria-labelledby="modalAnneeScolaireLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="modalAnneeScolaireLabel">Créer une année scolaire</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <?php include 'parts/forms/anneeform.html.php'; ?>
+                        </div>
+                        <div class="modal-footer">
+                        </div>
+                    </div>
                 </div>
             </div>
+
         </div>
     </div>
 </main>

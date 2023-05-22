@@ -24,6 +24,9 @@ class Helpers
             $uri = substr($uri, 0, $pos);
         }
 
+        while ($uri[strlen($uri) - 1] === '/')
+            $uri = substr($uri, 0, -1);
+
         return ['method' => $method, 'uri' => $uri];
     }
 

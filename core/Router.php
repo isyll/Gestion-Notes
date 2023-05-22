@@ -113,14 +113,15 @@ class Router
                 $tmp = false;
 
                 for ($i = 0, $c = count($parts); $i < $c; $i++) {
-                    if ($parts[$i][0] !== '{' || substr($parts[$i], -1) !== '}') {
-                        if (strtolower(trim($uriParts[$i])) !== strtolower(trim($parts[$i]))) {
-                            $tmp = true;
-                            break;
+                    if (strlen($parts[$i]) && strlen($uriParts[$i]))
+                        if ($parts[$i][0] !== '{' || substr($parts[$i], -1) !== '}') {
+                            if (strtolower(trim($uriParts[$i])) !== strtolower(trim($parts[$i]))) {
+                                $tmp = true;
+                                break;
+                            }
+                        } else {
+                            $data['arg'] = $uriParts[$i];
                         }
-                    } else {
-                        $data['arg'] = $uriParts[$i];
-                    }
                 }
 
                 if ($tmp)

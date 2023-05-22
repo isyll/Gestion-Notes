@@ -3,16 +3,16 @@
 $routes = [
     '/' => [
         'name' => 'home',
-        'handler' => 'AdminController@schoolYears',
+        'handler' => 'HomeController@index',
     ],
     'page404' => [
         'name' => 'page404',
         'handler' => 'HomeController@page404',
     ],
-    '/students' => [
-        'name' => 'students',
-        'handler' => 'AdminController@students',
-    ],
+    // '/students' => [
+    //     'name' => 'students',
+    //     'handler' => 'AdminController@students',
+    // ],
     '/login' => [
         'name' => 'login',
         'handler' => 'LoginController@connect',
@@ -23,19 +23,23 @@ $routes = [
     ],
     '/niveaux' => [
         'name' => 'niveaux',
-        'handler' => 'AdminController@niveaux',
+        'handler' => 'NiveauxController@index',
+    ],
+    '/niveaux/{niveau}' => [
+        'name' => 'classes-',
+        'handler' => 'ClassesController@index',
     ],
     '/classes' => [
         'name' => 'classes',
-        'handler' => 'AdminController@classes',
-    ],
-    '/school-years/{period}' => [
-        'name' => 'classes',
-        'handler' => 'SchoolYearsController@schoolYears',
+        'handler' => 'ClassesController@index',
     ],
     '/school-years' => [
-        'name' => 'classes',
-        'handler' => 'SchoolYearsController@schoolYears',
+        'name' => 'school-years',
+        'handler' => 'SchoolYearsController@index',
+    ],
+    '/school-years/{period}' => [
+        'name' => 'schoolYears-',
+        'handler' => 'SchoolYearsController@index',
     ],
 ];
 

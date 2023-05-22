@@ -19,9 +19,11 @@ class SchoolYearsController extends Controller
         $this->model = new SchoolYearsModel($db);
     }
 
-    public function schoolYears(string $period)
+    public function index(string $period)
     {
         $this->data['schoolYears'] = $this->model->getYears();
+        $this->data['current']     = 'school-years';
+        $this->data['title']       = 'Année scolaire';
 
         $y = ((int) date('Y')) - 5;
         for ($i = $y; $i < $y + 15; $i++) {
@@ -52,7 +54,7 @@ class SchoolYearsController extends Controller
                     $this->model->saveYear([
                         'period' => $_POST['period']
                     ]);
-                    $this->data['msg'] = Helpers::msg('Année créée avec succès');
+                    $this->data['msg']         = Helpers::msg('Année créée avec succès');
                     $this->data['schoolYears'] = $this->model->getYears();
                 }
 
@@ -64,6 +66,6 @@ class SchoolYearsController extends Controller
             }
         }
 
-        echo $this->render('admin', $this->data);
+        echo $this->render('school-years', $this->data);
     }
 }
