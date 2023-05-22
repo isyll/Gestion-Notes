@@ -26,11 +26,17 @@ class FormValidator
             if ($field['type'] === 'numeric') {
                 $this->numeric($field);
             }
+            if ($field['type'] === 'email') {
+                $this->email($field);
+            }
             if ($field['type'] === 'alphanum') {
                 $this->alphaNum($field);
             }
             if ($field['type'] === 'chars_only') {
                 $this->charsOnly($field);
+            }
+            if ($field['type'] === 'set') {
+                $this->inArray($field);
             }
             if (!empty($field['regex'])) {
                 $this->regex($field);
@@ -52,6 +58,18 @@ class FormValidator
     private function addError($name, $error)
     {
         $this->errors[$name] = $error;
+    }
+
+    private function email(array $field)
+    {
+        if (!filter_var($field['value'], FILTER_VALIDATE_EMAIL))
+            $this->addError($field['name'], "Le champs {$field['name']} est invalide");
+    }
+
+    private function inArray(array $field)
+    {
+        if (!in_array($field['value'], $field['set_values']))
+            $this->addError($field['name'], "Le champs {$field['name']} est invalide");
     }
 
     private function errorTest(bool $condition, string $name, string $error): void

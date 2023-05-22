@@ -8,6 +8,7 @@ use Core\Controller;
 use Core\Database;
 use Core\FormValidator;
 use Core\Helpers;
+use Core\SessionManager;
 
 class SchoolYearsController extends Controller
 {
@@ -19,53 +20,67 @@ class SchoolYearsController extends Controller
         $this->model = new SchoolYearsModel($db);
     }
 
-    public function index(string $period)
+    public function index()
     {
+        $this->data['current'] = 'school-years';
+        $this->data['title']   = 'Année scolaire';
+
         $this->data['schoolYears'] = $this->model->getYears();
-        $this->data['current']     = 'school-years';
-        $this->data['title']       = 'Année scolaire';
 
-        $y = ((int) date('Y')) - 5;
-        for ($i = $y; $i < $y + 15; $i++) {
-            $i2                      = $i + 1;
-            $this->data['periods'][] = "$i - $i2";
-        }
+        if (SessionManager::get('school-create')) {
+            $this->data['msg'] = SessionManager::get('school-create-msg');
 
-        if ($this->request['method'] === 'POST') {
-            $_POST['period'] = Helpers::rms($_POST['period']);
-
-            $fv = new FormValidator([
-                [
-                    'name' => 'period',
-                    'required' => true,
-                    'value' => $_POST['period'] ?? '',
-                    'regex' => '/^[0-9]{4}\s?-\s?[0-9]{4}$/',
-                ]
-            ]);
-
-            $fv->validate();
-
-            if (count($this->data['errors'] = $fv->getErrors()) > 0) {
-                $this->data['msg'] = Helpers::msg('Formulaire invalide', 'danger');
-            } else {
-                if ($this->model->periodExist($_POST['period'])) {
-                    $this->data['msg'] = Helpers::msg('Année déjà existante', 'danger');
-                } else {
-                    $this->model->saveYear([
-                        'period' => $_POST['period']
-                    ]);
-                    $this->data['msg']         = Helpers::msg('Année créée avec succès');
-                    $this->data['schoolYears'] = $this->model->getYears();
-                }
-
-            }
-        } else {
-            if ($period !== '') {
-                if (!$this->model->periodExist($period))
-                    $this->data['msg'] = Helpers::msg("L'année $period n'existe pas!", 'danger');
-            }
+            SessionManager::remove('school-create');
+            SessionManager::remove('school-create-msg');
         }
 
         echo $this->render('school-years', $this->data);
+    }
+
+    public function createYear(string $year)
+    {
+        SessionManager::set('school-create', true);
+
+        $this->data['current'] = 'school-years';
+
+        $fv = new FormValidator(
+            [
+                [
+                    'value' => $_POST['period'],
+                    'name' => 'libellé',
+                    'regex' => '/^\d{4}-\d{4}$/',
+                    'required' => true
+                ]
+            ]
+        );
+
+        $fv->validate();
+        $years = explode('-', $_POST['period']);
+
+        if (
+            count($this->data['errors'] = $fv->getErrors()) > 0 ||
+            !is_numeric($years[0]) || !is_numeric($years[1]) ||
+            $years[1] - $years[0] !== 1
+        ) {
+            SessionManager::set(
+                'school-create-msg',
+                Helpers::msg('Année non valide', 'danger')
+            );
+        } else if ($this->model->periodExist($_POST['period'])) {
+            SessionManager::set(
+                'school-create-msg',
+                Helpers::msg('Année déjà existante', 'danger')
+            );
+        } else {
+            SessionManager::set(
+                'school-create-msg',
+                Helpers::msg('Année créée avec succès', 'success')
+            );
+            $this->model->saveYear([
+                'period' => $_POST['period']
+            ]);
+        }
+
+        Helpers::redirectSite('/school-years');
     }
 }

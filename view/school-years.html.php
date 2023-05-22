@@ -14,15 +14,25 @@
             <div class="row ms-1">
                 <div class="col-8">
                     <div class="row">
+                        <div class="col-3"></div>
+                        <div class="col-6">
+                            <form class="d-flex" method="post" action="<?= $urls['create-year'] ?>">
+                                <label for="period" class="form-label me2">Libellé</label>
+                                <input type="text" maxlength="9" class="form-control ms-2" name="period" id="period" required/>
+                                <input type="submit" class="btn btn-secondary ms-2 text-white" value="Ajouter" />
+                            </form>
+                        </div>
+                        <div class="col-3"></div>
+                    </div>
+                    <div class="row">
                         <?php foreach ($schoolYears as $y): ?>
                             <div class="card col-4">
                                 <div class="card-body d-flex flex-column justify-content-center align-items-center">
                                     <h5 role="btn" class="card-title text-center">
                                         <?= $y['periode'] ?>
                                     </h5>
-                                    <a href="/school-year/<?= $y['periode'] ?>" class="card-link">
-                                        <button type="button" class="btn btn-secondary text-white">
-                                            Sélectionner</button>
+                                    <a href="/school-years/<?= $y['periode'] ?>" class="card-link">
+                                        <button type="button" class="btn btn-secondary text-white">Sélectionner</button>
                                     </a>
                                 </div>
                             </div>
@@ -31,9 +41,9 @@
                 </div>
                 <div class="col-2"></div>
 
-                <button data-bs-toggle="modal" data-bs-target="#modalAnneeScolaire"
+                <!-- <button data-bs-toggle="modal" data-bs-target="#modalAnneeScolaire"
                     class="h-auto btn btn-light rounded col-2">Créer
-                    une année scolaire</button>
+                    une année scolaire</button> -->
             </div>
             <div class="modal fade" id="modalAnneeScolaire" tabindex="-1" aria-labelledby="modalAnneeScolaireLabel"
                 aria-hidden="true">

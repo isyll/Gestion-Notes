@@ -139,6 +139,10 @@ class Router
         extract($data);
 
         $handler = explode('@', $handler);
+        $methods = array_map(function ($item) {
+            return strtolower($item);
+        }, $methods ?? []);
+
         return array_combine(
             [
                 'name',
@@ -146,7 +150,7 @@ class Router
                 'action',
                 'request_methods',
             ],
-            [$name, $handler[0], $handler[1], $methods ?? []]
+            [$name, $handler[0], $handler[1], $methods]
         );
     }
 }

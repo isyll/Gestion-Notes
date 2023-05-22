@@ -13,6 +13,16 @@ class ClassesModel
         $this->db = $db;
     }
 
+    public function getName(int $id)
+    {
+        $stmt = $this->db->getPDO()
+            ->prepare("SELECT libelle FROM classes WHERE id=?");
+
+        $stmt->execute([$id]);
+
+        return $stmt->fetchAll();
+    }
+
     public function classes(int $niveauId)
     {
         $stmt = $this->db->getPDO()

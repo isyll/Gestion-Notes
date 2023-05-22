@@ -1,10 +1,7 @@
-<form action="" method="post" id="formAnnee">
+<form action="<?= $urls['create-year'] ?>" method="post" id="formAnnee">
     <label for="period">Période de l'année scolaire</label>
     <select multiple size="3" type="text" id="period" name="period" class="form-select" required
         aria-describedby="perHelp">
-        <?php foreach ($periods as $p): ?>
-            <option value="<?= $p ?>"><?= $p ?></option>
-        <?php endforeach ?>
     </select>
     <?php if (isset($errors['period'])): ?>
         <div id="perHelp" class="text-danger">

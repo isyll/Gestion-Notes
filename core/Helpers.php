@@ -4,6 +4,16 @@ namespace Core;
 
 class Helpers
 {
+    public static function redirectSite(string $location): void
+    {
+        $base = self::getBaseURL();
+
+        $location = $base . $location;
+
+        header("Location: $location");
+        exit;
+    }
+
     public static function getBaseURL(): string
     {
         if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
@@ -33,6 +43,11 @@ class Helpers
     public static function rms(string $str): string
     {
         return preg_replace('/\s/', '', $str);
+    }
+
+    public static function rmms(string $str): string
+    {
+        return preg_replace('/\s+/', ' ', $str);
     }
 
     public static function msg(string $value, string $type = 'success'): array

@@ -26,20 +26,29 @@ $routes = [
         'handler' => 'NiveauxController@index',
     ],
     '/niveaux/{niveau}' => [
-        'name' => 'classes-',
+        'name' => '',
         'handler' => 'ClassesController@index',
     ],
     '/classes' => [
         'name' => 'classes',
         'handler' => 'ClassesController@index',
     ],
+    '/classes/{id}' => [
+        'name' => 'students',
+        'handler' => 'StudentsController@index',
+    ],
     '/school-years' => [
         'name' => 'school-years',
         'handler' => 'SchoolYearsController@index',
     ],
+    '/create-year' => [
+        'name' => 'create-year',
+        'handler' => 'SchoolYearsController@createYear',
+        // 'methods' => ['post']
+    ],
     '/school-years/{period}' => [
-        'name' => 'schoolYears-',
-        'handler' => 'SchoolYearsController@index',
+        'name' => '',
+        'handler' => 'NiveauxController@index',
     ],
 ];
 
