@@ -57,4 +57,38 @@ class Helpers
             'value' => $value
         ];
     }
+
+    public static function minifyHtml(string $buffer): string
+    {
+        $search = [
+            '/\>[^\S ]+/s',
+            '/[^\S ]+\</s',
+            '/(\s)+/s',
+            '/<!--(.|\s)*?-->/'
+        ];
+
+        $replace = [
+            '>',
+            '<',
+            '\\1',
+            ''
+        ];
+
+        return preg_replace($search, $replace, $buffer);
+    }
+
+    public static function explodeUrl(string $url): array
+    {
+        if ($url[0] === '/')
+            $url = substr($url, 1);
+        if (substr($url, -1) === '/')
+            $url = substr($url, 0, -1);
+
+        return array_map(
+            function ($item) {
+                return strtolower(trim($item));
+            },
+            explode('/', $url)
+        );
+    }
 }
