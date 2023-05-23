@@ -25,10 +25,43 @@ class SchoolYearsModel
         return false;
     }
 
+    public function getYearByPeriod(string $period)
+    {
+        $stmt = $this->db->getPDO()
+            ->prepare('SELECT * FROM annee_scolaire WHERE periode=? AND supprime=0');
+
+        $stmt->execute([$period]);
+
+        return $stmt->fetch();
+    }
+
     public function getYears()
     {
         return $this->db->getPDO()
-            ->query('SELECT periode FROM annee_scolaire;')->fetchAll();
+            ->query('SELECT * FROM annee_scolaire WHERE supprime=0')->fetchAll();
+    }
+
+    public function getYearById(int $id)
+    {
+        $stmt = $this->db->getPDO()
+            ->prepare('SELECT * FROM annee_scolaire WHERE id=? AND supprime=0');
+
+        $stmt->execute([$id]);
+
+        return $stmt->fetch();
+    }
+
+    public function yearExist(int $id): bool
+    {
+        return $this->getYearById($id) ? true : false;
+    }
+
+    public function deleteYear(int $id)
+    {
+        $stmt = $this->db->getPDO()
+            ->prepare('UPDATE annee_scolaire SET supprime=1 WHERE id=?');
+
+        $stmt->execute([$id]);
     }
 
     public function saveYear($data): bool
