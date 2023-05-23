@@ -44,7 +44,12 @@ $routes = [
     '/create-year' => [
         'name' => 'create-year',
         'handler' => 'SchoolYearsController@createYear',
-        // 'methods' => ['post']
+        'methods' => ['post']
+    ],
+    '/remove-year' => [
+        'name' => 'remove-year',
+        'handler' => 'SchoolYearsController@removeYear',
+        'methods' => ['post']
     ],
     '/school-years/{period}' => [
         'name' => '',
