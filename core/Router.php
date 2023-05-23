@@ -54,7 +54,6 @@ class Router
             ) {
                 try {
                     eval("use $ns\\$class;(new $class(\$db))->$action('$arg');");
-                    echo ("use $ns\\$class;(new $class(\$db))->$action('$arg');");
                 }
                 catch (\Exception $e) {
                     echo $e->getMessage();
