@@ -54,6 +54,7 @@ class Router
             ) {
                 try {
                     eval("use $ns\\$class;(new $class(\$db))->$action('$arg');");
+                    echo ("use $ns\\$class;(new $class(\$db))->$action('$arg');");
                 }
                 catch (\Exception $e) {
                     echo $e->getMessage();
@@ -99,12 +100,12 @@ class Router
         if ($uri === '')
             $uri = '/';
 
-        if (isset(self::$paths[$uri]))
+        if (isset(self::$paths[$uri])) {
             return self::$paths[$uri];
-        else {
+        } else {
             foreach (self::$paths as $path => $data) {
-                $parts    = explode('/', $path);
-                $uriParts = explode('/', $uri);
+                $parts    = Helpers::explodeUrl($path);
+                $uriParts = Helpers::explodeUrl($uri);
 
                 if (count($parts) !== count($uriParts)) {
                     continue;
@@ -113,7 +114,7 @@ class Router
                 $tmp = false;
 
                 for ($i = 0, $c = count($parts); $i < $c; $i++) {
-                    if (strlen($parts[$i]) && strlen($uriParts[$i]))
+                    if ($parts[$i] !== '') {
                         if ($parts[$i][0] !== '{' || substr($parts[$i], -1) !== '}') {
                             if (strtolower(trim($uriParts[$i])) !== strtolower(trim($parts[$i]))) {
                                 $tmp = true;
@@ -122,6 +123,10 @@ class Router
                         } else {
                             $data['arg'] = $uriParts[$i];
                         }
+                    } else {
+                        $tmp = true;
+                        continue;
+                    }
                 }
 
                 if ($tmp)
