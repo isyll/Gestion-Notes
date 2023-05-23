@@ -19,9 +19,13 @@ class SessionManager
         return $_SESSION[$key] ?? null;
     }
 
-    public static function remove(string $key): void
+    public static function remove(string|array $keys): void
     {
-        unset($_SESSION[$key]);
+        if (!is_array($keys))
+            $keys = [$keys];
+
+        foreach ($keys as $key)
+            unset($_SESSION[$key]);
     }
 
     public static function destroy()
@@ -30,7 +34,7 @@ class SessionManager
         $_SESSION = [];
     }
 
-    public static function newId() : bool
+    public static function newId(): bool
     {
         return session_regenerate_id();
     }
