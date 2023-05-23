@@ -144,7 +144,7 @@ class Router
 
         $handler = explode('@', $handler);
         $methods = array_map(function ($item) {
-            return strtolower($item);
+            return strtoupper($item);
         }, $methods ?? []);
 
         return array_combine(
