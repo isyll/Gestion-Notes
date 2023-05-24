@@ -12,10 +12,10 @@ class AdminController extends Controller
 {
     private AdminModel $model;
 
-    public function __construct(Database $db)
+    public function __construct()
     {
-        parent::__construct($db);
-        $this->model = new AdminModel($db);
+        parent::__construct();
+        $this->model = new AdminModel($this->db);
     }
 
     public function createUser()

@@ -14,14 +14,12 @@ class LoginController extends Controller
 
     public function __construct(Database $db)
     {
-        parent::__construct($db);
+        parent::__construct();
     }
 
     public function login()
     {
-        $login = $_POST['login'];
+        $login    = $_POST['login'];
         $password = $_POST['password'];
-
-        // self::$loginInfos['login']
     }
 }

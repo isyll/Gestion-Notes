@@ -25,7 +25,6 @@ $GLOBALS['viewsPath'] = dirname(__DIR__) . '/view';
 $GLOBALS['siteName']  = "Breukh'S School";
 $GLOBALS['baseURL']   = Helpers::getBaseURL();
 
-Router::$db        = $db;
 Router::$namespace = 'App\\Controller';
 Router::loadConfig($routes);
 Router::execute();

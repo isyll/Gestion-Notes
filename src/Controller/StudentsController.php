@@ -18,14 +18,13 @@ class StudentsController extends Controller
     private NiveauxModel $nm;
     private ClassesModel $cm;
 
-    public function __construct(Database $db)
+    public function __construct()
     {
-        parent::__construct($db);
-
-        $this->model = new StudentsModel($db);
-        $this->sym   = new SchoolYearsModel($db);
-        $this->nm    = new NiveauxModel($db);
-        $this->cm    = new ClassesModel($db);
+        parent::__construct();
+        $this->model = new StudentsModel($this->db);
+        $this->sym   = new SchoolYearsModel($this->db);
+        $this->nm    = new NiveauxModel($this->db);
+        $this->cm    = new ClassesModel($this->db);
     }
 
     public function studentsList(

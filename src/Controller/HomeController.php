@@ -3,16 +3,12 @@
 namespace App\Controller;
 
 use Core\Controller;
-use Core\Database;
-use Core\Router;
 
 class HomeController extends Controller
 {
-    private Router $router;
-
-    public function __construct(Database $db)
+    public function __construct()
     {
-        parent::__construct($db);
+        parent::__construct();
     }
 
     public function index()

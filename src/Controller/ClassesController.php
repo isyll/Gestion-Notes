@@ -16,12 +16,12 @@ class ClassesController extends Controller
     private NiveauxModel $nm;
     private SchoolYearsModel $sym;
 
-    public function __construct(Database $db)
+    public function __construct()
     {
-        parent::__construct($db);
-        $this->model = new ClassesModel($db);
-        $this->nm    = new NiveauxModel($db);
-        $this->sym   = new SchoolYearsModel($db);
+        parent::__construct();
+        $this->model = new ClassesModel($this->db);
+        $this->nm    = new NiveauxModel($this->db);
+        $this->sym   = new SchoolYearsModel($this->db);
     }
 
     public function index(string $id)

@@ -15,11 +15,11 @@ class NiveauxController extends Controller
 
     private ClassesModel $cmodel;
 
-    public function __construct(Database $db)
+    public function __construct()
     {
-        parent::__construct($db);
-        $this->model  = new NiveauxModel($db);
-        $this->cmodel = new ClassesModel($db);
+        parent::__construct();
+        $this->model  = new NiveauxModel($this->db);
+        $this->cmodel = new ClassesModel($this->db);
     }
 
     public function index(string $niveau = NULL)
@@ -56,7 +56,7 @@ class NiveauxController extends Controller
 
             if (count($this->data['niveaux']) === 0) {
                 $this->data['exists'] = false;
-                $this->data['msg'] = Helpers::msg("L'année scolaire {$period} n'existe pas", 'danger');
+                $this->data['msg']    = Helpers::msg("L'année scolaire {$period} n'existe pas", 'danger');
             } else {
                 $this->data['exists'] = true;
             }

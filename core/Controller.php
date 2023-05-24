@@ -11,9 +11,13 @@ class Controller
     protected array $data;
     protected string $defaultLayout = 'layout';
 
-    public function __construct(Database $db)
+    public function __construct()
     {
-        $this->db      = $db;
+        $this->db      = new Database(
+            dbname: 'gnotes',
+            user: 'isyll',
+            password: 'xCplm_'
+        );
         $this->request = Helpers::resolveRequest();
         $this->session = new SessionManager();
         $this->fv      = new FormValidator();
