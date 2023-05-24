@@ -36,12 +36,10 @@ class Database
         $stmt = $this->pdo->prepare($query);
         $val = $stmt->execute($values);
 
-        $results = [];
-
         if ($fetch) {
-            $results = $stmt->$fetch();
+            return $stmt->$fetch();
         }
 
-        return empty($results) ? $val : $results;
+        return $val;
     }
 }

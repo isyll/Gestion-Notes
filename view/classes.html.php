@@ -17,6 +17,7 @@
                     <form action="/create-classe" method="post" class="d-flex">
                         <input type="text" name="libelleClasse" class="form-control" />
                         <input type="hidden" name="period" value="<?= $period ?>" />
+                        <input type="hidden" name="niveauId" value="<?= $niveauId ?>" />
                         <input type="hidden" name="niveauSlug" value="<?= $niveauSlug ?>" />
                         <button class="btn btn-secondary" type="submit">Ajouter</button>
                     </form>

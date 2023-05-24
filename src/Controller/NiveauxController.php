@@ -6,9 +6,7 @@ use App\Model\ClassesModel;
 use App\Model\NiveauxModel;
 use App\Model\SchoolYearsModel;
 use Core\Controller;
-use Core\Database;
 use Core\FormValidator;
-use Core\Helpers;
 
 class NiveauxController extends Controller
 {
@@ -71,18 +69,21 @@ class NiveauxController extends Controller
                 'required' => true,
                 'name' => 'libelleNiveau',
                 'value' => $libelle,
-                'min_length' => 1
+                'min_length' => 1,
+                'error_msg' => "Le libellé de niveau saisi est invalide"
             ],
             [
                 'required' => true,
                 'name' => 'period',
                 'value' => $period,
+                'error_msg' => "L'année est invalide"
             ],
             [
                 'required' => true,
-                'name' => 'period',
+                'name' => 'yearId',
                 'value' => $yearId,
-                'type' => 'numeric'
+                'type' => 'numeric',
+                'error_msg' => "L'année est invalide"
             ]
         ]);
 

@@ -35,23 +35,21 @@ class ClassesModel
 
     public function getClasses(string $period, string $niveauSlug)
     {
-        $stmt = $this->db->getPDO()
-            ->prepare("SELECT classes.*
-            FROM classes, niveaux, annee_scolaire
-            WHERE niveaux.slug = ?
-            AND annee_scolaire.periode = ?
-            AND classes.id_niveau = niveaux.id
-            AND annee_scolaire.id = niveaux.as_id");
-
-        $stmt->execute([$niveauSlug, $period]);
-
-        return $stmt->fetchAll();
+        return $this->db->pexec(
+            "SELECT classes.* FROM classes
+            JOIN niveaux AS nv ON nv.id = classes.id_niveau AND nv.slug = ?
+            JOIN annee_scolaire AS ans ON ans.periode = ?
+            WHERE classes.supprime = 0",
+            [$niveauSlug, $period],
+            'fetchAll'
+        );
     }
 
     public function getNiveauId($period, $niveauSlug)
     {
         return $this->db->pexec(
-            "SELECT annee_scolaire.id FROM annee_scolaire, niveaux
+            "SELECT niveaux.id
+            FROM annee_scolaire, niveaux
             WHERE periode = ?
             AND annee_scolaire.id = as_id
             AND slug = ?",
@@ -60,11 +58,14 @@ class ClassesModel
         );
     }
 
-    public function saveClasse(array $datas): bool
-    {
+    public function saveClasse(
+        string $libelleClasse,
+        string $classeSlug,
+        int $niveauId
+    ): bool {
         return $this->db->pexec(
-            "INSERT INTO classes(libelle, id_niveau) VALUES(?, ?)",
-            [$datas['libelleClasse'], $datas['niveauId']]
+            "INSERT INTO classes(libelle, slug, id_niveau) VALUES(?, ?, ?)",
+            [$libelleClasse, $classeSlug, $niveauId]
         );
     }
 

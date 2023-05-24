@@ -27,12 +27,24 @@ class ClassesController extends Controller
     {
         $this->data['period']     = $period;
         $this->data['niveauSlug'] = $niveauSlug;
-        $this->data['niveauId']   = $this->model->getNiveauId($period, $niveauSlug);
+        $this->data['niveauId']   = $this->model->getNiveauId($period, $niveauSlug)['id'];
+
+        if ($this->session->get('create-classe')) {
+            $this->data['msg'] = $this->session->get('create-classe-msg');
+
+            if ($this->session->get('create-classe-errors')) {
+                $this->data['errors'] = $this->session->get('create-classe-errors');
+            }
+
+            $this->session->remove(['create-classe', 'create-classe-msg', 'create-classe-errors']);
+        }
 
         if ($this->sym->yearExistPeriod($period)) {
+            $this->data['yearId'] = $this->sym->getYearByPeriod($period)['id'];
+
             if ($this->sym->containsNiveau($period, $niveauSlug)) {
                 $this->data['classes'] = $this->model->getClasses($period, $niveauSlug);
-                if (count($this->data['classes']) === 0) {
+                if (!$this->data['classes']) {
                     $this->data['msg'] = $this->success("Le niveau $niveauSlug ne possède aucune classe");
                 }
             } else {
@@ -52,44 +64,51 @@ class ClassesController extends Controller
         $period        = $_POST['period'] ?? '';
         $niveauSlug    = $_POST['niveauSlug'] ?? '';
         $libelleClasse = $_POST['libelleClasse'] ?? '';
+        $niveauId      = $_POST['niveauId'] ?? '';
 
         $fv = new FormValidator([
             [
                 'required' => true,
                 'name' => 'period',
                 'value' => $period,
-                'error_msg' => "Le libellé de niveau saisi est invalide"
+                'error_msg' => "L'année '$period' est invalide"
             ],
             [
                 'required' => true,
                 'name' => 'niveauSlug',
                 'value' => $niveauSlug,
-                'error_msg' => "Le niveau est invalide"
+                'error_msg' => "Le niveau '$niveauSlug' est invalide"
             ],
             [
                 'required' => true,
                 'name' => 'libelleClasse',
                 'value' => $libelleClasse,
-                'error_msg' => "Le libellé de classe saisi est invalide"
+                'error_msg' => "Le libellé '$libelleClasse' est invalide"
             ],
         ]);
 
         $fv->validate();
 
-        if (count($this->data['errors'] = $fv->getErrors()) > 0) {
-            $this->data['msg'] = $this->error('Formulaire invalide');
-            dd('invalide');
+        if (count($errors = $fv->getErrors()) > 0) {
+            $this->session->set('create-classe-msg', $this->error('Formulaire invalide'));
+            $this->session->set('create-classe-errors', $errors);
         } else {
             if ($this->model->classeExist((int) $_POST['niveauId'], $_POST['libelleClasse'])) {
-                $this->data['msg'] = $this->error('Ce niveau possède déjà une classe nommée ' . $_POST['libelleClasse']);
-                dd('existe déjà');
+                $this->session->set('create-classe-msg', $this->error('Ce niveau possède déjà une classe nommée ' . $_POST['libelleClasse']));
             } else {
-                if ($this->model->saveClasse($_POST)) {
-                    dd("ok");
+                $libelleClasse = $this->helpers::rmms($libelleClasse);
+                $slug          = str_replace(' ', '-', $libelleClasse);
+
+                if ($this->model->saveClasse($libelleClasse, $slug, $niveauId)) {
+                    $this->session->set('create-classe-msg', $this->success('Classe créée avec succès ' . $_POST['libelleClasse']));
+
                 } else {
-                    dd('erreur');
+                    $this->session->set('create-classe-msg', $this->error('Une erreur est survenue lors de la création de la classe ' . $_POST['libelleClasse']));
+
                 }
             }
         }
+
+        $this->redirect("/{$this->data['urls']['base']}/$period/$niveauSlug");
     }
 }

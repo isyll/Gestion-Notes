@@ -13,15 +13,15 @@ $routes = [
         'name' => 'create-user',
         'handler' => 'AdminController@createUser',
     ],
-    'sc/{period}' => [
+    '/sc/{period}' => [
         'name' => '',
         'handler' => 'NiveauxController@getNiveaux',
     ],
-    'sc/{period}/{niveauSlug}' => [
+    '/sc/{period}/{niveauSlug}' => [
         'name' => '',
         'handler' => 'ClassesController@getClasses',
     ],
-    'sc/{period}/{niveauSlug}/{classeSlug}' => [
+    '/sc/{period}/{niveauSlug}/{classeSlug}' => [
         'name' => '',
         'handler' => 'StudentsController@studentsList',
     ],
