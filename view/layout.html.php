@@ -22,7 +22,7 @@
 
 <body>
     <?= $content; ?>
-    <script src="/build/main.js"></script>
+    <script src="/build/main.js" defer></script>
 </body>
 
 </html>

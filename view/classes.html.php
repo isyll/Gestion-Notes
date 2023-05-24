@@ -21,7 +21,7 @@
                                         <h5 role="btn" class="card-title text-center">
                                             <?= $c['libelle'] ?>
                                         </h5>
-                                        <a href="/<?= $period ?>/<?= $niveauSlug ?>/<?= $c['slug'] ?>"
+                                        <a href="/<?= $urls['base'] ?>/<?= $period ?>/<?= $niveauSlug ?>/<?= $c['slug'] ?>"
                                             class="card-link">
                                             <button type="button" class="btn btn-secondary text-white">
                                                 Sélectionner</button>

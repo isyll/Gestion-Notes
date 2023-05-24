@@ -8,6 +8,8 @@ class Router
 
     public static $namespace;
 
+    public static string $base;
+
     public static function register(
         string $name,
         string $handler,
@@ -78,6 +80,8 @@ class Router
             if (!empty($values['name']))
                 $urls[$values['name']] = $path;
         }
+
+        $urls['base'] = self::$base;
 
         return $urls;
     }

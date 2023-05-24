@@ -18,7 +18,8 @@
                 <?php if ($exists): ?>
                     <div class="col-2"></div>
                     <div class="col-8">
-                        <form method="/create-niveau" action="post" class="d-flex justify-content-between">
+                        <form method="/<?= $urls['base'] ?>/create-niveau" action="post"
+                            class="d-flex justify-content-between">
                             <label for="niveauLibelle" class="form-label">Créer un niveau</label>
                             <input type="text" class="form-control" name="niveauLibelle" id="niveauLibelle" />
                             <input type="submit" value="Ajouter" class="text-white btn btn-secondary" />
@@ -37,7 +38,7 @@
                                         <h5 role="btn" class="card-title text-center">
                                             <?= $n['libelle'] ?>
                                         </h5>
-                                        <a href="/<?= $period ?>/<?= $n['slug'] ?>" class="card-link">
+                                        <a href="/<?= $urls['base'] ?>/<?= $period ?>/<?= $n['slug'] ?>" class="card-link">
                                             <button type="button" class="btn btn-secondary text-white">
                                                 Sélectionner</button>
                                         </a>

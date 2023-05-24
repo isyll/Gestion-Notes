@@ -50,7 +50,7 @@
                                                 </td>
                                                 <td>
                                                     <div class="d-flex flex-column">
-                                                        <a href="/<?= $y['periode'] ?>">Sélectionner</a>
+                                                        <a href="/<?= $urls['base'] ?>/<?= $y['periode'] ?>">Sélectionner</a>
                                                         <button type="submit" class="update-year-button p-0 btn btn-link"
                                                             data-bs-toggle="modal" data-bs-target="#modalUpdateYear"
                                                             yearPeriod="<?= $y['periode'] ?>"
@@ -64,7 +64,7 @@
                                                 </td>
                                                 <td>
                                                     <div class="form-check form-switch">
-                                                        <form action="/active-year" method="post">
+                                                        <form action="/change-year-state" method="post">
                                                             <input type="hidden" name="yearId" value="<?= $y['id'] ?>" />
                                                             <input class="form-check-input" type="checkbox" role="switch"
                                                                 onchange="this.form.submit()" id="activeYear" name="action"

@@ -13,15 +13,15 @@ $routes = [
         'name' => 'create-user',
         'handler' => 'AdminController@createUser',
     ],
-    '/{period}' => [
+    'sc/{period}' => [
         'name' => '',
         'handler' => 'NiveauxController@getNiveaux',
     ],
-    '/{period}/{niveauSlug}' => [
+    'sc/{period}/{niveauSlug}' => [
         'name' => '',
         'handler' => 'ClassesController@getClasses',
     ],
-    '/{period}/{niveauSlug}/{classeSlug}' => [
+    'sc/{period}/{niveauSlug}/{classeSlug}' => [
         'name' => '',
         'handler' => 'StudentsController@studentsList',
     ],
@@ -46,7 +46,7 @@ $routes = [
         'methods' => ['post']
     ],
     '/change-year-state' => [
-        'name' => 'active-year',
+        'name' => 'change-year-state',
         'handler' => 'SchoolYearsController@changeYearState',
         'methods' => ['post']
     ],

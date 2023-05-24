@@ -17,5 +17,6 @@ $GLOBALS['siteName']  = "Breukh'S School";
 $GLOBALS['baseURL']   = Helpers::getBaseURL();
 
 Router::$namespace = 'App\\Controller';
+Router::$base      = 'sc';
 Router::loadConfig($routes);
 Router::execute();
