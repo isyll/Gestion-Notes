@@ -4,19 +4,17 @@ namespace App\Controller;
 
 use App\Model\SchoolYearsModel;
 use Core\Controller;
-use Core\Database;
 use Core\FormValidator;
 use Core\Helpers;
-use Core\SessionManager;
 
 class SchoolYearsController extends Controller
 {
     private SchoolYearsModel $model;
 
-    public function __construct(Database $db)
+    public function __construct()
     {
-        parent::__construct($db);
-        $this->model = new SchoolYearsModel($db);
+        parent::__construct();
+        $this->model = new SchoolYearsModel($this->db);
     }
 
     public function index()
@@ -37,6 +35,10 @@ class SchoolYearsController extends Controller
         } else if ($this->session->get('year-update')) {
             $this->data['msg'] = $this->session->get('year-update-msg');
             $this->session->remove(['year-update', 'year-update-msg']);
+
+        } else if ($this->session->get('year-state-change')) {
+            $this->data['msg'] = $this->session->get('year-state-change-msg');
+            $this->session->remove(['year-state-change', 'year-state-change-msg']);
 
         }
 
@@ -86,7 +88,7 @@ class SchoolYearsController extends Controller
             );
         }
 
-        $this->redirect('/');
+        $this->redirect($this->data['urls']['school-years']);
     }
 
     public function removeYear()
@@ -128,7 +130,7 @@ class SchoolYearsController extends Controller
             );
         }
 
-        $this->redirect('/school-years');
+        $this->redirect($this->data['urls']['school-years']);
     }
 
     public function updateYear()
@@ -190,19 +192,48 @@ class SchoolYearsController extends Controller
             );
         }
 
-        $this->redirect('/');
+        $this->redirect($this->data['urls']['school-years']);
     }
 
-    public function activeYear()
+    public function changeYearState()
     {
         $this->session->set('year-state-change', true);
 
-        $action = $_POST['action'] ?? 'disable';
+        $id     = (int) $_POST['yearId'];
+        $action = $_POST['action'] ?? '';
 
-        if (!in_array($action, ['active', 'disable'])) {
+        if ($this->model->yearExist($id)) {
+            if ($action === '')
+                $action = 'disable';
 
+            if (!in_array($action, ['active', 'disable'])) {
+                $this->session->set(
+                    'year-state-change-msg',
+                    $this->error("Action impossible")
+                );
+            } else {
+                $action = ['disable' => 0, 'active' => 1][$action];
+
+                if ($this->model->changeState($id, $action)) {
+                    $this->session->set(
+                        'year-state-change-msg',
+                        $this->success('Changement effectué avec succès')
+                    );
+                } else {
+                    $this->session->set(
+                        'year-state-change-msg',
+                        $this->error("Désolé une erreur est survenue, le changement n'a pas pus s'effectuer")
+                    );
+                }
+
+            }
         } else {
-
+            $this->session->set(
+                'year-state-change-msg',
+                $this->error("L'année choisie n'existe pas")
+            );
         }
+
+        $this->redirect($this->data['urls']['school-years']);
     }
 }

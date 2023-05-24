@@ -50,15 +50,16 @@
                                                 </td>
                                                 <td>
                                                     <div class="d-flex flex-column">
-                                                        <a href="/<?= $urls['base'] ?>/<?= $y['periode'] ?>">Sélectionner</a>
+                                                        <a
+                                                            href="/<?= $urls['base'] ?>/<?= $y['periode'] ?>">Sélectionner</a>
                                                         <button type="submit" class="update-year-button p-0 btn btn-link"
                                                             data-bs-toggle="modal" data-bs-target="#modalUpdateYear"
                                                             yearPeriod="<?= $y['periode'] ?>"
                                                             yearId="<?= $y['id'] ?>">Modifier</button>
                                                         <form action="/remove-year" method="post">
                                                             <input type="hidden" name="yearId" value="<?= $y['id'] ?>" />
-                                                            <button type="submit"
-                                                                class="p-0 btn btn-link text-danger">Supprimer</button>
+                                                            <button type="submit" class="p-0 btn btn-link text-danger"
+                                                                <?= $y['active'] ? '' : 'disabled' ?>>Supprimer</button>
                                                         </form>
                                                     </div>
                                                 </td>

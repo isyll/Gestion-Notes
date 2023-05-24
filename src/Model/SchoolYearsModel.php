@@ -111,4 +111,12 @@ class SchoolYearsModel
             return false;
         }
     }
+
+    public function changeState(int $id, int $state)
+    {
+        return $this->db->pexec(
+            "UPDATE annee_scolaire SET active = ? WHERE id = ?",
+            [$state, $id]
+        );
+    }
 }
