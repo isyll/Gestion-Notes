@@ -3,43 +3,32 @@
 $routes = [
     '/' => [
         'name' => 'home',
-        'handler' => 'HomeController@index',
+        'handler' => 'SchoolYearsController@index',
     ],
     'page404' => [
         'name' => 'page404',
         'handler' => 'HomeController@page404',
     ],
-    // '/students' => [
-    //     'name' => 'students',
-    //     'handler' => 'AdminController@students',
-    // ],
-    '/login' => [
-        'name' => 'login',
-        'handler' => 'LoginController@connect',
-    ],
     '/create-user' => [
         'name' => 'create-user',
         'handler' => 'AdminController@createUser',
     ],
-    '/niveaux' => [
-        'name' => 'niveaux',
-        'handler' => 'NiveauxController@index',
-    ],
-    '/niveaux/{niveau}' => [
+    '/{period}' => [
         'name' => '',
-        'handler' => 'ClassesController@index',
+        'handler' => 'NiveauxController@getNiveaux',
     ],
-    '/classes' => [
-        'name' => 'classes',
-        'handler' => 'ClassesController@index',
+    '/{period}/{niveauSlug}' => [
+        'name' => '',
+        'handler' => 'ClassesController@getClasses',
     ],
-    '/classes/{id}' => [
-        'name' => 'students',
-        'handler' => 'StudentsController@index',
+    '/{period}/{niveauSlug}/{classeSlug}' => [
+        'name' => '',
+        'handler' => 'StudentsController@studentsList',
     ],
-    '/school-years' => [
-        'name' => 'school-years',
-        'handler' => 'SchoolYearsController@index',
+    '/create-student' => [
+        'name' => 'create-year',
+        'handler' => 'StudentsController@createStudent',
+        'methods' => ['post']
     ],
     '/create-year' => [
         'name' => 'create-year',
@@ -51,9 +40,30 @@ $routes = [
         'handler' => 'SchoolYearsController@removeYear',
         'methods' => ['post']
     ],
-    '/school-years/{period}' => [
-        'name' => '',
-        'handler' => 'NiveauxController@index',
+    '/update-year' => [
+        'name' => 'update-year',
+        'handler' => 'SchoolYearsController@updateYear',
+        'methods' => ['post']
+    ],
+    '/active-year' => [
+        'name' => 'active-year',
+        'handler' => 'SchoolYearsController@activeYear',
+        'methods' => ['post']
+    ],
+    '/create-niveau' => [
+        'name' => 'create-niveau',
+        'handler' => 'NiveauxController@createNiveau',
+        'methods' => ['post']
+    ],
+    '/create-classe' => [
+        'name' => 'create-classe',
+        'handler' => 'ClassesController@createClasse',
+        'methods' => ['post']
+    ],
+    '/login' => [
+        'name' => 'login',
+        'handler' => 'LoginController@connect',
+        'methods' => ['post']
     ],
 ];
 

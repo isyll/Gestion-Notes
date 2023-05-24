@@ -13,14 +13,50 @@ class NiveauxModel
         $this->db = $db;
     }
 
-    public function getNiveaux()
+    public function getSYNiveauxById(int $id): array
     {
-        return $this->db->getPDO()->query("SELECT libelle FROM niveaux")->fetchAll();
+        $stmt = $this->db->getPDO()
+            ->prepare("SELECT * FROM niveaux WHERE as_id=?");
+
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
+
+    public function getSYNiveauxByPeriod(string $period): array
+    {
+        $stmt = $this->db->getPDO()
+            ->prepare("SELECT * FROM niveaux JOIN annee_scolaire ON annee_scolaire.id=as_id WHERE annee_scolaire.periode=? AND annee_scolaire.supprime=0");
+
+        $stmt->execute([$period]);
+
+        return $stmt->fetchAll();
+    }
+
+    public function getNiveauBySlug(string $period, string $slug)
+    {
+        $stmt = $this->db->getPDO()
+            ->prepare("SELECT * FROM niveaux JOIN annee_scolaire ON periode=? WHERE slug=?");
+
+        $stmt->execute([$period, $slug]);
+
+        return $stmt->fetch();
+    }
+
+    public function niveausIsDeleted(string $period, string $slug): bool
+    {
+        $result = $this->getNiveauBySlug($period, $slug);
+
+        if ($result) {
+            return $result['supprime'] ? true : false;
+        }
+
+        return false;
     }
 
     public function getAll()
     {
-        return $this->db->getPDO()->query("SELECT id, libelle FROM niveaux")->fetchAll();
+        return $this->db->getPDO()->query("SELECT * FROM niveaux")->fetchAll();
     }
 
     public function getNiveauById(int $id): array
@@ -46,7 +82,7 @@ class NiveauxModel
 
     public function niveauExist(string $libelle)
     {
-        $result = $this->getNiveaux();
+        $result = $this->getAll();
 
         foreach ($result as $r) {
             if ($r['libelle'] === $libelle)

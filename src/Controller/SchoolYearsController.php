@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Model\AdminModel;
 use App\Model\SchoolYearsModel;
 use Core\Controller;
 use Core\Database;
@@ -27,14 +26,18 @@ class SchoolYearsController extends Controller
 
         $this->data['schoolYears'] = $this->model->getYears();
 
-        if (SessionManager::get('school-create')) {
-            $this->data['msg'] = SessionManager::get('school-create-msg');
+        if ($this->session->get('year-create')) {
+            $this->data['msg'] = $this->session->get('year-create-msg');
+            $this->session->remove(['year-create', 'year-create-msg']);
 
-            SessionManager::remove(['school-create', 'school-create-msg']);
-        } else if (SessionManager::get('school-remove')) {
-            $this->data['msg'] = SessionManager::get('school-remove-msg');
+        } else if ($this->session->get('year-remove')) {
+            $this->data['msg'] = $this->session->get('year-remove-msg');
+            $this->session->remove(['year-remove', 'year-remove-msg']);
 
-            SessionManager::remove(['school-remove', 'school-remove-msg']);
+        } else if ($this->session->get('year-update')) {
+            $this->data['msg'] = $this->session->get('year-update-msg');
+            $this->session->remove(['year-update', 'year-update-msg']);
+
         }
 
         echo $this->render('school-years', $this->data);
@@ -42,7 +45,7 @@ class SchoolYearsController extends Controller
 
     public function createYear()
     {
-        SessionManager::set('school-create', true);
+        $this->session->set('year-create', true);
 
         $fv = new FormValidator(
             [
@@ -63,13 +66,13 @@ class SchoolYearsController extends Controller
             !is_numeric($years[0]) || !is_numeric($years[1]) ||
             $years[1] - $years[0] !== 1
         ) {
-            SessionManager::set(
-                'school-create-msg',
+            $this->session->set(
+                'year-create-msg',
                 Helpers::msg('Année non valide', 'danger')
             );
         } else if ($this->model->periodExist($_POST['period'])) {
-            SessionManager::set(
-                'school-create-msg',
+            $this->session->set(
+                'year-create-msg',
                 Helpers::msg('Année déjà existante', 'danger')
             );
         } else {
@@ -77,18 +80,18 @@ class SchoolYearsController extends Controller
                 'period' => $_POST['period']
             ]);
 
-            SessionManager::set(
-                'school-create-msg',
+            $this->session->set(
+                'year-create-msg',
                 Helpers::msg('Année créée avec succès')
             );
         }
 
-        Helpers::redirectSite('/school-years');
+        $this->redirect('/');
     }
 
     public function removeYear()
     {
-        SessionManager::set('school-remove', true);
+        $this->session->set('year-remove', true);
 
         $fv = new FormValidator(
             [
@@ -106,25 +109,100 @@ class SchoolYearsController extends Controller
         if (
             count($this->data['errors'] = $fv->getErrors()) > 0
         ) {
-            SessionManager::set(
-                'school-remove-msg',
+            $this->session->set(
+                'year-remove-msg',
                 Helpers::msg('Année non valide', 'danger')
             );
         } else if (!$this->model->yearExist((int) $_POST['yearId'])) {
-            SessionManager::set(
-                'school-remove-msg',
+            $this->session->set(
+                'year-remove-msg',
                 Helpers::msg("L'année demandée n'existe pas", 'danger')
             );
         } else {
             $period = $this->model->getYearById((int) $_POST['yearId']);
             $this->model->deleteYear((int) $_POST['yearId']);
 
-            SessionManager::set(
-                'school-remove-msg',
+            $this->session->set(
+                'year-remove-msg',
                 Helpers::msg("Année {$period['periode']} supprimée avec succès")
             );
         }
 
-        Helpers::redirectSite('/school-years');
+        $this->redirect('/school-years');
+    }
+
+    public function updateYear()
+    {
+        $this->session->set('year-update', true);
+
+        $id       = (int) $_POST['yearId'] ?? '';
+        $newValue = $_POST['newValue'] ?? '';
+
+        $this->fv->form([
+            [
+                'required' => true,
+                'value' => $id,
+                'name' => 'yearId',
+                'type' => 'numeric',
+                'error_msg' => "L'id $id est invalide"
+            ],
+            [
+                'required' => true,
+                'name' => 'yearNewValue',
+                'value' => $newValue,
+                'regex' => '/\d{4}-\d{4}/',
+                'error_msg' => "La période $newValue est invalide"
+            ],
+        ]);
+
+        $this->fv->validate();
+        $years = explode('-', $newValue);
+
+        if (
+            count($errors = $this->fv->getErrors()) > 0 ||
+            $years[1] - $years[0] !== 1
+        ) {
+            $this->session->set(
+                'year-update-msg',
+                Helpers::msg("L'année $newValue est invalide", 'danger')
+            );
+            $this->session->set(
+                'year-update-errors',
+                $errors
+            );
+        } else if ($this->model->yearExist($id)) {
+            if ($this->model->updateYear($id, $newValue)) {
+                $this->session->set(
+                    'year-update-msg',
+                    Helpers::msg('Année modifiée avec succès')
+                );
+            } else {
+                $this->session->set(
+                    'year-update-msg',
+                    Helpers::msg("La modification n'a pas pu s'effectuer", 'danger')
+                );
+            }
+
+        } else {
+            $this->session->set(
+                'year-update-msg',
+                Helpers::msg('Année inexistante', 'danger')
+            );
+        }
+
+        $this->redirect('/');
+    }
+
+    public function activeYear()
+    {
+        $this->session->set('year-state-change', true);
+
+        $action = $_POST['action'] ?? 'disable';
+
+        if (!in_array($action, ['active', 'disable'])) {
+
+        } else {
+
+        }
     }
 }

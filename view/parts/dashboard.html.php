@@ -1,4 +1,4 @@
-<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-secondary" style="width: 280px;">
+<!-- <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-secondary" style="width: 280px;">
 
     <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
         <span class="fs-4">Tableau de bord</span>
@@ -6,13 +6,13 @@
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
-            <a href="<?= $urls['school-years'] ?>"
-                class="text-white nav-link <?= $current == 'school-years' ? 'active' : '' ?>" aria-current="page">
+            <a href=" $urls['school-years']"
+                class="text-white nav-link  $current == 'school-years' ? 'active' : ''" aria-current="page">
                 Années scolaires
             </a>
         </li>
         <li>
-            <a href="<?= $urls['niveaux'] ?>" class="nav-link text-white <?= $current == 'niveaux' ? 'active' : '' ?>">
+            <a href="$urls['niveaux'] " class="nav-link text-white  $current == 'niveaux' ? 'active' : '' ">
                 Niveaux
             </a>
         </li>
@@ -34,4 +34,4 @@
             <li><a class="dropdown-item" href="#">Sign out</a></li>
         </ul>
     </div>
-</div>
+</div> -->

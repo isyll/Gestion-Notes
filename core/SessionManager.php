@@ -9,17 +9,17 @@ class SessionManager
         session_start();
     }
 
-    public static function set(string $key, mixed $value): void
+    public function set(string $key, mixed $value): void
     {
         $_SESSION[$key] = $value;
     }
 
-    public static function get(string $key): mixed
+    public function get(string $key): mixed
     {
         return $_SESSION[$key] ?? null;
     }
 
-    public static function remove(string|array $keys): void
+    public function remove(string|array $keys): void
     {
         if (!is_array($keys))
             $keys = [$keys];
@@ -28,13 +28,13 @@ class SessionManager
             unset($_SESSION[$key]);
     }
 
-    public static function destroy()
+    public function destroy()
     {
         session_destroy();
         $_SESSION = [];
     }
 
-    public static function newId(): bool
+    public function newId(): bool
     {
         return session_regenerate_id();
     }

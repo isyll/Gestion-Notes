@@ -34,7 +34,7 @@ class Helpers
             $uri = substr($uri, 0, $pos);
         }
 
-        while ($uri[strlen($uri) - 1] === '/')
+        while (substr($uri, -1) === '/')
             $uri = substr($uri, 0, -1);
 
         return ['method' => $method, 'uri' => $uri];
@@ -86,7 +86,7 @@ class Helpers
 
         return array_map(
             function ($item) {
-                return strtolower(trim($item));
+                return trim($item);
             },
             explode('/', $url)
         );

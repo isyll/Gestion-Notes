@@ -7,10 +7,15 @@ class FormValidator
     private array $datas;
     private array $errors;
 
-    public function __construct(array $datas)
+    public function __construct(array $datas = [])
     {
-        $this->datas  = $datas;
+        $this->form($datas);
         $this->errors = [];
+    }
+
+    public function form(array $datas)
+    {
+        $this->datas = $datas;
     }
 
     public function validate()
@@ -63,13 +68,13 @@ class FormValidator
     private function email(array $field)
     {
         if (!filter_var($field['value'], FILTER_VALIDATE_EMAIL))
-            $this->addError($field['name'], "Le champs {$field['name']} est invalide");
+            $this->addError($field['name'], $field['error_msg'] ?? '');
     }
 
     private function inArray(array $field)
     {
         if (!in_array($field['value'], $field['set_values']))
-            $this->addError($field['name'], "Le champs {$field['name']} est invalide");
+            $this->addError($field['name'], $field['error_msg'] ?? '');
     }
 
     private function errorTest(bool $condition, string $name, string $error): void
@@ -81,31 +86,31 @@ class FormValidator
     private function charsOnly(array $field): void
     {
         if (!preg_match('/^[A-Za-z]+$/', $field['value']))
-            $this->addError($field['name'], "Le champs {$field['name']} est invalide");
+            $this->addError($field['name'], $field['error_msg'] ?? '');
     }
 
     private function alphaNum(array $field): void
     {
         if (!preg_match('/^[A-Za-z0-9]+$/', $field['value']))
-            $this->addError($field['name'], "Le champs {$field['name']} est invalide");
+            $this->addError($field['name'], $field['error_msg'] ?? '');
     }
 
     private function regex(array $field)
     {
         if (!preg_match($field['regex'], $field['value']))
-            $this->addError($field['name'], "Le champs {$field['name']} est invalide");
+            $this->addError($field['name'], $field['error_msg'] ?? '');
     }
 
     private function required(array $field)
     {
         if (empty($field['value']))
-            $this->addError($field['name'], "Le champs {$field['name']} est obligatoire");
+            $this->addError($field['name'], $field['error_msg'] ?? '');
     }
 
     private function numeric(array $field)
     {
         if (!is_numeric($field['value']))
-            $this->addError($field['name'], "Le champs {$field['name']} doit être de type numérique}");
+            $this->addError($field['name'], $field['error_msg'] ?? '');
     }
 
     private function minLength(array $field)
@@ -113,7 +118,7 @@ class FormValidator
         $this->errorTest(
             strlen($field['value']) < $field['min_length'],
             $field['name'],
-            "Le champs {$field['name']} est inférieure à la taille minimale ({$field['min_length']})"
+            $field['error_msg'] ?? ''
         );
     }
 
@@ -122,7 +127,7 @@ class FormValidator
         $this->errorTest(
             strlen($field['value']) > $field['max_length'],
             $field['name'],
-            "Le champs {$field['name']} dépasse la taille maximale ({$field['max_length']})"
+            $field['error_msg'] ?? ''
         );
     }
 }

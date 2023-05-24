@@ -25,4 +25,9 @@ class HomeController extends Controller
     {
         echo $this->render('404');
     }
+
+    public function test($period = NULL, $niveauSlug = NULL, $classeSlug = NULL)
+    {
+        echo "test ok";
+    }
 }

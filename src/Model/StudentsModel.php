@@ -68,6 +68,45 @@ class StudentsModel
         }
     }
 
+    public function getClasses(string $period, string $niveauSlug)
+    {
+
+    }
+
+    public function containsClasse(string $period, string $niveauSlug, string $classeSlug): bool
+    {
+        $stmt = $this->db->getPDO()
+            ->prepare("SELECT classes.*
+                FROM classes, niveaux, annee_scolaire
+                WHERE annee_scolaire.periode = ?
+                AND niveaux.as_id = annee_scolaire.id
+                AND niveaux.slug = ?
+                AND classes.id_niveau = niveaux.id
+                AND classes.slug = ?
+                AND classes.supprime = 0");
+
+        $stmt->execute([$period, $niveauSlug, $classeSlug]);
+
+        return $stmt->fetch() ? true : false;
+    }
+
+    public function getAllStudents(string $period, string $niveauSlug, string $classeSlug)
+    {
+        $stmt = $this->db->getPDO()
+            ->prepare("SELECT personnes.*, eleves.*
+                FROM classes, personnes, niveaux, annee_scolaire, eleves
+                JOIN personnes AS p ON eleves.id_personne = p.id
+                WHERE annee_scolaire.periode = ?
+                AND niveaux.as_id = annee_scolaire.id
+                AND niveaux.slug = ?
+                AND classes.id_niveau = niveaux.id
+                AND classes.slug = ?");
+
+        $stmt->execute([$period, $niveauSlug, $classeSlug]);
+
+        return $stmt->fetchAll();
+    }
+
     public function numero()
     {
         return

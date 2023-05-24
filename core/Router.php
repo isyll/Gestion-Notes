@@ -5,6 +5,7 @@ namespace Core;
 class Router
 {
     private static array $paths;
+    private static array $redirections;
 
     public static $namespace;
     public static Database $db;
@@ -45,19 +46,19 @@ class Router
             $class           = $match['class'];
             $action          = $match['action'];
             $request_methods = $match['request_methods'];
-            $arg             = $match['arg'] ?? '';
 
-            $empty = empty($request_methods);
+            $args = '';
+            if (isset($match['arg'])) {
+                foreach ($match['arg'] as $name => $value) {
+                    $args .= "$name:'$value',";
+                }
+            }
+
             if (
-                $empty ||
-                (!$empty && in_array($method, $request_methods))
+                empty($request_methods) ||
+                (!empty($request_methods) && in_array($method, $request_methods))
             ) {
-                try {
-                    eval("use $ns\\$class;(new $class(\$db))->$action('$arg');");
-                }
-                catch (\Exception $e) {
-                    echo $e->getMessage();
-                }
+                eval("use $ns\\$class;(new $class(\$db))->$action($args);");
                 return;
             }
         }
@@ -115,12 +116,12 @@ class Router
                 for ($i = 0, $c = count($parts); $i < $c; $i++) {
                     if ($parts[$i] !== '') {
                         if ($parts[$i][0] !== '{' || substr($parts[$i], -1) !== '}') {
-                            if (strtolower(trim($uriParts[$i])) !== strtolower(trim($parts[$i]))) {
+                            if (strtolower($uriParts[$i]) !== strtolower($parts[$i])) {
                                 $tmp = true;
                                 break;
                             }
                         } else {
-                            $data['arg'] = $uriParts[$i];
+                            $data['arg'][substr($parts[$i], 1, -1)] = $uriParts[$i];
                         }
                     } else {
                         $tmp = true;

@@ -27,57 +27,98 @@
                     </div>
                     <div class="row">
                         <div class="list-group">
-                            <?php foreach ($schoolYears as $y): ?>
-                                <div class="list-group-item list-group-item-action">
-                                    <div class="d-flex justify-content-between mb-2 w-100">
-                                        <h5>
-                                            <?= $y['periode'] ?>
-                                        </h5>
-                                        <div class="d-flex flex-column">
-                                            <a href="/school-years/<?= $y['periode'] ?>">Sélectionner</a>
-                                            <form action="" method="post" id="updateYear<?= $y['id'] ?>">
-                                                <input type="hidden" name="yearId" value="<?= $y['id'] ?>" />
-                                                <button type="submit" class="p-0 btn btn-link">Modifier</button>
-                                            </form>
-                                            <form action="/remove-year" method="post">
-                                                <input type="hidden" name="yearId" value="<?= $y['id'] ?>" />
-                                                <button type="submit"
-                                                    class="p-0 btn btn-link text-danger">Supprimer</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php endforeach ?>
+                            <div class="list-group-item list-group-item-action">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">
+                                                Année scolaire
+                                            </th>
+                                            <th scope="col">
+                                                Actions
+                                            </th>
+                                            <th scope="col">
+                                                Etat
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($schoolYears as $y): ?>
+                                            <tr>
+                                                <td>
+                                                    <?= $y['periode'] ?>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex flex-column">
+                                                        <a href="/<?= $y['periode'] ?>">Sélectionner</a>
+                                                        <button type="submit" class="update-year-button p-0 btn btn-link"
+                                                            data-bs-toggle="modal" data-bs-target="#modalUpdateYear"
+                                                            yearPeriod="<?= $y['periode'] ?>"
+                                                            yearId="<?= $y['id'] ?>">Modifier</button>
+                                                        <form action="/remove-year" method="post">
+                                                            <input type="hidden" name="yearId" value="<?= $y['id'] ?>" />
+                                                            <button type="submit"
+                                                                class="p-0 btn btn-link text-danger">Supprimer</button>
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="form-check form-switch">
+                                                        <form action="/active-year" method="post">
+                                                            <input type="hidden" name="yearId" value="<?= $y['id'] ?>" />
+                                                            <input class="form-check-input" type="checkbox" role="switch"
+                                                                onchange="this.form.submit()" id="activeYear" name="action"
+                                                                <?= $y['active'] ? 'checked' : '' ?>
+                                                                value="<?= $y['active'] ? 'disable' : 'active' ?>" />
+                                                            <label class="form-check-label" for="activeYear">
+                                                                <?= $y['active'] ? 'désactiver' : 'activer' ?>
+                                                            </label>
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                     <div class="col-2"></div>
-                </div>
-                <!-- <div class="modal fade" id="confirmRemove" tabindex="-1" aria-labelledby="confirmRemoveLabel"
-                    aria-hidden="true" data-bs-backdrop="static">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="confirmRemoveLabel">Voulez-vous réellement supprimer
-                                    cette année</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form method="post" action="/remove-year">
-                                    <input type="hidden" value="" />
-                                    <div class="mt-4 d-flex justify-content-center align-items-center">
-                                        <button type="button" class="me-2 btn btn-secondary text-white"
-                                            data-bs-dismiss="modal">Non</button>
-                                        <button type="submit" class="ms-2 text-white btn btn-primary">Oui</button>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
+                    <div class="modal" tabindex="-1" id="modalUpdateYear">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Changer une année</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <?php include 'parts/forms/anneeform.html.php'; ?>
+                                </div>
+                                <div class="modal-footer">
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div> -->
+                </div>
 
             </div>
         </div>
 </main>
+
+<script>
+    let updYear = document.getElementsByClassName('update-year-button');
+
+    [...updYear].forEach(element =>
+    {
+        element.addEventListener('click', function (event)
+        {
+            let period = event.target.getAttribute('yearPeriod');
+            let id = event.target.getAttribute('yearId');
+
+            document.getElementById('yearId').value = id;
+            document.getElementById('yearPeriod').value = period;
+            document.getElementById('yearNewValue').value = period;
+        });
+    });
+</script>

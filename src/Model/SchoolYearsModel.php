@@ -35,6 +35,36 @@ class SchoolYearsModel
         return $stmt->fetch();
     }
 
+    public function containsNiveau($period, $niveauSlug): bool
+    {
+        $stmt = $this->db->getPDO()
+            ->prepare("SELECT niveaux.* FROM niveaux, annee_scolaire WHERE annee_scolaire.id=niveaux.as_id AND annee_scolaire.periode = ? AND niveaux.slug = ?");
+
+        $stmt->execute([$period, $niveauSlug]);
+
+        return $stmt->fetch() ? true : false;
+    }
+
+    public function updateYear(int $id, string $newPeriod)
+    {
+
+        $stmt = $this->db->getPDO()
+            ->prepare("UPDATE annee_scolaire SET periode = ? WHERE id = ?");
+
+        return $stmt->execute([$newPeriod, $id]);
+    }
+
+    public function yearIsDeleted(string $period): bool
+    {
+        $result = $this->getYearByPeriod($period);
+
+        if ($result) {
+            return $result['supprime'] ? true : false;
+        }
+
+        return false;
+    }
+
     public function getYears()
     {
         return $this->db->getPDO()
@@ -54,6 +84,11 @@ class SchoolYearsModel
     public function yearExist(int $id): bool
     {
         return $this->getYearById($id) ? true : false;
+    }
+
+    public function yearExistPeriod(string $period): bool
+    {
+        return $this->getYearByPeriod($period) ? true : false;
     }
 
     public function deleteYear(int $id)

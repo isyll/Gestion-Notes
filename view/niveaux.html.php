@@ -6,36 +6,38 @@
     <div id="main" class="w-100">
         <?php include 'parts/header.html.php' ?>
         <div id="content">
-            <?php if (isset($msg)): ?>
-                <div class="text-<?= $msg['type'] ?>">
-                    <?= $msg['value'] ?>
-                </div>
-            <?php endif ?>
+            <div class="row">
+                <?php if (isset($msg)): ?>
+                    <div class="text-<?= $msg['type'] ?>">
+                        <?= $msg['value'] ?>
+                    </div>
+                <?php endif ?>
+            </div>
+
+            <div class="row">
+                <?php if ($exists): ?>
+                    <div class="col-2"></div>
+                    <div class="col-8">
+                        <form method="/create-niveau" action="post" class="d-flex justify-content-between">
+                            <label for="niveauLibelle" class="form-label">Créer un niveau</label>
+                            <input type="text" class="form-control" name="niveauLibelle" id="niveauLibelle" />
+                            <input type="submit" value="Ajouter" class="text-white btn btn-secondary" />
+                        </form>
+                    </div>
+                    <div class="col-2"></div>
+                <?php endif ?>
+            </div>
             <div class="row ps-3">
                 <div class="col-8">
                     <div class="row">
-                        <?php if (isset($classes)): ?>
-                            <?php if (count($classes)): ?>
-                                <?php foreach ($classes as $c): ?>
-                                    <div class="card col-4">
-                                        <div class="card-title">
-                                            <?= $c['libelle'] ?>
-                                        </div>
-                                    </div>
-                                <?php endforeach ?>
-                            <?php else: ?>
-                                <div class="text-danger">
-                                    Ce niveau ne possède aucune classe
-                                </div>
-                            <?php endif ?>
-                        <?php else: ?>
+                        <?php if (isset($niveaux)): ?>
                             <?php foreach ($niveaux as $n): ?>
                                 <div class="card col-4">
                                     <div class="card-body d-flex flex-column justify-content-center align-items-center">
                                         <h5 role="btn" class="card-title text-center">
                                             <?= $n['libelle'] ?>
                                         </h5>
-                                        <a href="/niveaux/<?= $n['id'] ?>" class="card-link">
+                                        <a href="/<?= $period ?>/<?= $n['slug'] ?>" class="card-link">
                                             <button type="button" class="btn btn-secondary text-white">
                                                 Sélectionner</button>
                                         </a>
@@ -45,16 +47,6 @@
                         <?php endif ?>
                     </div>
                 </div>
-                <div class="col-2"></div>
-
-                <button data-bs-toggle="modal" data-bs-target="#Niveau"
-                    class="clearfix h-auto btn btn-light rounded col-2">
-                    <?php if (isset($requested) && count($requested)): ?>
-                        Créer une classe
-                    <?php else: ?>
-                        Créer un niveau
-                    <?php endif ?>
-                </button>
             </div>
             <div class="modal fade" id="Niveau" tabindex="-1" aria-labelledby="NiveauLabel" aria-hidden="true">
                 <div class="modal-dialog">

@@ -33,6 +33,24 @@ class ClassesModel
         return $stmt->fetchAll();
     }
 
+    public function getClasses(string $period, string $niveauSlug)
+    {
+        $stmt = $this->db->getPDO()
+            ->prepare("SELECT classes.*
+            FROM classes, niveaux, annee_scolaire
+            WHERE niveaux.slug = ?
+            AND annee_scolaire.periode = ?
+            AND classes.id_niveau = niveaux.id
+            AND annee_scolaire.id = niveaux.as_id");
+
+        // JOIN niveaux ON classes.id_niveau = niveaux.id
+        // JOIN annee_scolaire ON annee_scolaire.id = niveaux.as_id
+
+        $stmt->execute([$niveauSlug, $period]);
+
+        return $stmt->fetchAll();
+    }
+
     public function saveClasse(array $datas): bool
     {
         try {
