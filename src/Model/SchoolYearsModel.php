@@ -47,7 +47,6 @@ class SchoolYearsModel
 
     public function updateYear(int $id, string $newPeriod)
     {
-
         $stmt = $this->db->getPDO()
             ->prepare("UPDATE annee_scolaire SET periode = ? WHERE id = ?");
 

@@ -11,6 +11,18 @@
                     <?= $msg['value'] ?>
                 </div>
             <?php endif ?>
+            <div class="row">
+                <div class="col"></div>
+                <div class="col">
+                    <form action="/create-classe" method="post" class="d-flex">
+                        <input type="text" name="libelleClasse" class="form-control" />
+                        <input type="hidden" name="period" value="<?= $period ?>" />
+                        <input type="hidden" name="niveauSlug" value="<?= $niveauSlug ?>" />
+                        <button class="btn btn-secondary" type="submit">Ajouter</button>
+                    </form>
+                </div>
+                <div class="col"></div>
+            </div>
             <div class="row ps-3">
                 <div class="col-8">
                     <div class="row">
@@ -32,11 +44,6 @@
                         <?php endif ?>
                     </div>
                 </div>
-                <div class="col-2"></div>
-                <button data-bs-toggle="modal" data-bs-target="#Niveau"
-                    class="clearfix h-auto btn btn-light rounded col-2">
-                    Créer une nouvelle classe
-                </button>
             </div>
         </div>
     </div>

@@ -25,7 +25,8 @@ class SessionManager
             $keys = [$keys];
 
         foreach ($keys as $key)
-            unset($_SESSION[$key]);
+            if (isset($_SESSION[$key]))
+                unset($_SESSION[$key]);
     }
 
     public function destroy()

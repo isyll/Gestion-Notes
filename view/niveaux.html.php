@@ -18,10 +18,11 @@
                 <?php if ($exists): ?>
                     <div class="col-2"></div>
                     <div class="col-8">
-                        <form method="/<?= $urls['base'] ?>/create-niveau" action="post"
-                            class="d-flex justify-content-between">
-                            <label for="niveauLibelle" class="form-label">Créer un niveau</label>
-                            <input type="text" class="form-control" name="niveauLibelle" id="niveauLibelle" />
+                        <form method="post" action="<?= $urls['create-niveau'] ?>" class="d-flex justify-content-between">
+                            <input type="hidden" name="period" value="<?= $period ?>" />
+                            <input type="hidden" name="yearId" value="<?= $yearId ?>" />
+                            <label for="libelleNiveau" class="form-label">Créer un niveau</label>
+                            <input type="text" class="form-control" name="libelleNiveau" id="libelleNiveau" />
                             <input type="submit" value="Ajouter" class="text-white btn btn-secondary" />
                         </form>
                     </div>

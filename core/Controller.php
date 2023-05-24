@@ -8,6 +8,7 @@ class Controller
     protected FormValidator $fv;
     protected SessionManager $session;
     protected AccessControl $ac;
+    protected Helpers $helpers;
     protected array $request;
     protected array $data;
     protected string $defaultLayout = 'layout';
@@ -24,6 +25,7 @@ class Controller
         $this->session = new SessionManager();
         $this->fv      = new FormValidator();
         $this->ac      = new AccessControl();
+        $this->helpers = new Helpers();
 
         SessionManager::start();
         $this->ac->loadFromDatabase($this->db, 'accesscontrol');

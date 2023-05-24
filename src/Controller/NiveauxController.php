@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Model\ClassesModel;
 use App\Model\NiveauxModel;
+use App\Model\SchoolYearsModel;
 use Core\Controller;
 use Core\Database;
 use Core\FormValidator;
@@ -13,53 +14,45 @@ class NiveauxController extends Controller
 {
     private NiveauxModel $model;
 
-    private ClassesModel $cmodel;
+    private ClassesModel $cm;
+
+    private SchoolYearsModel $sym;
 
     public function __construct()
     {
         parent::__construct();
-        $this->model  = new NiveauxModel($this->db);
-        $this->cmodel = new ClassesModel($this->db);
-    }
-
-    public function index(string $niveau = NULL)
-    {
-        // $this->data['current'] = 'niveaux';
-        // $this->data['title']   = 'Niveaux';
-        // $this->data['niveaux'] = $this->model->getAll();
-
-        // if ($this->request['method'] === 'POST') {
-
-        // } else {
-        //     if (isset($niveau) && is_numeric($niveau)) {
-        //         $this->data['requested'] = $this->model->getNiveauById((int) $niveau);
-        //         if (count($this->data['requested'])) {
-        //             $this->data['classes'] = $this->model->getClasses($niveau);
-        //         } else {
-        //             echo 'dsdsdsl';
-        //             $this->data['classes'] = [];
-        //         }
-        //     }
-        // }
-
-        // echo $this->render('niveaux', $this->data);
+        $this->model = new NiveauxModel($this->db);
+        $this->cm    = new ClassesModel($this->db);
+        $this->sym   = new SchoolYearsModel($this->db);
     }
 
     public function getNiveaux(string $period = NULL)
     {
         $this->data['current'] = 'niveaux';
         $this->data['title']   = 'Niveaux';
-        $this->data['period']  = $period;
 
-        if ($period) {
+        if ($this->session->get('create-niveau')) {
+            $this->data['msg'] = $this->session->get('create-niveau-msg');
+
+            if ($this->session->get('create-niveau-errors')) {
+                $this->data['errors'] = $this->session->get('create-niveau-errors');
+            }
+
+            $this->session->remove(['create-niveau', 'create-niveau-msg', 'create-niveau-errors']);
+        }
+
+        if ($this->sym->yearExistPeriod($period)) {
+            $this->data['exists']  = true;
             $this->data['niveaux'] = $this->model->getSYNiveauxByPeriod($period);
+            $this->data['period']  = $period;
+            $this->data['yearId']  = $this->sym->getYearByPeriod($period)['id'];
 
             if (count($this->data['niveaux']) === 0) {
-                $this->data['exists'] = false;
-                $this->data['msg']    = Helpers::msg("L'année scolaire {$period} n'existe pas", 'danger');
-            } else {
-                $this->data['exists'] = true;
+                $this->data['msg'] = $this->data = $this->success("L'année scolaire {$period} ne possède aucun niveau");
             }
+        } else {
+            $this->data['exists'] = false;
+            $this->data['msg']    = $this->error("L'année scolaire {$period} n'existe pas");
         }
 
         echo $this->render('niveaux', $this->data);
@@ -67,33 +60,56 @@ class NiveauxController extends Controller
 
     public function createNiveau()
     {
+        $this->session->set('create-niveau', true);
+
+        $libelle = $this->helpers::rmms($_POST['libelleNiveau'] ?? '');
+        $period  = $_POST['period'] ?? '';
+        $yearId  = (int) $_POST['yearId'] ?? '';
+
         $fv = new FormValidator([
             [
                 'required' => true,
-                'name' => 'libellé de niveau',
-                'value' => $_POST['libelleNiveau'] ?? '',
+                'name' => 'libelleNiveau',
+                'value' => $libelle,
+                'min_length' => 1
             ],
             [
                 'required' => true,
-                'name' => 'libellé de classe',
-                'value' => $_POST['idPeriode'],
+                'name' => 'period',
+                'value' => $period,
+            ],
+            [
+                'required' => true,
+                'name' => 'period',
+                'value' => $yearId,
+                'type' => 'numeric'
             ]
         ]);
 
         $fv->validate();
 
-        // if (count($this->data['errors'] = $fv->getErrors()) > 0) {
-        //     $this->data['msg'] = Helpers::msg('Formulaire invalide', 'danger');
-        // } else {
-        //     if ($this->model->niveauExist($_POST['libelleNiveau'])) {
-        //         $this->data['msg'] = Helpers::msg('Ce niveau déjà', 'danger');
-        //     } else {
-        //         $this->model->saveNiveau([
-        //             'libelle' => $_POST['libelleNiveau']
-        //         ]);
-        //         $this->data['msg']     = Helpers::msg('Année créée avec succès');
-        //         $this->data['niveaux'] = $this->model->getNiveaux();
-        //     }
-        // }
+        if (count($errors = $fv->getErrors()) > 0) {
+            $this->session->set('create-niveau-msg', $this->error('Formulaire invalide'));
+            $this->session->set('create-niveau-errors', $errors);
+        } else {
+            if ($this->model->niveauExist($_POST['libelleNiveau'])) {
+                $this->session->set('create-niveau-msg', $this->error('Ce niveau déjà'));
+            } else {
+                if ($this->sym->yearExist($yearId)) {
+                    $libelle = $this->helpers::rmms($libelle);
+                    $slug    = str_replace(' ', '-', $libelle);
+
+                    if ($this->model->saveNiveau($libelle, $slug, $yearId)) {
+                        $this->session->set('create-niveau-msg', $this->success('Niveau créée avec succès'));
+                    } else {
+                        $this->session->set('create-niveau-msg', $this->error("Une erreur s'est produite lors de la création du niveau"));
+                    }
+                } else {
+                    $this->session->set('create-niveau-msg', $this->error("L'année scolaire sélectionné n'existe pas"));
+                }
+            }
+        }
+
+        $this->redirect("/{$this->data['urls']['base']}/$period/");
     }
 }

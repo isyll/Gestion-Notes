@@ -97,16 +97,11 @@ class NiveauxModel
         return count($this->getClasses($id)) > 0;
     }
 
-    public function saveNiveau($data): bool
+    public function saveNiveau(string $libelle, string $slug, int $yearId): bool
     {
-        try {
-            $this->db->getPDO()
-                ->prepare("INSERT INTO niveaux(libelle) VALUES(?)")
-                ->execute([$data['libelle']]);
-            return true;
-        }
-        catch (\PDOException $e) {
-            return false;
-        }
+        return $this->db->pexec(
+            "INSERT INTO niveaux(libelle, slug, as_id) VALUES(?, ?, ?)",
+            [$libelle, $slug, $yearId]
+        );
     }
 }

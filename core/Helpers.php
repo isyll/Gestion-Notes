@@ -47,7 +47,7 @@ class Helpers
 
     public static function rmms(string $str): string
     {
-        return preg_replace('/\s+/', ' ', $str);
+        return preg_replace('/\s+/', ' ',  trim($str));
     }
 
     public static function msg(string $value, string $type = 'success'): array

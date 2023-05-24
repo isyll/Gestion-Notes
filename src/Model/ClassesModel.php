@@ -43,26 +43,29 @@ class ClassesModel
             AND classes.id_niveau = niveaux.id
             AND annee_scolaire.id = niveaux.as_id");
 
-        // JOIN niveaux ON classes.id_niveau = niveaux.id
-        // JOIN annee_scolaire ON annee_scolaire.id = niveaux.as_id
-
         $stmt->execute([$niveauSlug, $period]);
 
         return $stmt->fetchAll();
     }
 
+    public function getNiveauId($period, $niveauSlug)
+    {
+        return $this->db->pexec(
+            "SELECT annee_scolaire.id FROM annee_scolaire, niveaux
+            WHERE periode = ?
+            AND annee_scolaire.id = as_id
+            AND slug = ?",
+            [$period, $niveauSlug],
+            'fetch'
+        );
+    }
+
     public function saveClasse(array $datas): bool
     {
-        try {
-            $this->db->getPDO()
-                ->prepare("INSERT INTO classes(libelle, id_niveau) VALUES(?,?)")
-                ->execute([$datas['libelleClasse'], $datas['niveauId']]);
-            return true;
-        }
-        catch (\PDOException $e) {
-            echo $e->getMessage();
-            return false;
-        }
+        return $this->db->pexec(
+            "INSERT INTO classes(libelle, id_niveau) VALUES(?, ?)",
+            [$datas['libelleClasse'], $datas['niveauId']]
+        );
     }
 
     public function classeExist(int $niveauId, string $libelleClasse): bool
