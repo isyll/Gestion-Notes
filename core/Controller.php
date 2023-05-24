@@ -7,20 +7,26 @@ class Controller
     protected Database $db;
     protected FormValidator $fv;
     protected SessionManager $session;
+    protected AccessControl $ac;
     protected array $request;
     protected array $data;
     protected string $defaultLayout = 'layout';
 
     public function __construct()
     {
-        $this->db      = new Database(
+        $this->db = new Database(
             dbname: 'gnotes',
             user: 'isyll',
             password: 'xCplm_'
         );
+
         $this->request = Helpers::resolveRequest();
         $this->session = new SessionManager();
         $this->fv      = new FormValidator();
+        $this->ac      = new AccessControl();
+
+        SessionManager::start();
+        $this->ac->loadFromDatabase($this->db, 'accesscontrol');
 
         $this->data['title'] = 'Accueil ' . $GLOBALS['siteName'];
         $this->data['urls']  = Router::getURLs();
