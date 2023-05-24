@@ -34,7 +34,7 @@ class Database
         string $fetch = NULL
     ): mixed {
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute($values);
+        $val = $stmt->execute($values);
 
         $results = [];
 
@@ -42,6 +42,6 @@ class Database
             $results = $stmt->$fetch();
         }
 
-        return empty($results) ? $stmt : $results;
+        return empty($results) ? $val : $results;
     }
 }
