@@ -5,10 +5,8 @@ namespace Core;
 class Router
 {
     private static array $paths;
-    private static array $redirections;
 
     public static $namespace;
-    public static Database $db;
 
     public static function register(
         string $name,
@@ -40,7 +38,6 @@ class Router
         [$method, $uri] = array_values(Helpers::resolveRequest());
 
         $ns = self::$namespace;
-        $db = self::$db;
 
         if ($match = self::match($uri)) {
             $class           = $match['class'];
@@ -58,7 +55,7 @@ class Router
                 empty($request_methods) ||
                 (!empty($request_methods) && in_array($method, $request_methods))
             ) {
-                eval("use $ns\\$class;(new $class(\$db))->$action($args);");
+                eval("use $ns\\$class;(new $class())->$action($args);");
                 return;
             }
         }
