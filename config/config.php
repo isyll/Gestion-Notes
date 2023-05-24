@@ -2,7 +2,7 @@
 
 $routes = [
     '/' => [
-        'name' => 'home',
+        'name' => 'school-years',
         'handler' => 'SchoolYearsController@index',
     ],
     'page404' => [
