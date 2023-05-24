@@ -74,4 +74,20 @@ class Controller
         header('content-type:application/json;charset=utf-8');
         echo json_encode($results);
     }
+
+    public function success(string $value): array
+    {
+        return [
+            'type' => 'success',
+            'value' => $value
+        ];
+    }
+
+    public function error(string $value): array
+    {
+        return [
+            'type' => 'danger',
+            'value' => $value
+        ];
+    }
 }
