@@ -23,7 +23,7 @@ $routes = [
     ],
     '/sc/{period}/{niveauSlug}/{classeSlug}' => [
         'name' => '',
-        'handler' => 'StudentsController@studentsList',
+        'handler' => 'StudentsController@list',
     ],
     '/create-student' => [
         'name' => 'create-year',
