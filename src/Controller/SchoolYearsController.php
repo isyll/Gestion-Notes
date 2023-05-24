@@ -17,7 +17,7 @@ class SchoolYearsController extends Controller
         $this->model = new SchoolYearsModel($this->db);
     }
 
-    public function index()
+    public function getYears()
     {
         $this->data['current'] = 'school-years';
         $this->data['title']   = 'Année scolaire';

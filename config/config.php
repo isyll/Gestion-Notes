@@ -3,7 +3,7 @@
 $routes = [
     '/' => [
         'name' => 'school-years',
-        'handler' => 'SchoolYearsController@index',
+        'handler' => 'SchoolYearsController@getYears',
     ],
     'page404' => [
         'name' => 'page404',
