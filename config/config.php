@@ -45,9 +45,9 @@ $routes = [
         'handler' => 'SchoolYearsController@updateYear',
         'methods' => ['post']
     ],
-    '/active-year' => [
+    '/change-year-state' => [
         'name' => 'active-year',
-        'handler' => 'SchoolYearsController@activeYear',
+        'handler' => 'SchoolYearsController@changeYearState',
         'methods' => ['post']
     ],
     '/create-niveau' => [
@@ -68,10 +68,10 @@ $routes = [
 ];
 
 $config = [
-    'db_name' => 'gnotes',
-    'db_host' => 'locahost',
-    'db_user' => 'isyll',
-    'db_password' => 'xCplm_',
-    'db_connection' => 'mysql',
+    // 'db_name' => 'gnotes',
+    // 'db_host' => 'locahost',
+    // 'db_user' => 'isyll',
+    // 'db_password' => 'xCplm_',
+    // 'db_connection' => 'mysql',
     'accessDbName' => 'accesscontrol'
 ];
