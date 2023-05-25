@@ -1,24 +1,48 @@
-<form action="" method="post" id="formAnnee">
+<form action="<?= $urls['create-student'] ?>" method="post" id="formAnnee">
     <div class="row">
         <div class="col-6">
             <input type="text" class="form-control" placeholder="Prénom" aria-label="Prénom" name="firstname"
-                id="firstname" required />
+                id="firstname" />
+            <?php if (isset($errors['firstname'])): ?>
+                <div id="fn" class="form-text">
+                    <?= $errors['firstname']['msg'] ?>
+                </div>
+            <?php endif ?>
         </div>
         <div class="col-6">
-            <input type="text" class="form-control" placeholder="Nom" aria-label="Nom" name="lastname" required
-                id="lastname" />
+            <input type="text" class="form-control" placeholder="Nom" aria-label="Nom" name="lastname" id="lastname" />
+            <?php if (isset($errors['lastname'])): ?>
+                <div id="ln" class="form-text">
+                    <?= $errors['lastname']['msg'] ?>
+                </div>
+            <?php endif ?>
         </div>
         <div class="col-12">
             <label for="email" class="form-label">Adresse email</label>
-            <input type="email" required class="form-control" name="email" id="email">
+            <input type="email" class="form-control" name="email" id="email">
+            <?php if (isset($errors['email'])): ?>
+                <div id="em" class="form-text">
+                    <?= $errors['email']['msg'] ?>
+                </div>
+            <?php endif ?>
         </div>
         <div class="col-12">
             <label for="phone" class="form-label">Numéro de téléphone</label>
-            <input type="tel" required class="form-control" name="phone" id="phone">
+            <input type="tel" class="form-control" name="phone" id="phone">
+            <?php if (isset($errors['phone'])): ?>
+                <div id="ph" class="form-text">
+                    <?= $errors['phone']['msg'] ?>
+                </div>
+            <?php endif ?>
         </div>
         <div class="col-12">
             <label for="address" class="form-label">Adresse</label>
-            <input type="text" class="form-control" name="address" id="address">
+            <input type="text" class="form-control" name="address" id="address" />
+            <?php if (isset($errors['address'])): ?>
+                <div id="adr" class="form-text">
+                    <?= $errors['address']['msg'] ?>
+                </div>
+            <?php endif ?>
         </div>
     </div>
 

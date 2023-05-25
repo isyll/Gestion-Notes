@@ -2,31 +2,23 @@
 
 $routes = [
     '/' => [
-        'name' => 'school-years',
-        'handler' => 'SchoolYearsController@getYears',
+        'name' => 'niveaux',
+        'handler' => 'NiveauxController@getNiveaux',
     ],
     'page404' => [
         'name' => 'page404',
         'handler' => 'HomeController@page404',
     ],
-    '/create-user' => [
-        'name' => 'create-user',
-        'handler' => 'AdminController@createUser',
-    ],
-    '/sc/{period}' => [
-        'name' => '',
-        'handler' => 'NiveauxController@getNiveaux',
-    ],
-    '/sc/{period}/{niveauSlug}' => [
+    '/app/{niveauId}' => [
         'name' => '',
         'handler' => 'ClassesController@getClasses',
     ],
-    '/sc/{period}/{niveauSlug}/{classeSlug}' => [
+    '/app/{niveauId}/{classeId}' => [
         'name' => '',
         'handler' => 'StudentsController@list',
     ],
     '/create-student' => [
-        'name' => 'create-year',
+        'name' => 'create-student',
         'handler' => 'StudentsController@createStudent',
         'methods' => ['post']
     ],
@@ -65,13 +57,4 @@ $routes = [
         'handler' => 'LoginController@connect',
         'methods' => ['post']
     ],
-];
-
-$config = [
-    // 'db_name' => 'gnotes',
-    // 'db_host' => 'locahost',
-    // 'db_user' => 'isyll',
-    // 'db_password' => 'xCplm_',
-    // 'db_connection' => 'mysql',
-    'accessDbName' => 'accesscontrol'
 ];

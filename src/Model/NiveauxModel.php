@@ -13,95 +13,77 @@ class NiveauxModel
         $this->db = $db;
     }
 
-    public function getSYNiveauxById(int $id): array
+    public function getNiveaux()
     {
-        $stmt = $this->db->getPDO()
-            ->prepare("SELECT * FROM niveaux WHERE as_id=?");
-
-        $stmt->execute();
-
-        return $stmt->fetchAll();
-    }
-
-    public function getSYNiveauxByPeriod(string $period): array
-    {
-        $stmt = $this->db->getPDO()
-            ->prepare("SELECT * FROM niveaux JOIN annee_scolaire ON annee_scolaire.id=as_id WHERE annee_scolaire.periode=? AND annee_scolaire.supprime=0");
-
-        $stmt->execute([$period]);
-
-        return $stmt->fetchAll();
-    }
-
-    public function getNiveauBySlug(string $period, string $slug)
-    {
-        $stmt = $this->db->getPDO()
-            ->prepare("SELECT * FROM niveaux JOIN annee_scolaire ON periode=? WHERE slug=?");
-
-        $stmt->execute([$period, $slug]);
-
-        return $stmt->fetch();
-    }
-
-    public function niveausIsDeleted(string $period, string $slug): bool
-    {
-        $result = $this->getNiveauBySlug($period, $slug);
-
-        if ($result) {
-            return $result['supprime'] ? true : false;
-        }
-
-        return false;
-    }
-
-    public function getAll()
-    {
-        return $this->db->getPDO()->query("SELECT * FROM niveaux")->fetchAll();
+        return $this->db->pexec(
+            'SELECT * FROM niveaux WHERE supprime = 0',
+            [],
+            'fetchAll'
+        );
     }
 
     public function getNiveauById(int $id): array
     {
-        $stmt = $this->db->getPDO()
-            ->prepare("SELECT id, libelle FROM niveaux WHERE id=?");
-
-        $stmt->execute([$id]);
-        return $stmt->fetchAll();
+        return $this->db->pexec(
+            "SELECT * FROM niveaux WHERE id = ? AND supprime = 0",
+            [$id],
+            'fetch'
+        );
     }
 
-    public function getClasses(int $niveauxId)
+    public function niveauIdExists(int $id): bool
     {
-        $cm = new ClassesModel($this->db);
-
-        return $cm->classes($niveauxId);
+        return $this->db->pexec(
+            'SELECT 1 FROM niveaux WHERE id = ?',
+            [$id],
+            'fetch'
+        ) ? true : false;
     }
 
-    public function classeExist(int $niveauId, string $libelle)
+    public function niveauLibelleExists(string $libelle): bool
     {
-        return (new ClassesModel($this->db))->classeExist($niveauId, $libelle);
+        return $this->db->pexec(
+            'SELECT 1 FROM niveaux WHERE libelle = ?',
+            [$libelle],
+            'fetch'
+        ) ? true : false;
     }
 
-    public function niveauExist(string $libelle)
+    public function getAll()
     {
-        $result = $this->getAll();
+        return $this->db->pexec(
+            "SELECT * FROM niveaux",
+            [],
+            'fetchAll'
+        );
+    }
 
-        foreach ($result as $r) {
-            if ($r['libelle'] === $libelle)
+    public function getClasses(int $niveauId)
+    {
+        return $this->db->pexec(
+            "SELECT * FROM classes WHERE id_niveau = ?",
+            [$niveauId],
+            'fetchAll'
+        );
+    }
+
+    public function hasClasse(int $id, string $libelle): bool
+    {
+        $results = $this->getClasses($id);
+
+        foreach ($results as $item) {
+            if (strtolower($item['libelle']) === strtolower($libelle))
                 return true;
         }
 
         return false;
     }
 
-    public function hasClass(int $id): bool
-    {
-        return count($this->getClasses($id)) > 0;
-    }
-
-    public function saveNiveau(string $libelle, string $slug, int $yearId): bool
+    public function saveNiveau(string $libelle): bool
     {
         return $this->db->pexec(
-            "INSERT INTO niveaux(libelle, slug, as_id) VALUES(?, ?, ?)",
-            [$libelle, $slug, $yearId]
+            "INSERT INTO niveaux(libelle) VALUES(?)",
+            [$libelle]
         );
     }
 }

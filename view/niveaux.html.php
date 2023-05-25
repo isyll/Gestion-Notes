@@ -1,55 +1,71 @@
-<main class="d-flex w-100">
-    <div class="d-flex flex-column">
-        <div class="w-100" style="height:100px;background-color:#367fa9;"></div>
-        <?php include 'parts/dashboard.html.php' ?>
+<header>
+    <?php include 'parts/navbar.html.php' ?>
+</header>
+<div class="container">
+    <div class="row">
+        <?php if (isset($msg)): ?>
+            <div class="text-<?= $msg['type'] ?>">
+                <?= $msg['value'] ?>
+            </div>
+        <?php endif ?>
     </div>
-    <div id="main" class="w-100">
-        <?php include 'parts/header.html.php' ?>
-        <div id="content">
-            <div class="row">
-                <?php if (isset($msg)): ?>
-                    <div class="text-<?= $msg['type'] ?>">
-                        <?= $msg['value'] ?>
-                    </div>
-                <?php endif ?>
-            </div>
 
-            <div class="row">
-                <?php if ($exists): ?>
-                    <div class="col-2"></div>
-                    <div class="col-8">
-                        <form method="post" action="<?= $urls['create-niveau'] ?>" class="d-flex justify-content-between">
-                            <input type="hidden" name="period" value="<?= $period ?>" />
-                            <input type="hidden" name="yearId" value="<?= $yearId ?>" />
-                            <label for="libelleNiveau" class="form-label">Créer un niveau</label>
-                            <input type="text" class="form-control" name="libelleNiveau" id="libelleNiveau" />
-                            <input type="submit" value="Ajouter" class="text-white btn btn-secondary" />
-                        </form>
-                    </div>
-                    <div class="col-2"></div>
-                <?php endif ?>
-            </div>
-            <div class="row ps-3">
-                <div class="col-8">
-                    <div class="row">
-                        <?php if (isset($niveaux)): ?>
-                            <?php foreach ($niveaux as $n): ?>
-                                <div class="card col-4">
-                                    <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                                        <h5 role="btn" class="card-title text-center">
-                                            <?= $n['libelle'] ?>
-                                        </h5>
-                                        <a href="/<?= $urls['base'] ?>/<?= $period ?>/<?= $n['slug'] ?>" class="card-link">
-                                            <button type="button" class="btn btn-secondary text-white">
-                                                Sélectionner</button>
-                                        </a>
-                                    </div>
-                                </div>
-                            <?php endforeach ?>
-                        <?php endif ?>
-                    </div>
+    <div class="row">
+        <div class="col-4">
+        </div>
+        <div class="col-4">
+            <form method="POST" action="http://localhost:8000<?= $urls['create-niveau'] ?>"
+                class="d-flex justify-content-between">
+                <div class="form-group">
+                    <label for="libelleNiveau" class="form-label">Créer un niveau</label>
+                    <input required id="niveauLibelle" type="text" class="form-control" name="niveauLibelle" />
+                    <input type="hidden" name="current-url" value="<?= $currentURL ?>">
+                    <?php if (isset($errors)): ?>
+                        <small id="niveauHelp" class="form-text text-muted">
+                            <?= $errors['niveauLibelle'] ?>
+                        </small>
+                    <?php endif ?>
                 </div>
-            </div>
+                <input type="submit" class="text-white btn btn-secondary align-self-center" value="Ajouter" />
+            </form>
+        </div>
+        <div class="col-4">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6">
+            <table class="table table-striped table-hover ">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Libellé</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (isset($niveaux)): ?>
+                        <?php foreach ($niveaux as $n): ?>
+                            <tr>
+                                <td>
+                                    <?php $n['id'] ?>
+                                </td>
+                                <td style="color:rgba(255, 255, 255, 0.75);">
+                                    <?= $n['libelle'] ?>
+                                </td>
+                                <td>
+                                    <a href="/app/<?= $n['id'] ?>">
+                                        <button class="btn btn-link p-0">
+                                            Sélectionner
+                                        </button>
+                                    </a>
+                                </td>
+                            </tr>
+                        <?php endforeach ?>
+                    <?php endif ?>
+                </tbody>
+            </table>
+
             <div class="modal fade" id="Niveau" tabindex="-1" aria-labelledby="NiveauLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -77,4 +93,4 @@
             </div>
         </div>
     </div>
-</main>
+</div>

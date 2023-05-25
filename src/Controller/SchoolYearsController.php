@@ -19,8 +19,9 @@ class SchoolYearsController extends Controller
 
     public function getYears()
     {
-        $this->data['current'] = 'school-years';
-        $this->data['title']   = 'Année scolaire';
+        $this->data['current']      = 'school-years';
+        $this->data['title']        = 'Année scolaire';
+        $this->data['currenntYear'] = $this->getUserData('annee-actuelle');
 
         $this->data['schoolYears'] = $this->model->getYears();
 
@@ -49,191 +50,160 @@ class SchoolYearsController extends Controller
     {
         $this->session->set('year-create', true);
 
-        $fv = new FormValidator(
+        $yearLibelle = $_POST['yearLibelle'] ?? '';
+
+        $this->fv->form(
             [
                 [
-                    'value' => $_POST['period'],
-                    'name' => 'libellé',
+                    'value' => $yearLibelle,
+                    'name' => 'yearLibelle',
                     'regex' => '/^\d{4}-\d{4}$/',
                     'required' => true
                 ]
             ]
         );
 
-        $fv->validate();
-        $years = explode('-', $_POST['period']);
+        $this->fv->validate();
+        $years = explode('-', $yearLibelle);
 
         if (
-            count($this->data['errors'] = $fv->getErrors()) > 0 ||
-            !is_numeric($years[0]) || !is_numeric($years[1]) ||
+            count($errors = $this->fv->getErrors()) > 0 ||
+            !is_numeric($years[0]) ||
+            !is_numeric($years[1]) ||
             $years[1] - $years[0] !== 1
         ) {
-            $this->session->set(
-                'year-create-msg',
-                Helpers::msg('Année non valide', 'danger')
-            );
-        } else if ($this->model->periodExist($_POST['period'])) {
-            $this->session->set(
-                'year-create-msg',
-                Helpers::msg('Année déjà existante', 'danger')
-            );
-        } else {
-            $this->model->saveYear([
-                'period' => $_POST['period']
-            ]);
+            $this->session->set('year-create-errors', $errors);
 
             $this->session->set(
                 'year-create-msg',
-                Helpers::msg('Année créée avec succès')
+                $this->error('Année non valide')
+            );
+        } else if ($this->model->yearExistsByLibelle($yearLibelle)) {
+            $this->session->set(
+                'year-create-msg',
+                $this->error('Année déjà existante')
+            );
+        } else {
+            $this->model->saveYear($yearLibelle);
+
+            $this->session->set(
+                'year-create-msg',
+                $this->success('Année créée avec succès')
             );
         }
 
-        $this->redirect($this->data['urls']['school-years']);
+        $this->redirect($_POST['current-url'] ?? '');
     }
 
     public function removeYear()
     {
         $this->session->set('year-remove', true);
 
-        $fv = new FormValidator(
+        $yearLibelle = $_POST['yearLibelle'] ?? '';
+
+        $this->fv->form(
             [
                 [
-                    'value' => $_POST['yearId'],
-                    'type' => 'numeric',
-                    'name' => 'id',
-                    'required' => true
+                    'value' => $yearLibelle,
+                    'name' => 'yearLibelle',
+                    'regex' => '/^\d{4}-\d{4}$/',
+                    'required' => true,
+                    'error_msg' => "L'année $yearLibelle est invalide"
                 ]
             ]
         );
 
-        $fv->validate();
+        $this->fv->validate();
 
-        if (
-            count($this->data['errors'] = $fv->getErrors()) > 0
-        ) {
+        if (count($errors = $this->fv->getErrors()) > 0) {
+            $this->session->set('year-remove-errors', $errors);
             $this->session->set(
                 'year-remove-msg',
-                Helpers::msg('Année non valide', 'danger')
+                $this->error('Année non valide')
             );
-        } else if (!$this->model->yearExist((int) $_POST['yearId'])) {
+        } else if (!$this->model->yearExistsByLibelle($yearLibelle)) {
             $this->session->set(
                 'year-remove-msg',
-                Helpers::msg("L'année demandée n'existe pas", 'danger')
+                $this->error("L'année demandée n'existe pas")
             );
         } else {
-            $period = $this->model->getYearById((int) $_POST['yearId']);
-            $this->model->deleteYear((int) $_POST['yearId']);
+            $this->model->deleteYearByLibelle($yearLibelle);
 
             $this->session->set(
                 'year-remove-msg',
-                Helpers::msg("Année {$period['periode']} supprimée avec succès")
+                $this->error("Année $yearLibelle supprimée avec succès")
             );
         }
 
-        $this->redirect($this->data['urls']['school-years']);
+        $this->redirect($_POST['current-url'] ?? '');
     }
 
     public function updateYear()
     {
         $this->session->set('year-update', true);
 
-        $id       = (int) $_POST['yearId'] ?? '';
-        $newValue = $_POST['newValue'] ?? '';
+        $oldLibelle = $_POST['oldLibelle'] ?? '';
+        $newLibelle = $_POST['newLibelle'] ?? '';
 
         $this->fv->form([
             [
                 'required' => true,
-                'value' => $id,
-                'name' => 'yearId',
-                'type' => 'numeric',
-                'error_msg' => "L'id $id est invalide"
+                'value' => $oldLibelle,
+                'name' => 'yearLibelle',
+                'regex' => '/\d{4}-\d{4}/',
+                'error_msg' => "L'année $oldLibelle est invalide"
             ],
             [
                 'required' => true,
-                'name' => 'yearNewValue',
-                'value' => $newValue,
+                'name' => 'newLibelle',
+                'value' => $newLibelle,
                 'regex' => '/\d{4}-\d{4}/',
-                'error_msg' => "La période $newValue est invalide"
+                'error_msg' => "L'année $newLibelle est invalide"
             ],
         ]);
 
         $this->fv->validate();
-        $years = explode('-', $newValue);
+        $oldYears = explode('-', $oldLibelle);
+        $newYears = explode('-', $newLibelle);
 
         if (
-            count($errors = $this->fv->getErrors()) > 0 ||
-            $years[1] - $years[0] !== 1
+            $errors = $this->fv->getErrors() ||
+            !is_numeric($oldYears[0]) ||
+            !is_numeric($oldYears[1]) ||
+            !is_numeric($newYears[0]) ||
+            !is_numeric($newYears[1]) ||
+            $oldYears[1] - $oldYears[0] ||
+            $newYears[1] - $newYears[0]
         ) {
             $this->session->set(
                 'year-update-msg',
-                Helpers::msg("L'année $newValue est invalide", 'danger')
+                $this->error("Formulaire invalide")
             );
-            $this->session->set(
-                'year-update-errors',
-                $errors
-            );
-        } else if ($this->model->yearExist($id)) {
-            if ($this->model->updateYear($id, $newValue)) {
+            if ($errors)
+                $this->session->set(
+                    'year-update-errors',
+                    $errors
+                );
+        } else if ($this->model->yearExistsByLibelle($oldLibelle)) {
+            if ($this->model->updateYearByLibelle($oldLibelle, $newLibelle)) {
                 $this->session->set(
                     'year-update-msg',
-                    Helpers::msg('Année modifiée avec succès')
+                    $this->success('Année modifiée avec succès')
                 );
             } else {
                 $this->session->set(
                     'year-update-msg',
-                    Helpers::msg("La modification n'a pas pu s'effectuer", 'danger')
+                    $this->error("La modification n'a pas pu s'effectuer")
                 );
             }
 
         } else {
             $this->session->set(
                 'year-update-msg',
-                Helpers::msg('Année inexistante', 'danger')
+                $this->error('Année inexistante')
             );
         }
 
-        $this->redirect($this->data['urls']['school-years']);
-    }
-
-    public function changeYearState()
-    {
-        $this->session->set('year-state-change', true);
-
-        $id     = (int) $_POST['yearId'];
-        $action = $_POST['action'] ?? '';
-
-        if ($this->model->yearExist($id)) {
-            if ($action === '')
-                $action = 'disable';
-
-            if (!in_array($action, ['active', 'disable'])) {
-                $this->session->set(
-                    'year-state-change-msg',
-                    $this->error("Action impossible")
-                );
-            } else {
-                $action = ['disable' => 0, 'active' => 1][$action];
-
-                if ($this->model->changeState($id, $action)) {
-                    $this->session->set(
-                        'year-state-change-msg',
-                        $this->success('Changement effectué avec succès')
-                    );
-                } else {
-                    $this->session->set(
-                        'year-state-change-msg',
-                        $this->error("Désolé une erreur est survenue, le changement n'a pas pus s'effectuer")
-                    );
-                }
-
-            }
-        } else {
-            $this->session->set(
-                'year-state-change-msg',
-                $this->error("L'année choisie n'existe pas")
-            );
-        }
-
-        $this->redirect($this->data['urls']['school-years']);
+        $this->redirect($_POST['current-url'] ?? '');
     }
 }

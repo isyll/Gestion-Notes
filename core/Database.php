@@ -31,13 +31,13 @@ class Database
     public function pexec(
         string $query,
         array $values = [],
-        string $fetch = NULL
+        string $fetchMethod = NULL
     ): mixed {
         $stmt = $this->pdo->prepare($query);
         $val = $stmt->execute($values);
 
-        if ($fetch) {
-            return $stmt->$fetch();
+        if ($fetchMethod) {
+            return $stmt->$fetchMethod();
         }
 
         return $val;

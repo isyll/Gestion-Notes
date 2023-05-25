@@ -7,9 +7,6 @@ use App\Model\NiveauxModel;
 use App\Model\SchoolYearsModel;
 use App\Model\StudentsModel;
 use Core\Controller;
-use Core\Database;
-use Core\FormValidator;
-use Core\Helpers;
 
 class StudentsController extends Controller
 {
@@ -27,84 +24,108 @@ class StudentsController extends Controller
         $this->cm    = new ClassesModel($this->db);
     }
 
-    public function studentsList(
-        string $period = NULL,
-        string $niveauSlug = NULL,
-        string $classeSlug = NULL
+    public function list(
+        string $niveauId = NULL,
+        string $classeId = NULL
     ) {
-        $this->data['period']     = $period;
-        $this->data['niveauSlug'] = $niveauSlug;
-        $this->data['classeSlug'] = $classeSlug;
+        $this->data['niveauId'] = (int) $niveauId;
+        $this->data['classeId'] = (int) $classeId;
 
-        if ($this->sym->yearExistPeriod($period)) {
-            if ($this->sym->containsNiveau($period, $niveauSlug)) {
-                if ($this->model->containsClasse($period, $niveauSlug, $classeSlug)) {
-                    $this->data['students'] = $this->model->getAllStudents($period, $niveauSlug, $classeSlug);
-                } else {
-                    $this->data['msg'] = Helpers::msg("Le niveau $niveauSlug ne possède pas de de classe $classeSlug");
-                }
-            } else {
-                $this->data['msg'] = Helpers::msg("L'année $period ne possède pas de niveau $niveauSlug");
+        if ($this->session->get('create-student')) {
+            $this->data['msg'] = $this->session->get('create-student-msg');
+
+            if ($this->session->get('create-student-errors')) {
+                $this->data['errors'] = $this->session->get('create-student-errors');
             }
-        } else {
-            $this->data['msg'] = Helpers::msg("L'année $period n'existe pas.");
+
+            $this->session->remove(['create-student', 'create-student-msg', 'create-student-errors']);
         }
 
-        echo $this->render('classes', $this->data);
+        if ($this->nm->niveauIdExists($this->data['niveauId'])) {
+            $classe = $this->cm->getClasseById($this->data['classeId']);
+
+            if ($classe) {
+                if ($this->nm->hasClasse($this->data['niveauId'], $classe['libelle'])) {
+                    $this->data['students'] = $this->nm->getClasses($this->data['niveauId']);
+                } else {
+                    $this->data['msg'] = $this->error("Le niveau sélectionné ne possède pas cette classe");
+                }
+            } else {
+                $this->data['msg'] = $this->error("La classe sélectionnée n'existe pas");
+            }
+        }
+
+        echo $this->render('students', $this->data);
     }
 
     public function createStudent()
     {
-        $fv = new FormValidator([
+        $this->session->set('create-student', true);
+
+        $fn        = $_POST['firstname'] ?? '';
+        $ln        = $_POST['lastname'] ?? '';
+        $email     = $_POST['email'] ?? '';
+        $phone     = $this->helpers->rmms($_POST['phone'] ?? '');
+        $adresse   = $_POST['address'] ?? '';
+        $birthdate = $_POST['birthdate'] ?? '';
+        $type      = $_POST['type'] ?? '';
+        $niveauId  = $_POST['niveauId'] ?? '';
+        $classeId  = $_POST['classeId'] ?? '';
+
+        $this->fv->form([
             [
                 'required' => true,
-                'name' => 'prénom',
-                'value' => $_POST['firstname'] ?? '',
+                'name' => 'firstname',
+                'value' => $fn,
+                'error_msg' => "Le prénom $fn est invalide"
             ],
             [
                 'required' => true,
-                'name' => 'nom',
-                'value' => $_POST['lastname'] ?? '',
+                'name' => 'lastname',
+                'value' => $ln,
+                'error_msg' => "Le nom $ln est invalide"
             ],
             [
                 'required' => true,
                 'name' => 'email',
                 'type' => 'email',
-                'value' => $_POST['email'] ?? '',
+                'value' => $email,
             ],
             [
                 'required' => true,
-                'name' => 'numéro',
-                'value' =>
-                ($_POST['phone'] = Helpers::rmms($_POST['phone'] ?? '')) ?? '',
+                'name' => 'phone',
+                'value' => $phone,
             ],
             [
                 'required' => false,
-                'name' => 'adresse',
-                'value' => $_POST['adresse'] ?? '',
+                'name' => 'address',
+                'value' => $adresse,
+            ],
+            [
+                'required' => false,
+                'name' => 'birthdate',
+                'value' => $birthdate,
             ],
             [
                 'required' => true,
                 'name' => 'type',
-                'value' => $_POST['type'] ?? '',
+                'value' => $type,
                 'type' => 'set',
                 'set_values' => ['externe', 'interne']
             ],
         ]);
 
-        $fv->validate();
+        $this->fv->validate();
 
-        if (count($this->data['errors'] = $fv->getErrors()) > 0) {
-            $this->data['msg'] = Helpers::msg('Formulaire invalide', 'danger');
+        if (count($errors = $this->fv->getErrors()) > 0) {
+            $this->session->set('create-student-msg', $this->error('Formulaire invalide'));
+            $this->session->set('create-student-errors', $errors);
+
         } else {
-            if (count($this->model->getStudentByPhone($_POST['phone'])) > 0) {
-                $this->data['msg'] = Helpers::msg('Le numéro saisi est déjà enregistré', 'danger');
-            } else if (count($this->model->getStudentByEmail($_POST['email'])) > 0) {
-                $this->data['msg'] = Helpers::msg("L'email saisi est déjà enregistré", 'danger');
-            } else {
-                $this->model->saveStudent($_POST);
-                $this->data['msg'] = Helpers::msg('Classe créée avec succès');
-            }
+            $this->session->set('create-student-msg', $this->success("Elève enregistré"));
+
         }
+
+        $this->redirect($_POST['current-url']);
     }
 }

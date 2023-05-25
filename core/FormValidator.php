@@ -55,9 +55,11 @@ class FormValidator
         }
     }
 
-    public function getErrors()
+    public function getErrors(): array|bool
     {
-        return $this->errors;
+        if (count($this->errors) > 0)
+            return $this->errors;
+        return false;
     }
 
     private function addError($name, $error)

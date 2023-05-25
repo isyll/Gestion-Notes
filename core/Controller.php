@@ -4,6 +4,7 @@ namespace Core;
 
 class Controller
 {
+    private $userDataTableName = 'params';
     protected Database $db;
     protected FormValidator $fv;
     protected SessionManager $session;
@@ -27,16 +28,69 @@ class Controller
         $this->ac      = new AccessControl();
         $this->helpers = new Helpers();
 
-        SessionManager::start();
         $this->ac->loadFromDatabase($this->db, 'accesscontrol');
 
-        $this->data['title'] = 'Accueil ' . $GLOBALS['siteName'];
-        $this->data['urls']  = Router::getURLs();
+        $this->data['title']      = 'Accueil ' . $GLOBALS['siteName'];
+        $this->data['urls']       = Router::getURLs();
+        $this->data['currentURL'] = $this->currentURL();
     }
 
-    public function redirect(string $location)
+    public function currentURL()
     {
-        $location = Helpers::getBaseURL() . $location;
+        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
+            $url = "https://";
+        else
+            $url = "http://";
+
+        $url .= $_SERVER['HTTP_HOST'];
+
+        $url .= $_SERVER['REQUEST_URI'];
+
+        return $url;
+    }
+
+    public function loadUserDatas()
+    {
+        $datas = $this->db->pexec(
+            "SELECT * FROM params",
+            [],
+            'fetchAll'
+        );
+
+        $params = [];
+
+        foreach ($datas as $param) {
+            $params[$param['nom']] = $param['valeur'];
+        }
+
+        $this->session->set('params', $params);
+    }
+
+    public function getUserData(string $name)
+    {
+        if (!$this->session->get('params'))
+            $this->loadUserDatas();
+
+        $datas = $this->session->get('params');
+
+        if (isset($datas[$name]))
+            return $datas[$name];
+
+        return false;
+    }
+
+    public function setUserData(string $name, string $value)
+    {
+
+    }
+
+    public function redirect(string $location, bool $prependHost = true)
+    {
+        if ($location === '')
+            $location = '/';
+
+        if ($prependHost)
+            $location = Helpers::getBaseURL() . $location;
 
         header("Location: $location");
         exit;
