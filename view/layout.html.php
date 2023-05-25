@@ -13,6 +13,11 @@
     <link rel="stylesheet" href="/css/bootstrap-icons.css" />
     <link rel="stylesheet" href="/css/prism-okaidia.css" />
     <link rel="stylesheet" href="/css/custom.css" />
+    <style>
+        * {
+            font-size: 102.5%;
+        }
+    </style>
 </head>
 
 <body>
@@ -20,7 +25,6 @@
 
     <script src="/js/bootstrap-bundle.js"></script>
     <script src="/js/prism.js"></script>
-    <!-- <script src="/js/custom.js"></script> -->
 </body>
 
 </html>

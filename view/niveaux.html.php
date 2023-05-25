@@ -11,31 +11,36 @@
     </div>
 
     <div class="row">
-        <div class="col-4">
-        </div>
-        <div class="col-4">
-            <form method="POST" action="http://localhost:8000<?= $urls['create-niveau'] ?>"
-                class="d-flex justify-content-between">
-                <div class="form-group">
-                    <label for="libelleNiveau" class="form-label">Créer un niveau</label>
-                    <input required id="niveauLibelle" type="text" class="form-control" name="niveauLibelle" />
-                    <input type="hidden" name="current-url" value="<?= $currentURL ?>">
+        <div class="col"></div>
+        <div class="col">
+            <form method="post" action="<?= $urls['create-niveau'] ?>" class="row">
+                <label for="niveauLibelle" class="form-label col-3 align-self-center">Créer un niveau</label>
+                <div class="form-group col-6 align-self-center">
+                    <input required id="niveauLibelle" type="text" class="form-control  align-self-center"
+                        name="niveauLibelle" />
+                    <input type="hidden" name="current-url" value="<?= $currentURL ?>" />
+                </div>
+                <input type="submit" class="col-3 text-white btn btn-secondary align-self-center" value="Ajouter" />
+            </form>
+            <div class="row">
+                <div class="col-3"></div>
+                <div class="col-6">
                     <?php if (isset($errors)): ?>
-                        <small id="niveauHelp" class="form-text text-muted">
+                        <small id="classeHelp" class="form-text text-muted">
                             <?= $errors['niveauLibelle'] ?>
                         </small>
                     <?php endif ?>
                 </div>
-                <input type="submit" class="text-white btn btn-secondary align-self-center" value="Ajouter" />
-            </form>
+                <div class="col-3"></div>
+            </div>
         </div>
-        <div class="col-4">
+        <div class="col">
         </div>
     </div>
     <div class="row">
         <div class="col-3"></div>
         <div class="col-6">
-            <table class="table table-striped table-hover ">
+            <table class="table table-striped table-hover mt-4">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -65,32 +70,7 @@
                     <?php endif ?>
                 </tbody>
             </table>
-
-            <div class="modal fade" id="Niveau" tabindex="-1" aria-labelledby="NiveauLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="NiveauLabel">
-                                <?php if (isset($requested) && count($requested)): ?>
-                                    Créer une classe
-                                <?php else: ?>
-                                    Créer un niveau
-                                <?php endif ?>
-                            </h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <?php if (isset($requested) && count($requested)): ?>
-                                <?php include 'parts/forms/classeform.html.php'; ?>
-                            <?php else: ?>
-                                <?php include 'parts/forms/niveauform.html.php'; ?>
-                            <?php endif ?>
-                        </div>
-                        <div class="modal-footer">
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
+        <div class="col-3"></div>
     </div>
 </div>

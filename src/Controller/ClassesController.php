@@ -46,7 +46,7 @@ class ClassesController extends Controller
     {
         $this->session->set('create-classe', true);
 
-        $niveauId      = $_POST['niveauId'] ?? '';
+        $niveauId      = (int) $_POST['niveauId'] ?? '';
         $classeLibelle = $_POST['classeLibelle'] ?? '';
 
         $this->fv->form([
@@ -54,6 +54,8 @@ class ClassesController extends Controller
                 'required' => true,
                 'name' => 'classeLibelle',
                 'value' => $classeLibelle,
+                'max_length' => 255,
+                'min_length' => 1,
                 'error_msg' => "La classe '$classeLibelle' est invalide"
             ]
         ]);
@@ -65,19 +67,19 @@ class ClassesController extends Controller
             $this->session->set('create-classe-errors', $errors);
         } else {
             if ($this->nm->hasClasse($niveauId, $classeLibelle)) {
-                $this->session->set('create-classe-msg', $this->error('Ce niveau possède déjà une classe nommée ' . $_POST['libelleClasse']));
+                $this->session->set('create-classe-msg', $this->error('Ce niveau possède déjà une classe nommée ' . $classeLibelle));
             } else {
                 $classeLibelle = $this->helpers::rmms($classeLibelle);
 
                 if ($this->model->saveClasse($classeLibelle, $niveauId)) {
-                    $this->session->set('create-classe-msg', $this->success('Classe créée avec succès ' . $_POST['libelleClasse']));
+                    $this->session->set('create-classe-msg', $this->success('Classe créée avec succès ' . $classeLibelle));
 
                 } else {
-                    $this->session->set('create-classe-msg', $this->error('Une erreur est survenue lors de la création de la classe ' . $_POST['libelleClasse']));
+                    $this->session->set('create-classe-msg', $this->error('Une erreur est survenue lors de la création de la classe ' . $classeLibelle));
                 }
             }
         }
 
-        $this->redirect($_POST['current-url']);
+        $this->redirect($_POST['current-url'], false);
     }
 }
