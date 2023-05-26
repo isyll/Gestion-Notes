@@ -22,9 +22,20 @@
 
 <body>
     <?= $content; ?>
+    <script id='datas' type="application/json">
+        <?php
+        echo json_encode(Core\Router::getAPIRoutes());
+        ?>
+    </script>
+    <script>
+        const baseURL = '<?= Core\Helpers::getBaseURL(); ?>';
 
+    </script>
+
+    <script src="/js/jquery.js"></script>
     <script src="/js/bootstrap-bundle.js"></script>
     <script src="/js/prism.js"></script>
+    <script src="/js/custom.js"></script>
 </body>
 
 </html>
