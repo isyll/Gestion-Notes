@@ -1,6 +1,6 @@
 <div class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
     <div class="container">
-        <a href="../" class="navbar-brand">
+        <a href="/" class="navbar-brand">
             <?= $GLOBALS['siteName'] ?>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
@@ -10,38 +10,30 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="themes">Themes</a>
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#"
+                        id="themes">Administration</a>
                     <div class="dropdown-menu" aria-labelledby="themes">
-                        <a class="dropdown-item" href="#">Default</a>
+                        <a class="dropdown-item" href="<?= $urls['create-user-page'] ?>">Créer un utilisateur</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Cerulean</a>
-                        <a class="dropdown-item" href="#">Cosmo</a>
+                        <a class="dropdown-item" href="<?= $urls['user-admin'] ?>">Voir les utilisateurs</a>
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../help/">Help</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="https://blog.bootswatch.com/">Blog</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="download">Superhero</a>
-                    <div class="dropdown-menu" aria-labelledby="download">
-                        <a class="dropdown-item" rel="noopener" target="_blank" href="#">item</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#" download>item</a>
-                        <a class="dropdown-item" href="#" download>item</a>
-                    </div>
+                    <a class="nav-link" href="<?= $urls['new-student'] ?>">
+                        Ajouter un élève
+                    </a>
                 </li>
             </ul>
             <ul class="navbar-nav ms-md-auto">
                 <li class="nav-item">
-                    <a target="_blank" rel="noopener" class="nav-link" href="#"><i class="bi bi-github"></i> GitHub</a>
+
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Elève">
+                        <button class="btn btn-secondary" type="button" id="button-addon2"><i
+                                class="bi bi-search"></i></button>
+                    </div>
                 </li>
-                <li class="nav-item">
-                    <a target="_blank" rel="noopener" class="nav-link" href="#"><i class="bi bi-twitter"></i>
-                        Twitter</a>
-                </li>
+
             </ul>
         </div>
     </div>
