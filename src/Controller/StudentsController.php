@@ -46,7 +46,7 @@ class StudentsController extends Controller
 
             if ($classe) {
                 if ($this->nm->hasClasse($this->data['niveauId'], $classe['libelle'])) {
-                    $this->data['students'] = $this->nm->getClasses($this->data['niveauId']);
+                    $this->data['students'] = $this->cm->getStudents($this->data['classeId']);
                 } else {
                     $this->data['msg'] = $this->error("Le niveau sélectionné ne possède pas cette classe");
                 }
@@ -56,6 +56,12 @@ class StudentsController extends Controller
         }
 
         echo $this->render('students', $this->data);
+    }
+
+    public function newStudent()
+    {
+        $this->data['niveaux'] = $this->nm->getNiveaux();
+        echo $this->render('new-student', $this->data);
     }
 
     public function createStudent()
@@ -68,7 +74,7 @@ class StudentsController extends Controller
         $phone     = $this->helpers->rmms($_POST['phone'] ?? '');
         $adresse   = $_POST['address'] ?? '';
         $birthdate = $_POST['birthdate'] ?? '';
-        $type      = $_POST['type'] ?? '';
+        $type      = $_POST['studentType'] ?? '';
         $niveauId  = $_POST['niveauId'] ?? '';
         $classeId  = $_POST['classeId'] ?? '';
 
@@ -108,7 +114,7 @@ class StudentsController extends Controller
             ],
             [
                 'required' => true,
-                'name' => 'type',
+                'name' => 'studentType',
                 'value' => $type,
                 'type' => 'set',
                 'set_values' => ['externe', 'interne']
@@ -117,15 +123,13 @@ class StudentsController extends Controller
 
         $this->fv->validate();
 
-        if (count($errors = $this->fv->getErrors()) > 0) {
+        if ($errors = $this->fv->getErrors()) {
             $this->session->set('create-student-msg', $this->error('Formulaire invalide'));
             $this->session->set('create-student-errors', $errors);
-
         } else {
             $this->session->set('create-student-msg', $this->success("Elève enregistré"));
-
         }
 
-        $this->redirect($_POST['current-url']);
+        $this->redirect($_POST['current-url'], false);
     }
 }
