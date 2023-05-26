@@ -1,6 +1,7 @@
 <?php
 
 $routes = [
+    /* Web application routes */
     '/' => [
         'name' => 'niveaux',
         'handler' => 'NiveauxController@getNiveaux',
@@ -12,6 +13,10 @@ $routes = [
     '/app/{niveauId}' => [
         'name' => '',
         'handler' => 'ClassesController@getClasses',
+    ],
+    '/app/new-student' => [
+        'name' => 'new-student',
+        'handler' => 'StudentsController@newStudent',
     ],
     '/app/{niveauId}/{classeId}' => [
         'name' => '',
@@ -56,5 +61,24 @@ $routes = [
         'name' => 'login',
         'handler' => 'LoginController@connect',
         'methods' => ['post']
+    ],
+    '/admin/create-user-page' => [
+        'name' => 'create-user-page',
+        'handler' => 'AdminController@newUser',
+    ],
+    '/admin/user-admin' => [
+        'name' => 'user-admin',
+        'handler' => 'AdminController@userAdmin',
+    ],
+    '/admin/create-user' => [
+        'name' => 'create-user',
+        'handler' => 'AdminController@createUser',
+        'methods' => ['post']
+    ],
+
+    /* JSON API routes */
+    '/api/getclasses/{niveauId}' => [
+        'name' => 'get-classe-by-niveau',
+        'handler' => 'APIController@getClasses',
     ],
 ];
