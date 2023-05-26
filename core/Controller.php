@@ -4,7 +4,17 @@ namespace Core;
 
 class Controller
 {
-    private $userDataTableName = 'params';
+    private string $userDataTableName = 'params';
+    private array $httpResponseCodeMsg = [
+        '200' => '200 OK',
+        '204' => '204 No Content',
+        '300' => '300 Multiple Choices',
+        '301' => '301 Moved Permanently',
+        '304' => '304 Not Modified',
+        '400' => '400 Bad Request',
+        '403' => '403 Forbidden',
+        '404' => '404 Not Found',
+    ];
     protected Database $db;
     protected FormValidator $fv;
     protected SessionManager $session;
@@ -30,9 +40,10 @@ class Controller
 
         $this->ac->loadFromDatabase($this->db, 'accesscontrol');
 
-        $this->data['title']      = 'Accueil ' . $GLOBALS['siteName'];
-        $this->data['urls']       = Router::getURLs();
-        $this->data['currentURL'] = $this->currentURL();
+        $this->data['title']           = $GLOBALS['siteName'];
+        $this->data['urls']            = Router::getURLs();
+        $this->data['urls']['baseURL'] = $this->helpers::getBaseURL();
+        $this->data['currentURL']      = $this->currentURL();
     }
 
     public function currentURL()
@@ -125,20 +136,20 @@ class Controller
 
     public function jsonResponse(
         int $code,
-        string $codeMsg,
         string $msg,
-        array $datas = null
-    ) {
-        header($codeMsg);
+        array $datas = []
+    ): bool|string {
+        $codeMsg = $this->httpResponseCodeMsg[$code] ?? '200 OK';
+        header('HTTP/1.0 ' . $codeMsg);
 
         $results = [
             "code" => $code,
             "message" => $msg,
-            "datas" => $datas ?? []
+            "datas" => $datas
         ];
 
         header('content-type:application/json;charset=utf-8');
-        echo json_encode($results);
+        return json_encode($results);
     }
 
     public function success(string $value): array
