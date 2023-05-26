@@ -67,7 +67,7 @@ class SchoolYearsController extends Controller
         $years = explode('-', $yearLibelle);
 
         if (
-            count($errors = $this->fv->getErrors()) > 0 ||
+            $errors = $this->fv->getErrors() ||
             !is_numeric($years[0]) ||
             !is_numeric($years[1]) ||
             $years[1] - $years[0] !== 1
@@ -115,7 +115,7 @@ class SchoolYearsController extends Controller
 
         $this->fv->validate();
 
-        if (count($errors = $this->fv->getErrors()) > 0) {
+        if ($errors = $this->fv->getErrors()) {
             $this->session->set('year-remove-errors', $errors);
             $this->session->set(
                 'year-remove-msg',
