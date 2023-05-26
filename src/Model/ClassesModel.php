@@ -22,6 +22,15 @@ class ClassesModel
         ) ? true : false;
     }
 
+    public function getClassesByNiveau(int $id)
+    {
+        return $this->db->pexec(
+            'SELECT * FROM classes WHERE id_niveau = ? AND supprime = 0',
+            [$id],
+            'fetchAll'
+        );
+    }
+
     public function classeLibelleExists(string $libelle)
     {
         return $this->db->pexec(
@@ -34,9 +43,20 @@ class ClassesModel
     public function getClasseById(int $id)
     {
         return $this->db->pexec(
-            "SELECT * FROM classes WHERE id = ?",
+            "SELECT * FROM classes WHERE id = ? AND supprime = 0",
             [$id],
             'fetch'
+        );
+    }
+
+    public function getStudents(int $id)
+    {
+        return $this->db->pexec(
+            "SELECT * FROM eleves AS e
+            JOIN inscriptions AS i ON i.id_eleve = e.id
+            JOIN classes AS c ON c.id = i.id_classe AND c.id = ?",
+            [$id],
+            'fetchAll'
         );
     }
 
