@@ -82,6 +82,23 @@ class Router
         return $urls;
     }
 
+    public static function getAPIRoutes()
+    {
+        $urls = [];
+
+        foreach (self::$paths as $path => $values) {
+            if (!empty($values['name']))
+                if (str_starts_with($path, '/api')) {
+                    if ($pos = strpos($path, '{')) {
+                        $path = substr($path, 0, $pos);
+                    }
+                    $urls[$values['name']] = $path;
+                }
+        }
+
+        return $urls;
+    }
+
     public static function getURL(string $name): string
     {
         foreach (self::$paths as $path => $values) {
