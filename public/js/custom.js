@@ -1,8 +1,8 @@
 $(function () {
     const data = JSON.parse(document.getElementById("datas").textContent);
 
-    $("#niveau").change(function (e) {
-        let val = $("#niveau").val();
+    $("#niveauId").change(function (e) {
+        let val = $("#niveauId").val();
         const getClasses = data["get-classe-by-niveau"];
 
         if (val !== "") {
@@ -19,13 +19,13 @@ $(function () {
                         html += `<option value="${element["id"]}">${element["libelle"]}</option>`;
                     });
 
-                    $("#classe").html(html);
+                    $("#classeId").html(html);
                 })
                 .fail(function (error) {
-                    $("#classe").html("");
+                    $("#classeId").html("");
                 });
         } else {
-            $("#classe").html("");
+            $("#classeId").html("");
         }
     });
 });

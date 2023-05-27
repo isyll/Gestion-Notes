@@ -33,8 +33,8 @@
         </div>
 
         <div class="col-6">
-            <label for="niveau" class="form-label">Niveau</label>
-            <select id="niveau" name="niveau" class="form-select" required>
+            <label for="niveauId" class="form-label">Niveau</label>
+            <select id="niveauId" name="niveauId" class="form-select" required>
                 <option selected value="">Choisir...</option>
                 <?php if (isset($niveaux)): ?>
                     <?php foreach ($niveaux as $n): ?>
@@ -45,8 +45,8 @@
         </div>
 
         <div class="col-6">
-            <label for="classe" class="form-label">Classe</label>
-            <select id="classe" name="classe" class="form-select" required>
+            <label for="classeId" class="form-label">Classe</label>
+            <select id="classeId" name="classeId" class="form-select" required>
             </select>
         </div>
 
