@@ -15,31 +15,17 @@ class AdminModel
 
     public function saveUser(array $datas)
     {
-        $this->db->getPDO()->query("BEGIN");
-
-        $this->db->getPDO()->prepare("INSERT INTO personnes(email, prenoms, nom, adresse, telephone, type) VALUES(?,?,?,?,?,?)")
-            ->execute(
-                [
-                    $datas['email'],
-                    $datas['firstname'],
-                    $datas['lastname'],
-                    $datas['address'],
-                    $datas['phone'],
-                    'user'
-                ]
-            );
-
-        $this->db->getPDO()->prepare("INSERT INTO accounts(personne_id, username, type, password_hash, hash_algorithm) VALUES(?,?,?,?,?)")
-            ->execute(
-                [
-                    $this->db->getPDO()->lastInsertId(),
-                    $datas['username'],
-                    'user',
-                    $datas['passwordHash'],
-                    $datas['hash']
-                ]
-            );
-
-        $this->db->getPDO()->query("COMMIT");
+        return $this->db->pexec(
+            'INSERT INTO comptes(prenom, nom, email, telephone, type, password_hash, hash_algorithm) VALUES(?,?,?,?,?,?,?)',
+            [
+                $datas['firstname'],
+                $datas['lastname'],
+                $datas['email'],
+                $datas['phone'],
+                $datas['type'],
+                $datas['password_hash'],
+                $datas['hash_algorithm'],
+            ]
+        );
     }
 }

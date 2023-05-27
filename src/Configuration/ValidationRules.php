@@ -94,12 +94,79 @@ class ValidationRules
                     'error_msg' => 'Le numéro saisi est invalide'
                 ]
             ],
+        ],
+
+        'create-user' => [
             [
-                'name' => 'address',
+                'name' => 'firstname',
                 'rules' => [
-                    'error_msg' => 'L\'adresse est invalide'
+                    'required',
+                    'min_length' => [
+                        'value' => 1,
+                        'error_msg' => 'Le prénom est trop court'
+                    ],
+                    'max_length' => [
+                        'value' => 100,
+                        'error_msg' => 'Le prénom est trop long'
+                    ],
+                    'error_msg' => 'Le prénom est invalide'
+                ]
+            ],
+            [
+                'name' => 'lastname',
+                'rules' => [
+                    'required',
+                    'min_length' => [
+                        'value' => 1,
+                        'error_msg' => 'Le nom que vous avez saisi est trop court'
+                    ],
+                    'max_length' => [
+                        'value' => 100,
+                        'error_msg' => 'Le nom que vous avez saisi est trop long'
+                    ],
+                    'error_msg' => 'Le nom est invalide'
+                ]
+            ],
+            [
+                'name' => 'email',
+                'rules' => [
+                    'min_length' => [
+                        'value' => 5,
+                        'error_msg' => 'L\'adresse email est trop courte'
+                    ],
+                    'max_length' => [
+                        'value' => 255,
+                        'error_msg' => 'L\'addresse est trop longue'
+                    ],
+                    'error_msg' => 'L\'adresse email est invalide'
+                ]
+            ],
+            [
+                'name' => 'password',
+                'rules' => [
+                    'required',
+                    'min_length' => [
+                        'value' => 6,
+                        'error_msg' => 'Le mot de passe est trop court'
+                    ],
+                    'max_length' => [
+                        'value' => 25,
+                        'error_msg' => 'Le mot de passe est trop long'
+                    ],
+                    'error_msg' => 'Le niveau est invalide'
+                ]
+            ],
+            [
+                'name' => 'phone',
+                'rules' => [
+                    'type' => [
+                        'value' => 'phone',
+                        'error_msg' => 'Le numéro de téléphone saisi est invalide'
+                    ],
+                    'error_msg' => 'Le numéro saisi est invalide'
                 ]
             ],
         ]
+
     ];
 }
