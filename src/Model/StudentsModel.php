@@ -14,7 +14,7 @@ class StudentsModel
         $this->db = $db;
     }
 
-    private function getStudentBy(string $column, mixed $value): array
+    private function getStudentBy(string $column, mixed $value): array|bool
     {
         return $this->db->pexec(
             "SELECT * FROM eleves WHERE $column=?",
@@ -36,15 +36,15 @@ class StudentsModel
     public function saveStudent(array $data)
     {
         return $this->db->pexec(
-            'INSERT INTO eleves(numero,type,prenom,nom,adresse,email,telephone)',
+            'INSERT INTO eleves(numero,type,prenom,nom,adresse,email,telephone) VALUES(?,?,?,?,?,?,?)',
             [
                 $data['numero'],
-                $data['type'],
-                $data['prenom'],
-                $data['nom'],
-                $data['adresse'] ?? NULL,
-                $data['email'] ?? NULL,
-                $data['telephone'] ?? NULL,
+                $data['studentType'],
+                $data['firstname'],
+                $data['lastname'],
+                $data['address'] ?? '',
+                $data['email'] ?? '',
+                $data['phone'] ?? '',
             ]
         );
     }
