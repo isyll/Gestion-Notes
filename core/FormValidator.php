@@ -4,53 +4,72 @@ namespace Core;
 
 class FormValidator
 {
-    private array $datas;
-    private array $errors;
+    public static int $DEL_MULTIPLE_SPACES = 1;
+    public static int $TO_LOWER_CASE = 2;
 
-    public function __construct(array $datas = [])
+    private array $errors;
+    private array $values;
+    private array $rules;
+
+    public function __construct(array $rules = [], array $values = [])
     {
-        $this->form($datas);
+        $this->values = $values;
+        $this->rules  = $rules;
         $this->errors = [];
     }
 
-    public function form(array $datas)
+    public function process(int $option, bool $value)
     {
-        $this->datas = $datas;
+
+    }
+
+    public function rules(array $rules)
+    {
+        $this->rules = $rules;
+    }
+
+    public function values(array &$values)
+    {
+        $this->values = $values;
     }
 
     public function validate()
     {
-        foreach ($this->datas as $field) {
-            if ($field['required']) {
-                $this->required($field);
-            } else if (empty($field['value']))
+        foreach ($this->rules as $field) {
+            $rules = $field['rules'];
+            $name  = $field['name'];
+            $value = $this->values[$name] ?? '';
+
+            $defaultErrorMsg = $rules['error_msg'] ?? '';
+
+            if (array_search('required', $rules) === false && $value === '')
                 continue;
 
-            $field['type'] = $field['type'] ?? 'string';
+            foreach ($rules as $k => $v) {
+                if (is_array($v)) {
+                    if (empty($v['error_msg'])) {
+                        $v['error_msg'] = $defaultErrorMsg;
+                    }
 
-            if ($field['type'] === 'numeric') {
-                $this->numeric($field);
-            }
-            if ($field['type'] === 'email') {
-                $this->email($field);
-            }
-            if ($field['type'] === 'alphanum') {
-                $this->alphaNum($field);
-            }
-            if ($field['type'] === 'chars_only') {
-                $this->charsOnly($field);
-            }
-            if ($field['type'] === 'set') {
-                $this->inArray($field);
-            }
-            if (!empty($field['regex'])) {
-                $this->regex($field);
-            }
-            if (!empty($field['min_length'])) {
-                $this->minLength($field);
-            }
-            if (!empty($field['max_length'])) {
-                $this->maxLength($field);
+                    if ($k === 'min_length') {
+                        if (strlen($value) < $v['value'])
+                            $this->errors[$name] = $v['error_msg'];
+                    } elseif ($k === 'max_length') {
+                        if (strlen($value) > $v['value'])
+                            $this->errors[$name] = $v['error_msg'];
+                    } elseif ($k === 'type') {
+                        if ($v['value'] === 'regex') {
+                            if (!preg_match($v['regex'], $value)) {
+                                $this->errors[$name] = $v['error_msg'];
+                            }
+                        } elseif ($v['value'] === 'set') {
+                            if (!in_array($value, $v['set_values'])) {
+                                $this->errors[$name] = $v['error_msg'];
+                            }
+                        } elseif (!$this->validateType($v['value'], $value))
+                            $this->errors[$name] = $v['error_msg'];
+                    }
+                }
             }
         }
     }
@@ -62,74 +81,21 @@ class FormValidator
         return false;
     }
 
-    private function addError($name, $error)
+    private function validateType(string $type, $value)
     {
-        $this->errors[$name] = $error;
-    }
-
-    private function email(array $field)
-    {
-        if (!filter_var($field['value'], FILTER_VALIDATE_EMAIL))
-            $this->addError($field['name'], $field['error_msg'] ?? '');
-    }
-
-    private function inArray(array $field)
-    {
-        if (!in_array($field['value'], $field['set_values']))
-            $this->addError($field['name'], $field['error_msg'] ?? '');
-    }
-
-    private function errorTest(bool $condition, string $name, string $error): void
-    {
-        if ($condition)
-            $this->addError($name, $error);
-    }
-
-    private function charsOnly(array $field): void
-    {
-        if (!preg_match('/^[A-Za-z]+$/', $field['value']))
-            $this->addError($field['name'], $field['error_msg'] ?? '');
-    }
-
-    private function alphaNum(array $field): void
-    {
-        if (!preg_match('/^[A-Za-z0-9]+$/', $field['value']))
-            $this->addError($field['name'], $field['error_msg'] ?? '');
-    }
-
-    private function regex(array $field)
-    {
-        if (!preg_match($field['regex'], $field['value']))
-            $this->addError($field['name'], $field['error_msg'] ?? '');
-    }
-
-    private function required(array $field)
-    {
-        if (empty($field['value']))
-            $this->addError($field['name'], $field['error_msg'] ?? '');
-    }
-
-    private function numeric(array $field)
-    {
-        if (!is_numeric($field['value']))
-            $this->addError($field['name'], $field['error_msg'] ?? '');
-    }
-
-    private function minLength(array $field)
-    {
-        $this->errorTest(
-            strlen($field['value']) < $field['min_length'],
-            $field['name'],
-            $field['error_msg'] ?? ''
-        );
-    }
-
-    private function maxLength(array $field)
-    {
-        $this->errorTest(
-            strlen($field['value']) > $field['max_length'],
-            $field['name'],
-            $field['error_msg'] ?? ''
-        );
+        switch ($type) {
+            case 'number':
+                return is_numeric($value);
+            case 'email':
+                return filter_var($value, FILTER_VALIDATE_EMAIL) ? true : false;
+            case 'phone':
+                return preg_match('/^[0-9\s()+-]*$/', $value);
+            case 'alphanum':
+                return preg_match('/^[A-Za-z0-9]+$/', $value);
+            case 'alpha':
+                return preg_match('/^[A-Za-z]+$/', $value);
+            default:
+                return true;
+        }
     }
 }
