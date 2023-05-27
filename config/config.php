@@ -10,6 +10,10 @@ $routes = [
         'name' => 'page404',
         'handler' => 'HomeController@page404',
     ],
+    '/app/login' => [
+        'name' => 'login-page',
+        'handler' => 'LoginController@connection',
+    ],
     '/app/{niveauId}' => [
         'name' => '',
         'handler' => 'ClassesController@getClasses',
@@ -21,6 +25,13 @@ $routes = [
     '/app/{niveauId}/{classeId}' => [
         'name' => '',
         'handler' => 'StudentsController@list',
+    ],
+
+    /* Routes POST */
+    '/login' => [
+        'name' => 'login',
+        'handler' => 'LoginController@login',
+        'methods' => ['post']
     ],
     '/create-student' => [
         'name' => 'create-student',
@@ -57,11 +68,8 @@ $routes = [
         'handler' => 'ClassesController@createClasse',
         'methods' => ['post']
     ],
-    '/login' => [
-        'name' => 'login',
-        'handler' => 'LoginController@connect',
-        'methods' => ['post']
-    ],
+
+    /* Routes d'administration */
     '/admin/create-user-page' => [
         'name' => 'create-user-page',
         'handler' => 'AdminController@newUser',
