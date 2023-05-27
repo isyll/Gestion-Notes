@@ -18,7 +18,7 @@ class ValidationRules
                         'value' => 100,
                         'error_msg' => 'Le prénom est trop long'
                     ],
-                    'error_msg' => 'Le prénom est invalide'
+                    'error_msg' => 'Le prénom est requis'
                 ]
             ],
             [
@@ -33,7 +33,7 @@ class ValidationRules
                         'value' => 100,
                         'error_msg' => 'Le nom que vous avez saisi est trop long'
                     ],
-                    'error_msg' => 'Le nom est invalide'
+                    'error_msg' => 'Le nom est requis'
                 ]
             ],
             [
@@ -47,7 +47,7 @@ class ValidationRules
                         'value' => 255,
                         'error_msg' => 'L\'addresse est trop longue'
                     ],
-                    'error_msg' => 'L\'adresse email est invalide'
+                    'error_msg' => 'L\'adresse email est requis'
                 ]
             ],
             [
@@ -59,7 +59,7 @@ class ValidationRules
                         'error_msg' => 'Le type ne répond pas aux citères',
                         'set_values' => ['externe', 'interne']
                     ],
-                    'error_msg' => 'Le type est invalide'
+                    'error_msg' => 'Le type est requis'
                 ]
             ],
             [
@@ -70,7 +70,7 @@ class ValidationRules
                         'value' => 'number',
                         'error_msg' => 'Le niveau choisi est invalide'
                     ],
-                    'error_msg' => 'Le niveau est invalide'
+                    'error_msg' => 'Le niveau est requis'
                 ]
             ],
             [
@@ -81,7 +81,7 @@ class ValidationRules
                         'value' => 'number',
                         'error_msg' => 'La classe choisie est invalide'
                     ],
-                    'error_msg' => 'La classe est invalide'
+                    'error_msg' => 'La classe est requis'
                 ]
             ],
             [
@@ -91,7 +91,7 @@ class ValidationRules
                         'value' => 'phone',
                         'error_msg' => 'Le numéro de téléphone saisi est invalide'
                     ],
-                    'error_msg' => 'Le numéro saisi est invalide'
+                    'error_msg' => 'Le numéro saisi est requis'
                 ]
             ],
         ],
@@ -109,7 +109,7 @@ class ValidationRules
                         'value' => 100,
                         'error_msg' => 'Le prénom est trop long'
                     ],
-                    'error_msg' => 'Le prénom est invalide'
+                    'error_msg' => 'Le prénom est requis'
                 ]
             ],
             [
@@ -124,7 +124,22 @@ class ValidationRules
                         'value' => 100,
                         'error_msg' => 'Le nom que vous avez saisi est trop long'
                     ],
-                    'error_msg' => 'Le nom est invalide'
+                    'error_msg' => 'Le nom est requis'
+                ]
+            ],
+            [
+                'name' => 'username',
+                'rules' => [
+                    'required',
+                    'min_length' => [
+                        'value' => 4,
+                        'error_msg' => 'Le nom d\'utilisateur que vous avez saisi est trop court'
+                    ],
+                    'max_length' => [
+                        'value' => 100,
+                        'error_msg' => 'Le nom d\'utilisateur que vous avez saisi est trop long'
+                    ],
+                    'error_msg' => 'Le nom d\'utilisateur est requis'
                 ]
             ],
             [
@@ -138,7 +153,7 @@ class ValidationRules
                         'value' => 255,
                         'error_msg' => 'L\'addresse est trop longue'
                     ],
-                    'error_msg' => 'L\'adresse email est invalide'
+                    'error_msg' => 'L\'adresse email est requis'
                 ]
             ],
             [
@@ -153,7 +168,7 @@ class ValidationRules
                         'value' => 25,
                         'error_msg' => 'Le mot de passe est trop long'
                     ],
-                    'error_msg' => 'Le niveau est invalide'
+                    'error_msg' => 'Le niveau est requis'
                 ]
             ],
             [
@@ -182,6 +197,24 @@ class ValidationRules
                     'error_msg' => 'Le mot de passe est requis'
                 ]
             ],
+        ],
+        'create-niveau' => [
+            [
+                'name' => 'niveauLibelle',
+                'rules' => [
+                    'required',
+                    'error_msg' => 'Le libellé du niveau est requis'
+                ]
+            ]
+        ],
+        'create-classe' => [
+            [
+                'name' => 'classeLibelle',
+                'rules' => [
+                    'required',
+                    'error_msg' => 'Le libellé de la est requis'
+                ]
+            ]
         ]
     ];
 }

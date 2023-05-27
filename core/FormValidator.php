@@ -40,36 +40,35 @@ class FormValidator
             $name  = $field['name'];
             $value = $this->values[$name] ?? '';
 
-            $defaultErrorMsg = $rules['error_msg'] ?? '';
-
-            if (array_search('required', $rules) === false && $value === '')
+            if ($value === '') {
+                if (array_search('required', $rules) !== false)
+                    $this->errors[$name] = $rules['error_msg'];
                 continue;
+            }
 
             foreach ($rules as $k => $v) {
-                if (is_array($v)) {
-                    if (empty($v['error_msg'])) {
-                        $v['error_msg'] = $defaultErrorMsg;
-                    }
+                if (!is_array($v))
+                    continue;
 
-                    if ($k === 'min_length') {
-                        if (strlen($value) < $v['value'])
+                if ($k === 'min_length') {
+                    if (strlen($value) < $v['value'])
+                        $this->errors[$name] = $v['error_msg'];
+                } elseif ($k === 'max_length') {
+                    if (strlen($value) > $v['value'])
+                        $this->errors[$name] = $v['error_msg'];
+                } elseif ($k === 'type') {
+                    if ($v['value'] === 'regex') {
+                        if (!preg_match($v['regex'], $value)) {
                             $this->errors[$name] = $v['error_msg'];
-                    } elseif ($k === 'max_length') {
-                        if (strlen($value) > $v['value'])
+                        }
+                    } elseif ($v['value'] === 'set') {
+                        if (!in_array($value, $v['set_values'])) {
                             $this->errors[$name] = $v['error_msg'];
-                    } elseif ($k === 'type') {
-                        if ($v['value'] === 'regex') {
-                            if (!preg_match($v['regex'], $value)) {
-                                $this->errors[$name] = $v['error_msg'];
-                            }
-                        } elseif ($v['value'] === 'set') {
-                            if (!in_array($value, $v['set_values'])) {
-                                $this->errors[$name] = $v['error_msg'];
-                            }
-                        } elseif (!$this->validateType($v['value'], $value))
-                            $this->errors[$name] = $v['error_msg'];
-                    }
+                        }
+                    } elseif (!$this->validateType($v['value'], $value))
+                        $this->errors[$name] = $v['error_msg'];
                 }
+
             }
         }
     }

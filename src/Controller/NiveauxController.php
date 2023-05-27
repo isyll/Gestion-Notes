@@ -49,16 +49,7 @@ class NiveauxController extends Controller
         $this->session->set('create-niveau', true);
 
         $libelle = strtolower($this->helpers::rmms($_POST['niveauLibelle'] ?? ''));
-
-        $this->fv->form([
-            [
-                'required' => true,
-                'name' => 'niveauLibelle',
-                'value' => $libelle,
-                'min_length' => 1,
-                'error_msg' => "Le libellé de niveau saisi est invalide"
-            ]
-        ]);
+        $this->loadValidationRules('create-niveau', $_POST);
 
         $this->fv->validate();
 

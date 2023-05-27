@@ -20,7 +20,7 @@
     </style>
 </head>
 
-<body>
+<body class="text-center">
     <?= $content; ?>
     <script id='datas' type="application/json">
         <?php

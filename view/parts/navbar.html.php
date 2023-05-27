@@ -26,6 +26,11 @@
             </ul>
             <ul class="navbar-nav ms-md-auto">
                 <li class="nav-item">
+                    <form action="<?= $urls['logout'] ?>" method="post">
+                        <button type="submit" class="btn btn-link">Déconnexion</button>
+                    </form>
+                </li>
+                <li class="nav-item">
 
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Elève">

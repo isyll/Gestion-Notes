@@ -8,6 +8,8 @@ class Router
 
     public static $namespace;
 
+    public static string $current = '';
+
     public static function register(
         string $name,
         string $handler,
@@ -55,6 +57,8 @@ class Router
                 empty($request_methods) ||
                 (!empty($request_methods) && in_array($method, $request_methods))
             ) {
+                self::$current = $match['name'] ?? '';
+
                 eval("use $ns\\$class;(new $class())->$action($args);");
                 return;
             }

@@ -15,7 +15,7 @@ $routes = [
         'handler' => 'LoginController@connection',
     ],
     '/app/{niveauId}' => [
-        'name' => '',
+        'name' => 'list-classes',
         'handler' => 'ClassesController@getClasses',
     ],
     '/app/new-student' => [
@@ -23,11 +23,16 @@ $routes = [
         'handler' => 'StudentsController@newStudent',
     ],
     '/app/{niveauId}/{classeId}' => [
-        'name' => '',
+        'name' => 'list-students',
         'handler' => 'StudentsController@list',
     ],
 
     /* Routes POST */
+    '/logout' => [
+        'name' => 'logout',
+        'handler' => 'LoginController@logout',
+        'methods' => ['post']
+    ],
     '/login' => [
         'name' => 'login',
         'handler' => 'LoginController@login',

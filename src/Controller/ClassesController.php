@@ -49,16 +49,7 @@ class ClassesController extends Controller
         $niveauId      = (int) $_POST['niveauId'] ?? '';
         $classeLibelle = $_POST['classeLibelle'] ?? '';
 
-        $this->fv->form([
-            [
-                'required' => true,
-                'name' => 'classeLibelle',
-                'value' => $classeLibelle,
-                'max_length' => 255,
-                'min_length' => 1,
-                'error_msg' => "La classe '$classeLibelle' est invalide"
-            ]
-        ]);
+        $this->loadValidationRules('create-classe', $_POST);
 
         $this->fv->validate();
 

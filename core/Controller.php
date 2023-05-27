@@ -26,17 +26,25 @@ class Controller
 
     public function __construct()
     {
-        $this->db = new Database(
-            dbname: 'gnotes',
-            user: 'isyll',
-            password: 'xCplm_'
-        );
-
         $this->request = Helpers::resolveRequest();
         $this->session = new SessionManager();
         $this->fv      = new FormValidator();
         $this->ac      = new AccessControl();
         $this->helpers = new Helpers();
+
+        if (!$this->session->get('logged-in') && Router::$current !== '' && !isset($_POST['login-form'])) {
+            $loginPage = Router::getURLs()['login-page'];
+
+            if ($loginPage != $_SERVER['REQUEST_URI']) {
+                $this->redirect($loginPage);
+            }
+        }
+
+        $this->db = new Database(
+            dbname: 'gnotes',
+            user: 'isyll',
+            password: 'xCplm_'
+        );
 
         $this->ac->loadFromDatabase($this->db, 'accesscontrol');
 
@@ -48,8 +56,30 @@ class Controller
             'currentURL' => $this->currentURL()
         ];
 
-        $this->data['urls']['baseURL'] = $this->helpers::getBaseURL();
+        $this->data['urls']['baseURL']     = $this->helpers::getBaseURL();
+        $this->data['urls']['current-url'] = $this->currentURL();
         $this->session->remove(['msg', 'form-errors']);
+
+    }
+
+    public function setLogInfo(string $name, mixed $value)
+    {
+        $infos        = $this->session->get('log-infos') ?? [];
+        $infos[$name] = $value;
+        $this->session->set('log-infos', $infos);
+    }
+
+    public function userLogin(array $infos)
+    {
+        $this->session->set('logged-in', true);
+        $this->session->set('log-infos', $infos);
+        $this->redirect();
+    }
+
+    public function userLogout()
+    {
+        $this->session->destroy();
+        $this->redirect($this->data['urls']['login-page']);
     }
 
     public function currentURL()
@@ -108,7 +138,7 @@ class Controller
 
     }
 
-    public function redirect(string $location, bool $prependHost = true)
+    public function redirect(string $location = '', bool $prependHost = true)
     {
         if ($location === '')
             $location = '/';
