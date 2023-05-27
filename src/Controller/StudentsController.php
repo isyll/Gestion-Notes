@@ -12,41 +12,31 @@ class StudentsController extends Controller
 {
     private StudentsModel $model;
     private SchoolYearsModel $sym;
-    private NiveauxModel $nm;
-    private ClassesModel $cm;
+    private NiveauxModel $niveauModel;
+    private ClassesModel $classeModel;
 
     public function __construct()
     {
         parent::__construct();
-        $this->model = new StudentsModel($this->db);
-        $this->sym   = new SchoolYearsModel($this->db);
-        $this->nm    = new NiveauxModel($this->db);
-        $this->cm    = new ClassesModel($this->db);
+        $this->model       = new StudentsModel($this->db);
+        $this->sym         = new SchoolYearsModel($this->db);
+        $this->niveauModel = new NiveauxModel($this->db);
+        $this->classeModel = new ClassesModel($this->db);
     }
 
     public function list(
-        string $niveauId = NULL,
-        string $classeId = NULL
+        $niveauId = NULL,
+        $classeId = NULL
     ) {
         $this->data['niveauId'] = (int) $niveauId;
         $this->data['classeId'] = (int) $classeId;
 
-        if ($this->session->get('create-student')) {
-            $this->data['msg'] = $this->session->get('create-student-msg');
-
-            if ($this->session->get('create-student-errors')) {
-                $this->data['errors'] = $this->session->get('create-student-errors');
-            }
-
-            $this->session->remove(['create-student', 'create-student-msg', 'create-student-errors']);
-        }
-
-        if ($this->nm->niveauIdExists($this->data['niveauId'])) {
-            $classe = $this->cm->getClasseById($this->data['classeId']);
+        if ($this->niveauModel->niveauIdExists($this->data['niveauId'])) {
+            $classe = $this->classeModel->getClasseById($this->data['classeId']);
 
             if ($classe) {
-                if ($this->nm->hasClasse($this->data['niveauId'], $classe['libelle'])) {
-                    $this->data['students'] = $this->cm->getStudents($this->data['classeId']);
+                if ($this->niveauModel->hasClasse($this->data['niveauId'], $classe['libelle'])) {
+                    $this->data['students'] = $this->classeModel->getStudents($this->data['classeId']);
                 } else {
                     $this->data['msg'] = $this->error("Le niveau sélectionné ne possède pas cette classe");
                 }
@@ -60,74 +50,38 @@ class StudentsController extends Controller
 
     public function newStudent()
     {
-        $this->data['niveaux'] = $this->nm->getNiveaux();
+        $this->data['niveaux'] = $this->niveauModel->getNiveaux();
+
         echo $this->render('new-student', $this->data);
     }
 
     public function createStudent()
     {
-        $this->session->set('create-student', true);
+        $_POST['numero'] = rand(1, 10000);
 
-        $fn        = $_POST['firstname'] ?? '';
-        $ln        = $_POST['lastname'] ?? '';
-        $email     = $_POST['email'] ?? '';
-        $phone     = $this->helpers->rmms($_POST['phone'] ?? '');
-        $adresse   = $_POST['address'] ?? '';
-        $birthdate = $_POST['birthdate'] ?? '';
-        $type      = $_POST['studentType'] ?? '';
-        $niveauId  = $_POST['niveauId'] ?? '';
-        $classeId  = $_POST['classeId'] ?? '';
-
-        $this->fv->form([
-            [
-                'required' => true,
-                'name' => 'firstname',
-                'value' => $fn,
-                'error_msg' => "Le prénom $fn est invalide"
-            ],
-            [
-                'required' => true,
-                'name' => 'lastname',
-                'value' => $ln,
-                'error_msg' => "Le nom $ln est invalide"
-            ],
-            [
-                'required' => true,
-                'name' => 'email',
-                'type' => 'email',
-                'value' => $email,
-            ],
-            [
-                'required' => true,
-                'name' => 'phone',
-                'value' => $phone,
-            ],
-            [
-                'required' => false,
-                'name' => 'address',
-                'value' => $adresse,
-            ],
-            [
-                'required' => false,
-                'name' => 'birthdate',
-                'value' => $birthdate,
-            ],
-            [
-                'required' => true,
-                'name' => 'studentType',
-                'value' => $type,
-                'type' => 'set',
-                'set_values' => ['externe', 'interne']
-            ],
-        ]);
+        $this->loadValidationRules('create-student', $_POST);
 
         $this->fv->validate();
 
         if ($errors = $this->fv->getErrors()) {
-            $this->session->set('create-student-msg', $this->error('Formulaire invalide'));
-            $this->session->set('create-student-errors', $errors);
+            $this->session->set('msg', $this->error('Formulaire invalide'));
+            $this->session->set('form-errors', $errors);
+            dd($errors);
         } else {
-            $this->session->set('create-student-msg', $this->success("Elève enregistré"));
+            if ($this->model->getStudentByEmail($_POST['email'])) {
+                $this->session->set('form-errors', $this->error('Un autre élève possède le même email'));
+            } elseif ($this->model->getStudentByPhone($_POST['phone'])) {
+                $this->session->set('form-errors', $this->error('Un autre élève possède le même numéro de téléphone'));
+            } elseif (!$this->niveauModel->niveauIdExists((int) $_POST['niveauId'])) {
+                $this->session->set('form-errors', $this->error('La niveau sélectionné n\'existe pas'));
+            } elseif (!$this->classeModel->classeIdExists((int) $_POST['classeId'])) {
+                $this->session->set('form-errors', $this->error('La classe sélectionnée n\'existe pas'));
+            } elseif (!$this->classeModel->classeNiveauMatch((int) $_POST['classeId'], (int) $_POST['niveauId'])) {
+                $this->session->set('form-errors', $this->error('Le niveau ne correspond pas à la classe sélectionnée'));
+            } else {
+                $this->model->saveStudent($_POST);
+                $this->session->set('msg', $this->success('Elève créé avec succès'));
+            }
         }
 
         $this->redirect($_POST['current-url'], false);
