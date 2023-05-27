@@ -166,7 +166,22 @@ class ValidationRules
                     'error_msg' => 'Le numéro saisi est invalide'
                 ]
             ],
+        ],
+        'login' => [
+            [
+                'name' => 'username',
+                'rules' => [
+                    'required',
+                    'error_msg' => 'Le nom d\'utilisateur est requis'
+                ]
+            ],
+            [
+                'name' => 'password',
+                'rules' => [
+                    'required',
+                    'error_msg' => 'Le mot de passe est requis'
+                ]
+            ],
         ]
-
     ];
 }
