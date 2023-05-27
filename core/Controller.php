@@ -40,10 +40,16 @@ class Controller
 
         $this->ac->loadFromDatabase($this->db, 'accesscontrol');
 
-        $this->data['title']           = $GLOBALS['siteName'];
-        $this->data['urls']            = Router::getURLs();
+        $this->data = [
+            'msg' => $this->session->get('msg') ?? NULL,
+            'errors' => $this->session->get('form-errors') ?? NULL,
+            'title' => $GLOBALS['siteName'],
+            'urls' => Router::getURLs(),
+            'currentURL' => $this->currentURL()
+        ];
+
         $this->data['urls']['baseURL'] = $this->helpers::getBaseURL();
-        $this->data['currentURL']      = $this->currentURL();
+        $this->session->remove(['msg', 'form-errors']);
     }
 
     public function currentURL()
@@ -54,10 +60,17 @@ class Controller
             $url = "http://";
 
         $url .= $_SERVER['HTTP_HOST'];
-
         $url .= $_SERVER['REQUEST_URI'];
 
         return $url;
+    }
+
+    public function loadValidationRules(string $name, array $values)
+    {
+        $datas = \App\Configuration\ValidationRules::$datas[$name];
+
+        $this->fv->rules($datas);
+        $this->fv->values($values);
     }
 
     public function loadUserDatas()
