@@ -60,6 +60,15 @@ class ClassesModel
         );
     }
 
+    public function classeNiveauMatch(int $classeId, int $niveauId)
+    {
+        return $this->db->pexec(
+            "SELECT 1 FROM classes WHERE id = ? AND id_niveau = ? AND supprime = 0",
+            [$niveauId, $classeId],
+            'fetch'
+        ) ? true : false;
+    }
+
     public function saveClasse(
         string $classeLibelle,
         int $niveauId
