@@ -153,9 +153,10 @@ class Controller
     public function render(
         string $file,
         array $data = [],
-        string $layout = NULL
+        string $layout = NULL,
+        bool $minify = false
     ): string {
-        if (!$layout)
+        if ($layout === NULL)
             $layout = $this->defaultLayout;
 
         if (!empty($data) && !array_is_list($data))
@@ -165,10 +166,20 @@ class Controller
         require_once "{$GLOBALS['viewsPath']}/$file.html.php";
         $content = ob_get_clean();
 
+        if ($minify)
+            $content = $this->helpers::minifyHtml($content);
+
+        if (!$layout)
+            return $content;
+
         ob_start();
         require_once "{$GLOBALS['viewsPath']}/$layout.html.php";
+        $result = ob_get_clean();
 
-        return ob_get_clean();
+        if ($minify)
+            $result = $this->helpers::minifyHtml($result);
+
+        return $result;
     }
 
     public function jsonDecode()
