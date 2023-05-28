@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        <?= $title ?>
+        <?= $title ?? '' ?>
     </title>
     <link rel="shortcut icon" href="/img/logo-site.png">
     <link rel="stylesheet" href="/css/bootstrap.css" />
@@ -23,9 +23,7 @@
 <body class="text-center">
     <?= $content; ?>
     <script id='datas' type="application/json">
-        <?php
-        echo json_encode(Core\Router::getAPIRoutes());
-        ?>
+        <?= json_encode(Core\Router::getAPIRoutes()); ?>
     </script>
     <script>
         const baseURL = '<?= Core\Helpers::getBaseURL(); ?>';
