@@ -3,7 +3,7 @@
 $routes = [
     /* Web application routes */
     '/' => [
-        'name' => 'niveaux',
+        'name' => 'list-niveaux',
         'handler' => 'NiveauxController@getNiveaux',
     ],
     'page404' => [
@@ -14,6 +14,10 @@ $routes = [
         'name' => 'login-page',
         'handler' => 'LoginController@connection',
     ],
+    '/app/profile/{userId}' => [
+        'name' => 'profile-page',
+        'handler' => 'ProfileController@userPage',
+    ],
     '/app/{niveauId}' => [
         'name' => 'list-classes',
         'handler' => 'ClassesController@getClasses',
@@ -21,6 +25,10 @@ $routes = [
     '/app/new-student' => [
         'name' => 'new-student',
         'handler' => 'StudentsController@newStudent',
+    ],
+    '/app/new-niveau' => [
+        'name' => 'new-niveau',
+        'handler' => 'NiveauxController@newNiveau',
     ],
     '/app/{niveauId}/{classeId}' => [
         'name' => 'list-students',
@@ -58,14 +66,14 @@ $routes = [
         'handler' => 'SchoolYearsController@updateYear',
         'methods' => ['post']
     ],
-    '/change-year-state' => [
-        'name' => 'change-year-state',
-        'handler' => 'SchoolYearsController@changeYearState',
-        'methods' => ['post']
-    ],
     '/create-niveau' => [
         'name' => 'create-niveau',
         'handler' => 'NiveauxController@createNiveau',
+        'methods' => ['post']
+    ],
+    '/delete-niveau' => [
+        'name' => 'delete-niveau',
+        'handler' => 'NiveauxController@deleteNiveau',
         'methods' => ['post']
     ],
     '/create-classe' => [
