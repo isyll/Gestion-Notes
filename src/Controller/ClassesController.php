@@ -25,16 +25,6 @@ class ClassesController extends Controller
     {
         $this->data['niveauId'] = (int) $niveauId;
 
-        if ($this->session->get('create-classe')) {
-            $this->data['msg'] = $this->session->get('create-classe-msg');
-
-            if ($this->session->get('create-classe-errors')) {
-                $this->data['errors'] = $this->session->get('create-classe-errors');
-            }
-
-            $this->session->remove(['create-classe', 'create-classe-msg', 'create-classe-errors']);
-        }
-
         if ($this->nm->niveauIdExists($this->data['niveauId'])) {
             $this->data['classes'] = $this->nm->getClasses($this->data['niveauId']);
         }
@@ -44,29 +34,20 @@ class ClassesController extends Controller
 
     public function createClasse()
     {
-        $this->session->set('create-classe', true);
-
-        $niveauId      = (int) $_POST['niveauId'] ?? '';
-        $classeLibelle = $_POST['classeLibelle'] ?? '';
-
         $this->loadValidationRules('create-classe', $_POST);
-
         $this->fv->validate();
 
         if ($errors = $this->fv->getErrors()) {
-            $this->session->set('create-classe-msg', $this->error('Formulaire invalide'));
-            $this->session->set('create-classe-errors', $errors);
+            $this->session->set('msg', $this->error('Formulaire invalide'));
+            $this->session->set('form-errors', $errors);
         } else {
-            if ($this->nm->hasClasse($niveauId, $classeLibelle)) {
-                $this->session->set('create-classe-msg', $this->error('Ce niveau possède déjà une classe nommée ' . $classeLibelle));
+            if ($this->nm->hasClasse((int) $_POST['niveauId'], $_POST['classeLibelle'])) {
+                $this->session->set('msg', $this->error('Ce niveau possède déjà une classe nommée ' . $_POST['classeLibelle']));
             } else {
-                $classeLibelle = $this->helpers::rmms($classeLibelle);
-
-                if ($this->model->saveClasse($classeLibelle, $niveauId)) {
-                    $this->session->set('create-classe-msg', $this->success('Classe créée avec succès ' . $classeLibelle));
-
+                if ($this->model->saveClasse($_POST['classeLibelle'], (int) $_POST['niveauId'])) {
+                    $this->session->set('create-classe-msg', $this->success('Classe créée avec succès ' . $_POST['classeLibelle']));
                 } else {
-                    $this->session->set('create-classe-msg', $this->error('Une erreur est survenue lors de la création de la classe ' . $classeLibelle));
+                    $this->session->set('create-classe-msg', $this->error('Une erreur est survenue lors de la création de la classe ' . $_POST['classeLibelle']));
                 }
             }
         }

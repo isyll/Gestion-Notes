@@ -95,12 +95,11 @@ class Controller
         return $url;
     }
 
-    public function loadValidationRules(string $name, array $values)
+    public function loadValidationRules(string $name, array &$values)
     {
         $datas = \App\Configuration\ValidationRules::$datas[$name];
 
-        $this->fv->rules($datas);
-        $this->fv->values($values);
+        $this->fv->form($datas, $values);
     }
 
     public function loadUserDatas()

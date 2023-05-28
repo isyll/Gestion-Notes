@@ -28,17 +28,6 @@ class NiveauxController extends Controller
     {
         $this->data['current'] = 'niveaux';
         $this->data['title']   = 'Niveaux';
-
-        if ($this->session->get('create-niveau')) {
-            $this->data['msg'] = $this->session->get('create-niveau-msg');
-
-            if ($this->session->get('create-niveau-errors')) {
-                $this->data['errors'] = $this->session->get('create-niveau-errors');
-            }
-
-            $this->session->remove(['create-niveau', 'create-niveau-msg', 'create-niveau-errors']);
-        }
-
         $this->data['niveaux'] = $this->model->getNiveaux();
 
         echo $this->render('niveaux', $this->data);
@@ -46,27 +35,20 @@ class NiveauxController extends Controller
 
     public function createNiveau()
     {
-        $this->session->set('create-niveau', true);
-
-        $libelle = strtolower($this->helpers::rmms($_POST['niveauLibelle'] ?? ''));
         $this->loadValidationRules('create-niveau', $_POST);
-
         $this->fv->validate();
 
         if ($errors = $this->fv->getErrors()) {
-            $this->session->set('create-niveau-msg', $this->error('Formulaire invalide'));
-            if ($errors)
-                $this->session->set('create-niveau-errors', $errors);
+            $this->session->set('msg', $this->error('Formulaire invalide'));
+            $this->session->set('form-errors', $errors);
         } else {
-            if ($this->model->niveauLibelleExists($libelle)) {
-                $this->session->set('create-niveau-msg', $this->error('Ce niveau déjà'));
+            if ($this->model->niveauLibelleExists($_POST['niveauLibelle'])) {
+                $this->session->set('msg', $this->error('Ce niveau déjà'));
             } else {
-                $libelle = $this->helpers::rmms($libelle);
-
-                if ($this->model->saveNiveau($libelle)) {
-                    $this->session->set('create-niveau-msg', $this->success('Niveau créée avec succès'));
+                if ($this->model->saveNiveau($_POST['niveauLibelle'])) {
+                    $this->session->set('msg', $this->success('Niveau créée avec succès'));
                 } else {
-                    $this->session->set('create-niveau-msg', $this->error("Une erreur s'est produite lors de la création du niveau"));
+                    $this->session->set('msg', $this->error("Une erreur inconnue s'est produite"));
                 }
             }
         }

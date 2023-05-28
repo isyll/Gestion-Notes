@@ -5,7 +5,9 @@ namespace Core;
 class FormValidator
 {
     public static int $DEL_MULTIPLE_SPACES = 1;
-    public static int $TO_LOWER_CASE = 2;
+    public static int $DEL_ALL_SPACES = 2;
+    public static int $TO_LOWER_CASE = 3;
+    public static bool $toLowerCase = true;
 
     private array $errors;
     private array $values;
@@ -18,18 +20,10 @@ class FormValidator
         $this->errors = [];
     }
 
-    public function process(int $option, bool $value)
-    {
-
-    }
-
-    public function rules(array $rules)
+    public function form(array $rules, array &$values)
     {
         $this->rules = $rules;
-    }
-
-    public function values(array &$values)
-    {
+        $this->process($values);
         $this->values = $values;
     }
 
@@ -96,5 +90,21 @@ class FormValidator
             default:
                 return true;
         }
+    }
+
+    private function process(array &$datas)
+    {
+        foreach ($this->rules as $field) {
+            if ($process = $field['process'] ?? false) {
+                if (in_array('del_all_spaces', $process))
+                    $datas[$field['name']] = Helpers::rms($datas[$field['name']]);
+                if (in_array('del_multiple_spaces', $process))
+                    $datas[$field['name']] = Helpers::rmms($datas[$field['name']]);
+                if (in_array('to_lower_case', $process))
+                    $datas[$field['name']] = Helpers::rms($datas[$field['name']]);
+            }
+        }
+
+        return $datas;
     }
 }

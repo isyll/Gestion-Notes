@@ -19,7 +19,8 @@ class ValidationRules
                         'error_msg' => 'Le prénom est trop long'
                     ],
                     'error_msg' => 'Le prénom est requis'
-                ]
+                ],
+                'process' => ['del_multiple_spaces']
             ],
             [
                 'name' => 'lastname',
@@ -34,7 +35,8 @@ class ValidationRules
                         'error_msg' => 'Le nom que vous avez saisi est trop long'
                     ],
                     'error_msg' => 'Le nom est requis'
-                ]
+                ],
+                'process' => ['del_multiple_spaces']
             ],
             [
                 'name' => 'email',
@@ -48,7 +50,8 @@ class ValidationRules
                         'error_msg' => 'L\'addresse est trop longue'
                     ],
                     'error_msg' => 'L\'adresse email est requis'
-                ]
+                ],
+                'process' => ['del_multiple_spaces', 'to_lower_case']
             ],
             [
                 'name' => 'studentType',
@@ -60,7 +63,9 @@ class ValidationRules
                         'set_values' => ['externe', 'interne']
                     ],
                     'error_msg' => 'Le type est requis'
-                ]
+                ],
+                'process' => ['del_multiple_spaces', 'to_lower_case']
+
             ],
             [
                 'name' => 'niveauId',
@@ -71,7 +76,8 @@ class ValidationRules
                         'error_msg' => 'Le niveau choisi est invalide'
                     ],
                     'error_msg' => 'Le niveau est requis'
-                ]
+                ],
+                'process' => ['del_all_spaces']
             ],
             [
                 'name' => 'classeId',
@@ -82,7 +88,8 @@ class ValidationRules
                         'error_msg' => 'La classe choisie est invalide'
                     ],
                     'error_msg' => 'La classe est requis'
-                ]
+                ],
+                'process' => ['del_all_spaces']
             ],
             [
                 'name' => 'phone',
@@ -92,7 +99,8 @@ class ValidationRules
                         'error_msg' => 'Le numéro de téléphone saisi est invalide'
                     ],
                     'error_msg' => 'Le numéro saisi est requis'
-                ]
+                ],
+                'process' => ['del_all_spaces']
             ],
         ],
 
@@ -110,7 +118,8 @@ class ValidationRules
                         'error_msg' => 'Le prénom est trop long'
                     ],
                     'error_msg' => 'Le prénom est requis'
-                ]
+                ],
+                'process' => ['del_multiple_spaces']
             ],
             [
                 'name' => 'lastname',
@@ -125,7 +134,8 @@ class ValidationRules
                         'error_msg' => 'Le nom que vous avez saisi est trop long'
                     ],
                     'error_msg' => 'Le nom est requis'
-                ]
+                ],
+                'process' => ['del_multiple_spaces']
             ],
             [
                 'name' => 'username',
@@ -140,7 +150,8 @@ class ValidationRules
                         'error_msg' => 'Le nom d\'utilisateur que vous avez saisi est trop long'
                     ],
                     'error_msg' => 'Le nom d\'utilisateur est requis'
-                ]
+                ],
+                'process' => ['del_all_spaces', 'to_lower_case']
             ],
             [
                 'name' => 'email',
@@ -154,7 +165,8 @@ class ValidationRules
                         'error_msg' => 'L\'addresse est trop longue'
                     ],
                     'error_msg' => 'L\'adresse email est requis'
-                ]
+                ],
+                'process' => ['del_all_spaces', 'to_lower_case']
             ],
             [
                 'name' => 'password',
@@ -179,7 +191,8 @@ class ValidationRules
                         'error_msg' => 'Le numéro de téléphone saisi est invalide'
                     ],
                     'error_msg' => 'Le numéro saisi est invalide'
-                ]
+                ],
+                'process' => ['del_all_spaces']
             ],
         ],
         'login' => [
@@ -188,7 +201,9 @@ class ValidationRules
                 'rules' => [
                     'required',
                     'error_msg' => 'Le nom d\'utilisateur est requis'
-                ]
+                ],
+                'process' => ['del_all_spaces', 'to_lower_case']
+
             ],
             [
                 'name' => 'password',
@@ -204,7 +219,8 @@ class ValidationRules
                 'rules' => [
                     'required',
                     'error_msg' => 'Le libellé du niveau est requis'
-                ]
+                ],
+                'process' => ['del_multiple_spaces']
             ]
         ],
         'create-classe' => [
@@ -213,7 +229,8 @@ class ValidationRules
                 'rules' => [
                     'required',
                     'error_msg' => 'Le libellé de la est requis'
-                ]
+                ],
+                'process' => ['del_multiple_spaces']
             ]
         ]
     ];
