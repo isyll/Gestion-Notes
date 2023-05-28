@@ -34,7 +34,7 @@ class NiveauxModel
     public function niveauIdExists(int $id): bool
     {
         return $this->db->pexec(
-            'SELECT 1 FROM niveaux WHERE id = ?',
+            'SELECT 1 FROM niveaux WHERE id = ? AND supprime = 0',
             [$id],
             'fetch'
         ) ? true : false;
@@ -43,25 +43,16 @@ class NiveauxModel
     public function niveauLibelleExists(string $libelle): bool
     {
         return $this->db->pexec(
-            'SELECT 1 FROM niveaux WHERE libelle = ?',
+            'SELECT 1 FROM niveaux WHERE libelle = ? AND supprime = 0',
             [$libelle],
             'fetch'
         ) ? true : false;
     }
 
-    public function getAll()
-    {
-        return $this->db->pexec(
-            "SELECT * FROM niveaux",
-            [],
-            'fetchAll'
-        );
-    }
-
     public function getClasses(int $niveauId)
     {
         return $this->db->pexec(
-            "SELECT * FROM classes WHERE id_niveau = ?",
+            "SELECT * FROM classes WHERE id_niveau = ? AND supprime = 0",
             [$niveauId],
             'fetchAll'
         );
@@ -84,6 +75,14 @@ class NiveauxModel
         return $this->db->pexec(
             "INSERT INTO niveaux(libelle) VALUES(?)",
             [$libelle]
+        );
+    }
+
+    public function deleteNiveau(int $id): bool
+    {
+        return $this->db->pexec(
+            "UPDATE niveaux SET supprime = 1 WHERE id = ?",
+            [$id]
         );
     }
 }

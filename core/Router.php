@@ -5,10 +5,9 @@ namespace Core;
 class Router
 {
     private static array $paths;
-
-    public static $namespace;
-
+    public static string $namespace;
     public static string $current = '';
+    public static string $title = '';
 
     public static function register(
         string $name,
@@ -58,6 +57,7 @@ class Router
                 (!empty($request_methods) && in_array($method, $request_methods))
             ) {
                 self::$current = $match['name'] ?? '';
+                self::$title   = $match['title'] ?? '';
 
                 eval("use $ns\\$class;(new $class())->$action($args);");
                 return;
@@ -70,6 +70,9 @@ class Router
             $class  = self::$paths['page404']['class'];
             $action = self::$paths['page404']['action'];
 
+            self::$current = $match['name'] ?? '';
+            self::$title   = $match['title'] ?? '';
+
             eval("use $ns\\$class;(new $class())->$action();");
         }
     }
@@ -80,7 +83,10 @@ class Router
 
         foreach (self::$paths as $path => $values) {
             if (!empty($values['name']))
-                $urls[$values['name']] = $path;
+                if ($pos = strpos($path, '{')) {
+                    $path = substr($path, 0, $pos);
+                }
+            $urls[$values['name']] = $path;
         }
 
         return $urls;
@@ -101,16 +107,6 @@ class Router
         }
 
         return $urls;
-    }
-
-    public static function getURL(string $name): string
-    {
-        foreach (self::$paths as $path => $values) {
-            if ($values['name'] === $name && $path !== 'page404')
-                return $path;
-        }
-
-        return '';
     }
 
     private static function match(string $uri): array|false
@@ -172,8 +168,9 @@ class Router
                 'class',
                 'action',
                 'request_methods',
+                'title'
             ],
-            [$name, $handler[0], $handler[1], $methods]
+            [$name, $handler[0], $handler[1], $methods, $title ?? NULL]
         );
     }
 }

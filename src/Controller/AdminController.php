@@ -4,18 +4,12 @@ namespace App\Controller;
 
 use App\Model\AdminModel;
 use Core\Controller;
-use Core\Database;
-use Core\FormValidator;
-use Core\Helpers;
 
 class AdminController extends Controller
 {
-    private AdminModel $model;
-
     public function __construct()
     {
         parent::__construct();
-        $this->model = new AdminModel($this->db);
     }
 
     public function createUser()
@@ -37,7 +31,7 @@ class AdminController extends Controller
                 $_POST['hash_algorithm'] = PASSWORD_DEFAULT;
                 $_POST['password_hash']  = password_hash($_POST['password'], $_POST['hash_algorithm']);
 
-                $this->model->saveUser($_POST);
+                $this->adminModel->saveUser($_POST);
                 $this->session->set('msg', $this->success('Utilisateur créé avec succès'));
             }
         }

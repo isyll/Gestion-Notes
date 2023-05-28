@@ -34,7 +34,7 @@ class ClassesModel
     public function classeLibelleExists(string $libelle)
     {
         return $this->db->pexec(
-            'SELECT 1 FROM classes WHERE libelle = ?',
+            'SELECT 1 FROM classes WHERE libelle = ? AND supprime = 0',
             [$libelle],
             'fetch'
         ) ? true : false;
@@ -76,6 +76,14 @@ class ClassesModel
         return $this->db->pexec(
             "INSERT INTO classes(libelle,  id_niveau) VALUES(?, ?)",
             [$classeLibelle, $niveauId]
+        );
+    }
+
+    public function deleteClasse(int $niveauId, int $classeId)
+    {
+        return $this->db->pexec(
+            'UPDATE classes SET supprime = 1 WHERE id_niveau = ? AND id = ?',
+            [$niveauId, $classeId]
         );
     }
 }

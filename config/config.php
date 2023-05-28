@@ -5,34 +5,47 @@ $routes = [
     '/' => [
         'name' => 'list-niveaux',
         'handler' => 'NiveauxController@getNiveaux',
+        'title' => 'Niveaux'
     ],
     'page404' => [
         'name' => 'page404',
         'handler' => 'HomeController@page404',
+        'title' => 'Page non trouvée'
     ],
     '/app/login' => [
         'name' => 'login-page',
         'handler' => 'LoginController@connection',
+        'title' => 'Connexion'
     ],
     '/app/profile/{userId}' => [
         'name' => 'profile-page',
         'handler' => 'ProfileController@userPage',
+        'title' => 'Profil'
     ],
     '/app/{niveauId}' => [
         'name' => 'list-classes',
         'handler' => 'ClassesController@getClasses',
+        'title' => 'Classes'
     ],
     '/app/new-student' => [
         'name' => 'new-student',
         'handler' => 'StudentsController@newStudent',
+        'title' => 'Créer élève'
     ],
     '/app/new-niveau' => [
         'name' => 'new-niveau',
         'handler' => 'NiveauxController@newNiveau',
+        'title' => 'Créer un niveau'
+    ],
+    '/app/new-classe/{niveauId}' => [
+        'name' => 'new-classe',
+        'handler' => 'ClassesController@newClasse',
+        'title' => 'Créer une classe'
     ],
     '/app/{niveauId}/{classeId}' => [
         'name' => 'list-students',
         'handler' => 'StudentsController@list',
+        'title' => 'Elèves'
     ],
 
     /* Routes POST */
@@ -81,20 +94,27 @@ $routes = [
         'handler' => 'ClassesController@createClasse',
         'methods' => ['post']
     ],
-
-    /* Routes d'administration */
-    '/admin/create-user-page' => [
-        'name' => 'create-user-page',
-        'handler' => 'AdminController@newUser',
-    ],
-    '/admin/user-admin' => [
-        'name' => 'user-admin',
-        'handler' => 'AdminController@userAdmin',
+    '/delete-classe' => [
+        'name' => 'delete-classe',
+        'handler' => 'ClassesController@deleteClasse',
+        'methods' => ['post']
     ],
     '/admin/create-user' => [
         'name' => 'create-user',
         'handler' => 'AdminController@createUser',
         'methods' => ['post']
+    ],
+
+    /* Routes d'administration */
+    '/admin/new-user' => [
+        'name' => 'create-user-page',
+        'handler' => 'AdminController@newUser',
+        'title' => 'Créer utilisateur'
+    ],
+    '/admin/user-admin' => [
+        'name' => 'user-admin',
+        'handler' => 'AdminController@userAdmin',
+        'title' => 'Administration'
     ],
 
     /* JSON API routes */

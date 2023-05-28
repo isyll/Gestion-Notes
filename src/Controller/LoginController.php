@@ -2,22 +2,18 @@
 
 namespace App\Controller;
 
-use App\Model\AdminModel;
 use Core\Controller;
 
 class LoginController extends Controller
 {
-    private AdminModel $adminModel;
-
     public function __construct()
     {
         parent::__construct();
-        $this->adminModel = new AdminModel($this->db);
     }
 
     public function connection()
     {
-        echo $this->render('login', $this->data);
+        echo $this->render('login', $this->data, false, true);
     }
 
     public function login()

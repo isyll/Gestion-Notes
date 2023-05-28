@@ -47,7 +47,7 @@ class Helpers
 
     public static function rmms(string $str): string
     {
-        return preg_replace('/\s+/', ' ',  trim($str));
+        return preg_replace('/\s+/', ' ', trim($str));
     }
 
     public static function msg(string $value, string $type = 'success'): array
@@ -56,6 +56,13 @@ class Helpers
             'type' => $type,
             'value' => $value
         ];
+    }
+
+    public static function randomFileName(string $filename): string
+    {
+        $ext    = pathinfo($filename, PATHINFO_EXTENSION);
+        $random = uniqid('pp_') . ".$ext";
+        return $random;
     }
 
     public static function minifyHtml(string $buffer): string

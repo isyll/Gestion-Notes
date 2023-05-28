@@ -2,6 +2,12 @@
 
 namespace Core;
 
+use App\Model\AdminModel;
+use App\Model\ClassesModel;
+use App\Model\NiveauxModel;
+use App\Model\SchoolYearsModel;
+use App\Model\StudentsModel;
+
 class Controller
 {
     private string $userDataTableName = 'params';
@@ -20,6 +26,11 @@ class Controller
     protected SessionManager $session;
     protected AccessControl $ac;
     protected Helpers $helpers;
+    protected SchoolYearsModel $schoolYearsModel;
+    protected NiveauxModel $niveauxModel;
+    protected ClassesModel $classesModel;
+    protected StudentsModel $studentsModel;
+    protected AdminModel $adminModel;
     protected array $request;
     protected array $data;
     protected string $defaultLayout = 'layout';
@@ -32,7 +43,7 @@ class Controller
         $this->ac      = new AccessControl();
         $this->helpers = new Helpers();
 
-        if (!$this->session->get('logged-in') && Router::$current !== '' && !isset($_POST['login-form'])) {
+        if (!$this->session->get('logged-in') && !isset($_POST['login-form'])) {
             $loginPage = Router::getURLs()['login-page'];
 
             if ($loginPage != $_SERVER['REQUEST_URI']) {
@@ -46,21 +57,26 @@ class Controller
             password: 'xCplm_'
         );
 
+        $this->schoolYearsModel = new SchoolYearsModel($this->db);
+        $this->niveauxModel     = new NiveauxModel($this->db);
+        $this->classesModel     = new ClassesModel($this->db);
+        $this->adminModel       = new AdminModel($this->db);
+
         $this->ac->loadFromDatabase($this->db, 'accesscontrol');
 
         $this->data = [
             'currentYear' => $this->getParam('annee-actuelle'),
             'msg' => $this->session->get('msg') ?? NULL,
             'errors' => $this->session->get('form-errors') ?? NULL,
-            'title' => $GLOBALS['siteName'],
             'urls' => Router::getURLs(),
-            'currentURL' => $this->currentURL()
+            'currentURL' => $this->currentURL(),
+            'userInfos' => $this->session->get('log-infos'),
+            'title' => Router::$title ?? $GLOBALS['siteName']
         ];
 
         $this->data['urls']['baseURL']     = $this->helpers::getBaseURL();
         $this->data['urls']['current-url'] = $this->currentURL();
         $this->session->remove(['msg', 'form-errors']);
-
     }
 
     public function setLogInfo(string $name, mixed $value)
@@ -194,7 +210,7 @@ class Controller
         array $datas = []
     ): bool|string {
         $codeMsg = $this->httpResponseCodeMsg[$code] ?? '200 OK';
-        header('HTTP/1.0 ' . $codeMsg);
+        header('HTTP/1.1 ' . $codeMsg);
 
         $results = [
             "code" => $code,

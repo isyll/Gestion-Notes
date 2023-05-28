@@ -228,10 +228,46 @@ class ValidationRules
                 'name' => 'classeLibelle',
                 'rules' => [
                     'required',
-                    'error_msg' => 'Le libellé de la est requis'
+                    'error_msg' => 'Le libellé de la classe est requis'
                 ],
                 'process' => ['del_multiple_spaces']
+            ],
+            [
+                'name' => 'niveauId',
+                'rules' => [
+                    'required',
+                    'error_msg' => 'Le niveau est requis'
+                ],
+                'process' => ['del_all_spaces']
+            ],
+        ],
+        'delete-niveau' => [
+            [
+                'name' => 'niveauId',
+                'rules' => [
+                    'required',
+                    'error_msg' => 'L\'id de niveau est requis'
+                ],
+                'process' => ['del_all_spaces']
             ]
+        ],
+        'delete-classe' => [
+            [
+                'name' => 'niveauId',
+                'rules' => [
+                    'required',
+                    'error_msg' => 'L\'id de niveau est requis'
+                ],
+                'process' => ['del_all_spaces']
+            ],
+            [
+                'name' => 'classeId',
+                'rules' => [
+                    'required',
+                    'error_msg' => 'L\'id de la classe est requis'
+                ],
+                'process' => ['del_all_spaces']
+            ],
         ]
     ];
 }

@@ -2,35 +2,26 @@
 
 namespace App\Controller;
 
-use App\Model\ClassesModel;
-use App\Model\NiveauxModel;
-use App\Model\SchoolYearsModel;
 use Core\Controller;
-use Core\FormValidator;
 
 class NiveauxController extends Controller
 {
-    private NiveauxModel $model;
-
-    private ClassesModel $cm;
-
-    private SchoolYearsModel $sym;
-
     public function __construct()
     {
         parent::__construct();
-        $this->model = new NiveauxModel($this->db);
-        $this->cm    = new ClassesModel($this->db);
-        $this->sym   = new SchoolYearsModel($this->db);
     }
 
     public function getNiveaux()
     {
         $this->data['current'] = 'niveaux';
-        $this->data['title']   = 'Niveaux';
-        $this->data['niveaux'] = $this->model->getNiveaux();
+        $this->data['niveaux'] = $this->niveauxModel->getNiveaux();
 
         echo $this->render('niveaux', $this->data);
+    }
+
+    public function newNiveau()
+    {
+        echo $this->render('new-niveau', $this->data);
     }
 
     public function createNiveau()
@@ -42,14 +33,37 @@ class NiveauxController extends Controller
             $this->session->set('msg', $this->error('Formulaire invalide'));
             $this->session->set('form-errors', $errors);
         } else {
-            if ($this->model->niveauLibelleExists($_POST['niveauLibelle'])) {
+            if ($this->niveauxModel->niveauLibelleExists($_POST['niveauLibelle'])) {
                 $this->session->set('msg', $this->error('Ce niveau déjà'));
             } else {
-                if ($this->model->saveNiveau($_POST['niveauLibelle'])) {
+                if ($this->niveauxModel->saveNiveau($_POST['niveauLibelle'])) {
                     $this->session->set('msg', $this->success('Niveau créée avec succès'));
+                    $this->redirect($this->data['urls']['list-niveaux'], false);
                 } else {
                     $this->session->set('msg', $this->error("Une erreur inconnue s'est produite"));
                 }
+            }
+        }
+
+        $this->redirect($_POST['current-url'] ?? '', false);
+    }
+
+    public function deleteNiveau()
+    {
+        $this->loadValidationRules('delete-niveau', $_POST);
+        $this->fv->validate();
+
+        if ($errors = $this->fv->getErrors()) {
+            $this->session->set('msg', $this->error('Formulaire invalide'));
+            $this->session->set('form-errors', $errors);
+        } else {
+            if ($this->niveauxModel->niveauIdExists((int) $_POST['niveauId'])) {
+                if ($this->niveauxModel->deleteNiveau((int) $_POST['niveauId']))
+                    $this->session->set('msg', $this->success('Le niveau a bien été supprimé'));
+                else
+                    $this->session->set('msg', $this->error('Une erreur inconnue est survenue lors de la suppression'));
+            } else {
+                $this->session->set('msg', $this->error('Le niveau sélectionné n\'existe pas'));
             }
         }
 

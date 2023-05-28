@@ -1,7 +1,7 @@
 <header>
     <?php include 'parts/navbar.html.php' ?>
 </header>
-<div class="container">
+<div class="container w-100">
     <div class="row">
         <?php if (isset($msg)): ?>
             <div class="text-<?= $msg['type'] ?>">
@@ -10,41 +10,20 @@
         <?php endif ?>
     </div>
 
-    <div class="row">
-        <div class="col"></div>
-        <div class="col">
-            <form method="post" action="<?= $urls['create-niveau'] ?>" class="row">
-                <label for="niveauLibelle" class="form-label col-3 align-self-center">Créer un niveau</label>
-                <div class="form-group col-6 align-self-center">
-                    <input required id="niveauLibelle" type="text" class="form-control  align-self-center"
-                        name="niveauLibelle" />
-                    <input type="hidden" name="current-url" value="<?= $currentURL ?>" />
-                </div>
-                <input type="submit" class="col-3 text-white btn btn-secondary align-self-center" value="Ajouter" />
-            </form>
-            <div class="row">
-                <div class="col-3"></div>
-                <div class="col-6">
-                    <?php if (isset($errors)): ?>
-                        <small id="classeHelp" class="form-text text-muted">
-                            <?= $errors['niveauLibelle'] ?>
-                        </small>
-                    <?php endif ?>
-                </div>
-                <div class="col-3"></div>
-            </div>
+    <div class="row position-relative">
+        <div class="position-absolute w-auto h-auto end-0">
+            <a href="<?= $urls['new-niveau'] ?>">
+                <i class="bi bi-plus fs-1"></i>
+            </a>
         </div>
-        <div class="col">
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-3"></div>
-        <div class="col-6">
-            <table class="table table-striped table-hover mt-4">
+        <div class="m-auto col-10 col-lg-6">
+            <h4 class="my-4">Les niveaux</h4>
+            <table class="table table-striped table-hover">
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>Libellé</th>
+                        <th></th>
                         <th></th>
                     </tr>
                 </thead>
@@ -59,11 +38,20 @@
                                     <?= $n['libelle'] ?>
                                 </td>
                                 <td>
-                                    <a href="/app/<?= $n['id'] ?>">
-                                        <button class="btn btn-link p-0">
+                                    <a href="<?= $urls['list-classes'] ?><?= $n['id'] ?>">
+                                        <button class="btn btn-link p-0 text-decoration-none">
                                             Sélectionner
                                         </button>
                                     </a>
+                                </td>
+                                <td>
+                                    <form action="<?= $urls['delete-niveau'] ?>" method="post">
+                                        <input type="hidden" name="niveauId" value="<?= $n['id'] ?>" />
+                                        <input type="hidden" name="current-url" value="<?= $currentURL ?>" />
+                                        <button type="submit" class="btn btn-link text-danger">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         <?php endforeach ?>
@@ -71,6 +59,5 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-3"></div>
     </div>
 </div>

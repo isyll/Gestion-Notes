@@ -2,17 +2,13 @@
 
 namespace App\Controller;
 
-use App\Model\ClassesModel;
 use Core\Controller;
 
 class APIController extends Controller
 {
-    private ClassesModel $cm;
-
     public function __construct()
     {
         parent::__construct();
-        $this->cm = new ClassesModel($this->db);
     }
 
     public function getAllClasses()
@@ -25,7 +21,7 @@ class APIController extends Controller
         if (is_numeric(($niveauId))) {
             try {
                 $niveauId = (int) $niveauId;
-                $classes  = $this->cm->getClassesByNiveau($niveauId);
+                $classes  = $this->classesModel->getClassesByNiveau($niveauId);
 
                 if (count($classes) === 0) {
                     $code = '204';
