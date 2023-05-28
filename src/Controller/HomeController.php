@@ -13,7 +13,7 @@ class HomeController extends Controller
 
     public function page404()
     {
-        echo $this->render('404');
+        echo $this->render(file: '404', layout: false, minify: true);
     }
 
     public function test()
