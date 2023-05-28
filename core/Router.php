@@ -70,7 +70,7 @@ class Router
             $class  = self::$paths['page404']['class'];
             $action = self::$paths['page404']['action'];
 
-            eval("use $ns\\$class;(new $class(\$db))->$action();");
+            eval("use $ns\\$class;(new $class())->$action();");
         }
     }
 
