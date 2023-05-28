@@ -49,6 +49,7 @@ class Controller
         $this->ac->loadFromDatabase($this->db, 'accesscontrol');
 
         $this->data = [
+            'currentYear' => $this->getParam('annee-actuelle'),
             'msg' => $this->session->get('msg') ?? NULL,
             'errors' => $this->session->get('form-errors') ?? NULL,
             'title' => $GLOBALS['siteName'],
@@ -102,7 +103,7 @@ class Controller
         $this->fv->form($datas, $values);
     }
 
-    public function loadUserDatas()
+    public function loadParams()
     {
         $datas = $this->db->pexec(
             "SELECT * FROM params",
@@ -119,10 +120,10 @@ class Controller
         $this->session->set('params', $params);
     }
 
-    public function getUserData(string $name)
+    public function getParam(string $name)
     {
         if (!$this->session->get('params'))
-            $this->loadUserDatas();
+            $this->loadParams();
 
         $datas = $this->session->get('params');
 

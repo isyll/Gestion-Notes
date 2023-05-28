@@ -26,18 +26,24 @@
             </ul>
             <ul class="navbar-nav ms-md-auto">
                 <li class="nav-item">
+                    <small>
+                        Année scolaire :
+                        <?= $currentYear ?>
+                    </small>
+                </li>
+                <li class="nav-item">
                     <form action="<?= $urls['logout'] ?>" method="post">
                         <button type="submit" class="btn btn-link">Déconnexion</button>
                     </form>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
 
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Elève">
                         <button class="btn btn-secondary" type="button" id="button-addon2"><i
                                 class="bi bi-search"></i></button>
                     </div>
-                </li>
+                </li> -->
 
             </ul>
         </div>
