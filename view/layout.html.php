@@ -26,6 +26,8 @@
         <?= json_encode(Core\Router::getAPIRoutes()); ?>
     </script>
     <script>
+        const data = JSON.parse(document.getElementById("datas").textContent);
+
         const baseURL = '<?= Core\Helpers::getBaseURL(); ?>';
 
     </script>
