@@ -58,6 +58,7 @@ class Controller
         );
 
         $this->schoolYearsModel = new SchoolYearsModel($this->db);
+        $this->studentsModel    = new StudentsModel($this->db);
         $this->niveauxModel     = new NiveauxModel($this->db);
         $this->classesModel     = new ClassesModel($this->db);
         $this->adminModel       = new AdminModel($this->db);
