@@ -64,17 +64,25 @@ class Router
             }
         }
 
+        self::pageNotFound();
+    }
+
+    public static function pageNotFound()
+    {
         header('HTTP/1.1 404 Not Found');
 
         if (isset(self::$paths['page404'])) {
             $class  = self::$paths['page404']['class'];
             $action = self::$paths['page404']['action'];
 
-            self::$current = $match['name'] ?? '';
-            self::$title   = $match['title'] ?? '';
+            self::$current = self::$paths['page404']['name'] ?? '';
+            self::$title   = self::$paths['page404']['title'] ?? '';
 
+            $ns = self::$namespace;
             eval("use $ns\\$class;(new $class())->$action();");
         }
+
+        exit;
     }
 
     public static function getURLs()
