@@ -45,10 +45,11 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <form action="<?= $urls['delete-niveau'] ?>" method="post">
+                                    <form class="delete-niveau-form" action="<?= $urls['delete-niveau'] ?>" method="post">
                                         <input type="hidden" name="niveauId" value="<?= $n['id'] ?>" />
                                         <input type="hidden" name="current-url" value="<?= $currentURL ?>" />
-                                        <button type="submit" class="btn btn-link text-danger">
+                                        <button type="submit" data-bs-toggle="modal" data-bs-target="#confirmDelete"
+                                            class="delete-btn btn btn-link text-danger">
                                             <i class="bi bi-trash-fill"></i>
                                         </button>
                                     </form>
@@ -58,6 +59,20 @@
                     <?php endif ?>
                 </tbody>
             </table>
+        </div>
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" id="confirmDelete">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="myModalLabel">Voulez-vous vraiment supprimer ce niveau ?</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="modal-btn-yes">Oui</button>
+                <button type="button" class="btn btn-secondary" id="modal-btn-no" data-bs-dismiss="modal">Non</button>
+            </div>
         </div>
     </div>
 </div>
