@@ -43,7 +43,7 @@ class ClassesController extends Controller
             $this->session->set('msg', $this->error('Formulaire invalide'));
             $this->session->set('form-errors', $errors);
         } else {
-            if ($this->niveauxModel->hasClasse((int) $_POST['niveauId'], $_POST['classeLibelle'])) {
+            if ($this->niveauxModel->hasClasseLibelle((int) $_POST['niveauId'], $_POST['classeLibelle'])) {
                 $this->session->set('msg', $this->error('Ce niveau possède déjà une classe nommée ' . $_POST['classeLibelle']));
             } else {
                 if ($this->classesModel->saveClasse($_POST['classeLibelle'], (int) $_POST['niveauId'])) {
