@@ -16,8 +16,11 @@ class StudentsModel
 
     private function getStudentBy(string $column, mixed $value): array|bool
     {
+        if ($value === '')
+            return false;
+
         return $this->db->pexec(
-            "SELECT * FROM eleves WHERE $column=?",
+            "SELECT * FROM eleves WHERE $column = ?",
             [$value],
             'fetch'
         );
@@ -35,18 +38,31 @@ class StudentsModel
 
     public function saveStudent(array $data)
     {
-        return $this->db->pexec(
+        $this->db->getPDO()->query('BEGIN');
+
+        $result = $this->db->pexec(
             'INSERT INTO eleves(numero,type,prenom,nom,adresse,email,telephone) VALUES(?,?,?,?,?,?,?)',
             [
                 $data['numero'],
                 $data['studentType'],
                 $data['firstname'],
                 $data['lastname'],
-                $data['address'] ?? '',
-                $data['email'] ?? '',
-                $data['phone'] ?? '',
+                $data['address'] ?? NULL,
+                $data['email'] !== '' ? $data['email'] : NULL,
+                $data['phone'] !== '' ? $data['phone'] : NULL,
             ]
         );
+
+        $this->db->pexec(
+            'INSERT INTO inscriptions(id_eleve, id_classe, id_annee) VALUES(?,?,?)',
+            [
+                $this->db->getPDO()->lastInsertId(),
+                $data['classeId'],
+                $data['annee_scolaire_id']
+            ]
+        );
+
+        return $this->db->getPDO()->query('COMMIT');
     }
 
     public function getAvailableNumber()
