@@ -49,7 +49,8 @@
                                         <input type="hidden" name="classeId" value="<?= $c['id'] ?>" />
                                         <input type="hidden" name="niveauId" value="<?= $niveau['id'] ?>" />
                                         <input type="hidden" name="current-url" value="<?= $currentURL ?>" />
-                                        <button type="submit" class="btn btn-link text-danger">
+                                        <button type="submit" class="delete-btn btn btn-link text-danger" data-bs-toggle="modal"
+                                            data-bs-target="#confirmDelete">
                                             <i class="bi bi-trash-fill"></i>
                                         </button>
                                     </form>
@@ -59,6 +60,20 @@
                     <?php endif ?>
                 </tbody>
             </table>
+        </div>
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" id="confirmDelete">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="myModalLabel">Voulez-vous vraiment supprimer cette classe ?</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="modal-btn-yes">Oui</button>
+                <button type="button" class="btn btn-secondary" id="modal-btn-no" data-bs-dismiss="modal">Non</button>
+            </div>
         </div>
     </div>
 </div>
