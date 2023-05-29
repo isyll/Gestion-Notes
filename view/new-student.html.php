@@ -11,10 +11,14 @@
     </div>
 
     <div class="row">
-        <div class="col-3"></div>
-        <div class="col-6">
+        <h5>
+            Niveau :
+            <?= $niveau['libelle'] ?> <code class="fs-4 text-white">/</code>
+            Classe :
+            <?= $classe['libelle'] ?>
+        </h5>
+        <div class="m-auto pt-3 col-10 col-lg-6">
             <?php include 'parts/forms/studentform.html.php'; ?>
         </div>
-        <div class="col-3"></div>
     </div>
 </div>
