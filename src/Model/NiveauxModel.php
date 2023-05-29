@@ -58,16 +58,22 @@ class NiveauxModel
         );
     }
 
-    public function hasClasse(int $id, string $libelle): bool
+    public function hasClasseLibelle(int $niveauId, string $classeLibelle): bool
     {
-        $results = $this->getClasses($id);
+        return $this->db->pexec(
+            'SELECT 1 FROM classes WHERE id_niveau = ? AND libelle = ?',
+            [$niveauId, $classeLibelle],
+            'fetch'
+        ) ? true : false;
+    }
 
-        foreach ($results as $item) {
-            if (strtolower($item['libelle']) === strtolower($libelle))
-                return true;
-        }
-
-        return false;
+    public function hasClasseId(int $niveauId, int $classeId): bool
+    {
+        return $this->db->pexec(
+            'SELECT 1 FROM classes WHERE id_niveau = ? AND id = ?',
+            [$niveauId, $classeId],
+            'fetch'
+        ) ? true : false;
     }
 
     public function saveNiveau(string $libelle): bool
