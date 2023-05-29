@@ -56,7 +56,7 @@ class FormValidator
                             $this->errors[$name] = $v['error_msg'];
                         }
                     } elseif ($v['value'] === 'set') {
-                        if (!in_array($value, $v['set_values'])) {
+                        if (!in_array($value, $v['set_values'], true)) {
                             $this->errors[$name] = $v['error_msg'];
                         }
                     } elseif (!$this->validateType($v['value'], $value))
@@ -102,6 +102,8 @@ class FormValidator
                     $datas[$field['name']] = Helpers::rmms($datas[$field['name']]);
                 if (in_array('to_lower_case', $process))
                     $datas[$field['name']] = Helpers::rms($datas[$field['name']]);
+                if (in_array('capitalize', $process))
+                    $datas[$field['name']] = ucwords($datas[$field['name']]);
             }
         }
 
