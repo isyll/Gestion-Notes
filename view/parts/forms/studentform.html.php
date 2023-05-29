@@ -1,17 +1,19 @@
-<form action="<?= $urls['create-student'] ?>" method="post" id="formAnnee">
+<form action="<?= $urls['create-student'] ?>" method="post" id="formAnnee" class="text-start m-auto">
     <input type="hidden" name="current-url" value="<?= $currentURL ?>" />
+    <input type="hidden" name="niveauId" value="<?= $niveau['id'] ?>" />
+    <input type="hidden" name="classeId" value="<?= $classe['id'] ?>" />
     <div class="row">
-        <div class="col-6">
+        <div class="col-lg-6 col-12">
             <label for="firstname" class="form-label">Prénom</label>
-            <input required type="text" class="form-control" placeholder="Prénom de l'étudiant" aria-label="Prénom"
-                name="firstname" id="firstname" />
+            <input required type="text" class="form-control" placeholder="Prénom de l'étudiant" name="firstname"
+                id="firstname" />
             <?php if (isset($errors['firstname'])): ?>
                 <div id="fn" class="form-text text-danger">
                     <?= $errors['firstname'] ?>
                 </div>
             <?php endif ?>
         </div>
-        <div class="col-6">
+        <div class="col-lg-6 col-12">
             <label for="lastname" class="form-label">Nom</label>
 
             <input required type="text" class="form-control" placeholder="Nom de l'étudiant" name="lastname"
@@ -28,25 +30,7 @@
             <select id="studentType" name="studentType" class="form-select" required>
                 <option selected>Choisir...</option>
                 <option value="externe">Externe</option>
-                <option value="intene">Interne</option>
-            </select>
-        </div>
-
-        <div class="col-6">
-            <label for="niveauId" class="form-label">Niveau</label>
-            <select id="niveauId" name="niveauId" class="form-select" required>
-                <option selected value="">Choisir...</option>
-                <?php if (isset($niveaux)): ?>
-                    <?php foreach ($niveaux as $n): ?>
-                        <option value="<?= $n['id'] ?>"><?= $n['libelle'] ?></option>
-                    <?php endforeach ?>
-                <?php endif ?>
-            </select>
-        </div>
-
-        <div class="col-6">
-            <label for="classeId" class="form-label">Classe</label>
-            <select id="classeId" name="classeId" class="form-select" required>
+                <option value="interne">Interne</option>
             </select>
         </div>
 
