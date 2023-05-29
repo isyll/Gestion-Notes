@@ -42,6 +42,11 @@ $routes = [
         'handler' => 'ClassesController@newClasse',
         'title' => 'Créer une classe'
     ],
+    '/app/new-student/{niveauId}/{classeId}' => [
+        'name' => 'new-student',
+        'handler' => 'StudentsController@newStudent',
+        'title' => 'Créer une élève'
+    ],
     '/app/{niveauId}/{classeId}' => [
         'name' => 'list-students',
         'handler' => 'StudentsController@list',
