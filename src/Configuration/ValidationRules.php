@@ -20,7 +20,7 @@ class ValidationRules
                     ],
                     'error_msg' => 'Le prénom est requis'
                 ],
-                'process' => ['del_multiple_spaces']
+                'process' => ['del_multiple_spaces', 'capitalize']
             ],
             [
                 'name' => 'lastname',
@@ -36,7 +36,7 @@ class ValidationRules
                     ],
                     'error_msg' => 'Le nom est requis'
                 ],
-                'process' => ['del_multiple_spaces']
+                'process' => ['del_multiple_spaces', 'capitalize']
             ],
             [
                 'name' => 'email',
@@ -64,7 +64,7 @@ class ValidationRules
                     ],
                     'error_msg' => 'Le type est requis'
                 ],
-                'process' => ['del_multiple_spaces', 'to_lower_case']
+                'process' => ['del_all_spaces', 'to_lower_case']
 
             ],
             [
@@ -119,7 +119,7 @@ class ValidationRules
                     ],
                     'error_msg' => 'Le prénom est requis'
                 ],
-                'process' => ['del_multiple_spaces']
+                'process' => ['del_multiple_spaces', 'capitalize']
             ],
             [
                 'name' => 'lastname',
@@ -135,7 +135,7 @@ class ValidationRules
                     ],
                     'error_msg' => 'Le nom est requis'
                 ],
-                'process' => ['del_multiple_spaces']
+                'process' => ['del_multiple_spaces', 'capitalize']
             ],
             [
                 'name' => 'username',
