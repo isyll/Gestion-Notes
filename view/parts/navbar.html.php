@@ -8,19 +8,12 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav">
-                <!-- <li class="nav-item">
-                    <a class="nav-link" href="<?= $urls['new-student'] ?>">
-                        Ajouter un élève
-                    </a>
-                </li> -->
-            </ul>
             <ul class="navbar-nav ms-md-auto">
                 <li class="nav-item me-4 align-self-center">
-                    <small>
+                    <a href="<?= $urls['school-years'] ?>" class="text-black text-decoration-none">
                         Année scolaire :
                         <?= $currentYear ?>
-                    </small>
+                    </a>
                 </li>
                 <li class="nav-item">
                     <div class="dropdown">
@@ -30,8 +23,7 @@
                         </button>
                         <ul class="dropdown-menu">
                             <li class="dropdown-item text-center">
-                                <a
-                                    href="<?= $urls['profile-page'] ?><?= $userInfos['id'] ?>">Profil</a>
+                                <a href="<?= $urls['profile-page'] ?><?= $userInfos['id'] ?>">Profil</a>
                             </li>
                             <li class="dropdown-item text-center">
                                 <form action="<?= $urls['logout'] ?>" method="post">
