@@ -22,6 +22,11 @@ $routes = [
         'handler' => 'ClassesController@getClasses',
         'title' => 'Classes'
     ],
+    '/school-years' => [
+        'name' => 'school-years',
+        'handler' => 'SchoolYearsController@list',
+        'title' => 'Années scolaires'
+    ],
     '/new-student/{niveauId}/{classeId}' => [
         'name' => 'new-student',
         'handler' => 'StudentsController@newStudent',
