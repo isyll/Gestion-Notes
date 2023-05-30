@@ -12,45 +12,35 @@ $routes = [
         'handler' => 'HomeController@page404',
         'title' => 'Page non trouvée'
     ],
-    '/app/login' => [
+    '/login' => [
         'name' => 'login-page',
         'handler' => 'LoginController@connection',
         'title' => 'Connexion'
     ],
-    '/app/profile/{userId}' => [
-        'name' => 'profile-page',
-        'handler' => 'ProfileController@userPage',
-        'title' => 'Profil'
-    ],
-    '/app/{niveauId}' => [
+    '/niveau/{niveauId}' => [
         'name' => 'list-classes',
         'handler' => 'ClassesController@getClasses',
         'title' => 'Classes'
     ],
-    '/app/new-student' => [
-        'name' => 'new-student',
-        'handler' => 'StudentsController@newStudent',
-        'title' => 'Créer élève'
-    ],
-    '/app/new-niveau' => [
-        'name' => 'new-niveau',
-        'handler' => 'NiveauxController@newNiveau',
-        'title' => 'Créer un niveau'
-    ],
-    '/app/new-classe/{niveauId}' => [
-        'name' => 'new-classe',
-        'handler' => 'ClassesController@newClasse',
-        'title' => 'Créer une classe'
-    ],
-    '/app/new-student/{niveauId}/{classeId}' => [
+    '/new-student/{niveauId}/{classeId}' => [
         'name' => 'new-student',
         'handler' => 'StudentsController@newStudent',
         'title' => 'Créer une élève'
     ],
-    '/app/{niveauId}/{classeId}' => [
+    '/students/{niveauId}/{classeId}' => [
         'name' => 'list-students',
         'handler' => 'StudentsController@list',
         'title' => 'Elèves'
+    ],
+    '/student-page/{niveauId}/{classeId}/{studentId}' => [
+        'name' => 'student-page',
+        'handler' => 'StudentsController@studentPage',
+        'title' => 'Page élève'
+    ],
+    '/edit-student/{niveauId}/{classeId}/{studentId}' => [
+        'name' => 'edit-student-page',
+        'handler' => 'StudentsController@editStudent',
+        'title' => 'Modifier élève'
     ],
 
     /* Routes POST */
@@ -59,7 +49,7 @@ $routes = [
         'handler' => 'LoginController@logout',
         'methods' => ['post']
     ],
-    '/login' => [
+    '/log-user' => [
         'name' => 'login',
         'handler' => 'LoginController@login',
         'methods' => ['post']
@@ -94,6 +84,11 @@ $routes = [
         'handler' => 'NiveauxController@deleteNiveau',
         'methods' => ['post']
     ],
+    '/edit-niveau' => [
+        'name' => 'edit-niveau',
+        'handler' => 'NiveauxController@edit',
+        'methods' => ['post']
+    ],
     '/create-classe' => [
         'name' => 'create-classe',
         'handler' => 'ClassesController@createClasse',
@@ -104,13 +99,33 @@ $routes = [
         'handler' => 'ClassesController@deleteClasse',
         'methods' => ['post']
     ],
+    '/edit-classe' => [
+        'name' => 'edit-classe',
+        'handler' => 'ClassesController@edit',
+        'methods' => ['post']
+    ],
     '/admin/create-user' => [
         'name' => 'create-user',
         'handler' => 'AdminController@createUser',
         'methods' => ['post']
     ],
+    '/delete-student' => [
+        'name' => 'delete-student',
+        'handler' => 'StudentsController@delete',
+        'methods' => ['post']
+    ],
+    '/edit-student' => [
+        'name' => 'edit-student',
+        'handler' => 'StudentsController@edit',
+        'methods' => ['post']
+    ],
 
     /* Routes d'administration */
+    '/admin/profile/{userId}' => [
+        'name' => 'profile-page',
+        'handler' => 'ProfileController@userPage',
+        'title' => 'Profil'
+    ],
     '/admin/new-user' => [
         'name' => 'create-user-page',
         'handler' => 'AdminController@newUser',
