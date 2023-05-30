@@ -8,21 +8,28 @@
                 <?= $msg['value'] ?>
             </div>
         <?php endif ?>
+
+        <small>
+            <?= $errors['newNiveauLibelle'] ?? '' ?>
+        </small>
+        <small>
+            <?= $errors['niveauLibelle'] ?? '' ?>
+        </small>
     </div>
 
     <div class="row position-relative">
         <div class="position-absolute w-auto h-auto end-0">
-            <a href="<?= $urls['new-niveau'] ?>">
+            <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#createNiveau">
                 <i class="bi bi-plus fs-1"></i>
-            </a>
+            </button>
         </div>
         <div class="m-auto col-10 col-lg-6">
             <h4 class="my-4">Les niveaux</h4>
-            <table class="table table-striped table-hover">
+            <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Libellé</th>
+                        <th></th>
+                        <th></th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -34,23 +41,30 @@
                                 <td>
                                     <?php $n['id'] ?>
                                 </td>
-                                <td style="color:rgba(255, 255, 255, 0.75);">
-                                    <?= $n['libelle'] ?>
-                                </td>
                                 <td>
                                     <a href="<?= $urls['list-classes'] ?><?= $n['id'] ?>">
-                                        <button class="btn btn-link p-0 text-decoration-none">
-                                            Sélectionner
+                                        <button class="btn btn-link p-0 fs-5 text-decoration-none text-black">
+                                            <?= $n['libelle'] ?>
                                         </button>
                                     </a>
+                                </td>
+                                <td>
+                                    <button class="editNiveauBtn btn btn-link" data-bs-toggle="modal"
+                                        data-bs-target="#editNiveau" niveauId="<?= $n['id'] ?>">
+                                        <a href="#" data-bs-toggle="tooltip" data-bs-title="Modifier">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                    </button>
                                 </td>
                                 <td>
                                     <form class="delete-niveau-form" action="<?= $urls['delete-niveau'] ?>" method="post">
                                         <input type="hidden" name="niveauId" value="<?= $n['id'] ?>" />
                                         <input type="hidden" name="current-url" value="<?= $currentURL ?>" />
-                                        <button type="submit" data-bs-toggle="modal" data-bs-target="#confirmDelete"
+                                        <button type="submit" data-bs-toggle="modal" data-bs-target="#confirmDeleteNiveau"
                                             class="delete-btn btn btn-link text-danger">
-                                            <i class="bi bi-trash-fill"></i>
+                                            <a href="#" data-bs-toggle="tooltip" data-bs-title="Supprimer">
+                                                <i class="text-danger bi bi-trash-fill"></i>
+                                            </a>
                                         </button>
                                     </form>
                                 </td>
@@ -62,16 +76,43 @@
         </div>
     </div>
 </div>
-<div class="modal fade" tabindex="-1" role="dialog" id="confirmDelete">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
+<div class="modal fade" tabindex="-1" role="dialog" id="createNiveau">
+    <div class="modal-dialog modal-dialog-centered modal-md">
         <div class="modal-content">
             <div class="modal-header">
-                <h6 class="modal-title" id="myModalLabel">Voulez-vous vraiment supprimer ce niveau ?</h6>
+                <h6 class="modal-title" id="myModalLabel">Créer un niveau</h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" id="modal-btn-yes">Oui</button>
-                <button type="button" class="btn btn-secondary" id="modal-btn-no" data-bs-dismiss="modal">Non</button>
+                <?php include 'parts/forms/niveauform.html.php'; ?>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" id="editNiveau">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="myModalLabel">Modifier un niveau</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-footer">
+                <?php include 'parts/forms/niveaueditform.html.php'; ?>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" id="confirmDeleteNiveau">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content bg-danger">
+            <div class="modal-header">
+                <h6 class="modal-title text-white" id="myModalLabel">Souhaitez vous vraiment supprimer ce niveau ?</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="modal-btn-yes">Oui</button>
+                <button type="button" class="btn btn-danger" id="modal-btn-no" data-bs-dismiss="modal">Non</button>
             </div>
         </div>
     </div>

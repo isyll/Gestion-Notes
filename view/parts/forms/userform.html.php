@@ -69,5 +69,5 @@
         </div>
     <?php endif ?>
 
-    <input type="submit" class="btn btn-primary text-white mt-2" value="Valider" />
+    <input type="submit" class="btn btn-primary mt-2" value="Valider" />
 </form>

@@ -68,6 +68,16 @@ class ValidationRules
 
             ],
             [
+                'name' => 'birthdate',
+                'rules' => [
+                    'type' => [
+                        'value' => 'date',
+                        'error_msg' => 'La date de naissance ne est invalide',
+                    ],
+                ],
+                'process' => ['del_all_spaces']
+            ],
+            [
                 'name' => 'niveauId',
                 'rules' => [
                     'required',
@@ -101,6 +111,178 @@ class ValidationRules
                     'error_msg' => 'Le numéro saisi est requis'
                 ],
                 'process' => ['del_all_spaces']
+            ],
+            [
+                'name' => 'address',
+                'rules' => [],
+                'process' => ['del_multiple_spaces']
+            ],
+        ],
+
+        'edit-niveau' => [
+            [
+                'name' => 'niveauId',
+                'rules' => [
+                    'required',
+                    'type' => [
+                        'value' => 'number',
+                        'error_msg' => 'Le niveau choisi est invalide'
+                    ],
+                    'error_msg' => 'Le niveau est requis'
+                ],
+                'process' => ['del_all_spaces']
+            ],
+            [
+                'name' => 'newNiveauLibelle',
+                'rules' => [
+                    'required',
+                    'error_msg' => 'Le libellé est requis'
+                ],
+                'process' => ['del_multiple_spaces', 'capitalize']
+            ],
+        ],
+
+        'edit-classe' => [
+            [
+                'name' => 'niveauId',
+                'rules' => [
+                    'required',
+                    'type' => [
+                        'value' => 'number',
+                        'error_msg' => 'Le niveau choisi est invalide'
+                    ],
+                    'error_msg' => 'Le niveau est requis'
+                ],
+                'process' => ['del_all_spaces']
+            ],
+            [
+                'name' => 'classeId',
+                'rules' => [
+                    'required',
+                    'type' => [
+                        'value' => 'number',
+                        'error_msg' => 'La classe choisie est invalide'
+                    ],
+                    'error_msg' => 'La classe est requise'
+                ],
+                'process' => ['del_all_spaces']
+            ],
+            [
+                'name' => 'newClasseLibelle',
+                'rules' => [
+                    'required',
+                    'error_msg' => 'Le libellé est requis'
+                ],
+                'process' => ['del_multiple_spaces', 'capitalize']
+            ],
+        ],
+
+        'edit-student' => [
+            [
+                'name' => 'firstname',
+                'rules' => [
+                    'min_length' => [
+                        'value' => 1,
+                        'error_msg' => 'Le prénom est trop court'
+                    ],
+                    'max_length' => [
+                        'value' => 100,
+                        'error_msg' => 'Le prénom est trop long'
+                    ],
+                    'error_msg' => 'Le prénom est requis'
+                ],
+                'process' => ['del_multiple_spaces', 'capitalize']
+            ],
+            [
+                'name' => 'lastname',
+                'rules' => [
+                    'min_length' => [
+                        'value' => 1,
+                        'error_msg' => 'Le nom que vous avez saisi est trop court'
+                    ],
+                    'max_length' => [
+                        'value' => 100,
+                        'error_msg' => 'Le nom que vous avez saisi est trop long'
+                    ],
+                    'error_msg' => 'Le nom est requis'
+                ],
+                'process' => ['del_multiple_spaces', 'capitalize']
+            ],
+            [
+                'name' => 'email',
+                'rules' => [
+                    'min_length' => [
+                        'value' => 5,
+                        'error_msg' => 'L\'adresse email est trop courte'
+                    ],
+                    'max_length' => [
+                        'value' => 255,
+                        'error_msg' => 'L\'adresse est trop longue'
+                    ],
+                    'error_msg' => 'L\'adresse email est requis'
+                ],
+                'process' => ['del_multiple_spaces', 'to_lower_case']
+            ],
+            [
+                'name' => 'studentType',
+                'rules' => [
+                    'type' => [
+                        'value' => 'set',
+                        'error_msg' => 'Le type ne répond pas aux citères',
+                        'set_values' => ['externe', 'interne']
+                    ],
+                ],
+                'process' => ['del_all_spaces', 'to_lower_case']
+            ],
+            [
+                'name' => 'birthdate',
+                'rules' => [
+                    'type' => [
+                        'value' => 'date',
+                        'error_msg' => 'La date de naissance ne est invalide',
+                    ],
+                ],
+                'process' => ['del_all_spaces']
+            ],
+            [
+                'name' => 'niveauId',
+                'rules' => [
+                    'required',
+                    'type' => [
+                        'value' => 'number',
+                        'error_msg' => 'Le niveau choisi est invalide'
+                    ],
+                    'error_msg' => 'Le niveau est requis'
+                ],
+                'process' => ['del_all_spaces']
+            ],
+            [
+                'name' => 'classeId',
+                'rules' => [
+                    'required',
+                    'type' => [
+                        'value' => 'number',
+                        'error_msg' => 'La classe choisie est invalide'
+                    ],
+                    'error_msg' => 'La classe est requis'
+                ],
+                'process' => ['del_all_spaces']
+            ],
+            [
+                'name' => 'phone',
+                'rules' => [
+                    'type' => [
+                        'value' => 'phone',
+                        'error_msg' => 'Le numéro de téléphone saisi est invalide'
+                    ],
+                    'error_msg' => 'Le numéro saisi est requis'
+                ],
+                'process' => ['del_all_spaces']
+            ],
+            [
+                'name' => 'address',
+                'rules' => [],
+                'process' => ['del_multiple_spaces']
             ],
         ],
 
@@ -162,7 +344,7 @@ class ValidationRules
                     ],
                     'max_length' => [
                         'value' => 255,
-                        'error_msg' => 'L\'addresse est trop longue'
+                        'error_msg' => 'L\'adresse est trop longue'
                     ],
                     'error_msg' => 'L\'adresse email est requis'
                 ],
@@ -220,7 +402,7 @@ class ValidationRules
                     'required',
                     'error_msg' => 'Le libellé du niveau est requis'
                 ],
-                'process' => ['del_multiple_spaces']
+                'process' => ['del_multiple_spaces', 'capitalize']
             ]
         ],
         'create-classe' => [
@@ -230,7 +412,7 @@ class ValidationRules
                     'required',
                     'error_msg' => 'Le libellé de la classe est requis'
                 ],
-                'process' => ['del_multiple_spaces']
+                'process' => ['del_multiple_spaces', 'capitalize']
             ],
             [
                 'name' => 'niveauId',
@@ -265,6 +447,16 @@ class ValidationRules
                 'rules' => [
                     'required',
                     'error_msg' => 'L\'id de la classe est requis'
+                ],
+                'process' => ['del_all_spaces']
+            ],
+        ],
+        'delete-student' => [
+            [
+                'name' => 'studentId',
+                'rules' => [
+                    'required',
+                    'error_msg' => "L'id de l'élève est requis"
                 ],
                 'process' => ['del_all_spaces']
             ],

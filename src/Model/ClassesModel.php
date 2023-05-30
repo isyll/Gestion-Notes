@@ -49,15 +49,26 @@ class ClassesModel
         );
     }
 
-    public function getStudents(int $id)
+    public function getStudents(int $classeId)
     {
         return $this->db->pexec(
-            "SELECT * FROM eleves AS e
+            "SELECT e.* FROM eleves AS e
             JOIN inscriptions AS i ON i.id_eleve = e.id
-            JOIN classes AS c ON c.id = i.id_classe AND c.id = ?",
-            [$id],
+            AND i.id_classe = ? WHERE e.supprime = 0",
+            [$classeId],
             'fetchAll'
         );
+    }
+
+    public function hasStudent(int $classeId, int $studentId) : bool
+    {
+        return $this->db->pexec(
+            "SELECT e.id FROM eleves AS e
+            JOIN inscriptions AS i ON i.id_eleve = e.id AND i.id_classe = ?
+            WHERE e.id = ?",
+            [$classeId, $studentId],
+            'fetchAll'
+        ) ? true : false;
     }
 
     public function classeNiveauMatch(int $classeId, int $niveauId)
@@ -84,6 +95,14 @@ class ClassesModel
         return $this->db->pexec(
             'UPDATE classes SET supprime = 1 WHERE id_niveau = ? AND id = ?',
             [$niveauId, $classeId]
+        );
+    }
+
+    public function editClasse(int $id, string $newLibelle): bool
+    {
+        return $this->db->pexec(
+            "UPDATE classes SET libelle = ? WHERE id = ?",
+            [$newLibelle, $id]
         );
     }
 }

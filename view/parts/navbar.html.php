@@ -1,4 +1,4 @@
-<div class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+<div class="navbar navbar-expand-lg fixed-top navbar-li bg-light">
     <div class="container">
         <a href="/" class="navbar-brand">
             <img src="/img/logo-site.png" alt="logo" width="80px" />
@@ -30,12 +30,12 @@
                         </button>
                         <ul class="dropdown-menu">
                             <li class="dropdown-item text-center">
-                                <a class="text-white"
+                                <a
                                     href="<?= $urls['profile-page'] ?><?= $userInfos['id'] ?>">Profil</a>
                             </li>
                             <li class="dropdown-item text-center">
                                 <form action="<?= $urls['logout'] ?>" method="post">
-                                    <button type="submit" class="btn btn-link text-white">Déconnexion</button>
+                                    <button type="submit" class="btn btn-link">Déconnexion</button>
                                 </form>
                             </li>
                         </ul>

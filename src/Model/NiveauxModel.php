@@ -61,7 +61,7 @@ class NiveauxModel
     public function hasClasseLibelle(int $niveauId, string $classeLibelle): bool
     {
         return $this->db->pexec(
-            'SELECT 1 FROM classes WHERE id_niveau = ? AND libelle = ?',
+            'SELECT 1 FROM classes, niveaux WHERE classes.libelle = ? AND classes.id = ? AND classes.supprime = 0 AND niveaux.supprime = 0',
             [$niveauId, $classeLibelle],
             'fetch'
         ) ? true : false;
@@ -70,7 +70,7 @@ class NiveauxModel
     public function hasClasseId(int $niveauId, int $classeId): bool
     {
         return $this->db->pexec(
-            'SELECT 1 FROM classes WHERE id_niveau = ? AND id = ?',
+            'SELECT 1 FROM classes, niveaux WHERE classes.id_niveau = ? AND classes.id = ? AND classes.supprime = 0 AND niveaux.supprime = 0',
             [$niveauId, $classeId],
             'fetch'
         ) ? true : false;
@@ -89,6 +89,14 @@ class NiveauxModel
         return $this->db->pexec(
             "UPDATE niveaux SET supprime = 1 WHERE id = ?",
             [$id]
+        );
+    }
+
+    public function editNiveau(int $id, string $newLibelle): bool
+    {
+        return $this->db->pexec(
+            "UPDATE niveaux SET libelle = ? WHERE id = ?",
+            [$newLibelle, $id]
         );
     }
 }

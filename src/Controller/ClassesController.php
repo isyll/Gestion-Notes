@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Core\Controller;
+use Core\Router;
 
 class ClassesController extends Controller
 {
@@ -18,20 +19,9 @@ class ClassesController extends Controller
         if ($this->niveauxModel->niveauIdExists($this->data['niveauId'])) {
             $this->data['niveau']  = $this->niveauxModel->getNiveauById($this->data['niveauId']);
             $this->data['classes'] = $this->niveauxModel->getClasses($this->data['niveauId']);
-        }
+        } else Router::pageNotFound();
 
         echo $this->render('classes', $this->data);
-    }
-
-    public function newClasse($niveauId)
-    {
-        $niveauId = (int) $niveauId;
-
-        if ($this->niveauxModel->niveauIdExists($niveauId)) {
-            $this->data['niveau'] = $this->niveauxModel->getNiveauById($niveauId);
-        }
-
-        echo $this->render('new-classe', $this->data);
     }
 
     public function createClasse()
@@ -80,8 +70,25 @@ class ClassesController extends Controller
         $this->redirect($_POST['current-url'] ?? '', false);
     }
 
-    private function control(int $niveauId, int $classeId): bool
+    public function edit()
     {
-        return true;
+        $this->loadValidationRules('edit-classe', $_POST);
+        $this->fv->validate();
+
+        if ($errors = $this->fv->getErrors()) {
+            $this->session->set('msg', $this->error('Formulaire invalide'));
+            $this->session->set('form-errors', $errors);
+        } else {
+            if ($this->niveauxModel->hasClasseId((int) $_POST['niveauId'], (int) $_POST['classeId'])) {
+                if ($this->classesModel->editClasse((int) $_POST['classeId'], $_POST['newClasseLibelle']))
+                    $this->session->set('msg', $this->success('La classe a bien été modifiée'));
+                else
+                    $this->session->set('msg', $this->error('Une erreur inconnue est survenue lors de la suppression'));
+            } else {
+                $this->session->set('msg', $this->error('Les données envoyées sont invalides'));
+            }
+        }
+
+        $this->redirect($_POST['current-url'] ?? '', false);
     }
 }

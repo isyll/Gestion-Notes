@@ -11,8 +11,7 @@
     <link rel="shortcut icon" href="/img/logo-site.png">
     <link rel="stylesheet" href="/css/bootstrap.css" />
     <link rel="stylesheet" href="/css/bootstrap-icons.css" />
-    <link rel="stylesheet" href="/css/prism-okaidia.css" />
-    <link rel="stylesheet" href="/css/custom.css" />
+    <link rel="stylesheet" href="/css/new.css" />
     <style>
         * {
             font-size: 102.5%;
@@ -41,8 +40,6 @@
 
     <script src="/js/jquery.js"></script>
     <script src="/js/bootstrap-bundle.js"></script>
-    <script src="/js/prism.js"></script>
-    <script src="/js/custom.js"></script>
 </body>
 
 </html>

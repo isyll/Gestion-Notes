@@ -20,7 +20,7 @@ class StudentsModel
             return false;
 
         return $this->db->pexec(
-            "SELECT * FROM eleves WHERE $column = ?",
+            "SELECT * FROM eleves WHERE $column = ? AND supprime = 0",
             [$value],
             'fetch'
         );
@@ -36,20 +36,26 @@ class StudentsModel
         return $this->getStudentBy('email', $email);
     }
 
+    public function getStudentById(int $id)
+    {
+        return $this->getStudentBy('id', $id);
+    }
+
     public function saveStudent(array $data)
     {
         $this->db->getPDO()->query('BEGIN');
 
         $result = $this->db->pexec(
-            'INSERT INTO eleves(numero,type,prenom,nom,adresse,email,telephone) VALUES(?,?,?,?,?,?,?)',
+            'INSERT INTO eleves(numero,type,prenom,nom,adresse,email,telephone,naissance) VALUES(?,?,?,?,?,?,?,?)',
             [
                 $data['numero'],
                 $data['studentType'],
                 $data['firstname'],
                 $data['lastname'],
-                $data['address'] ?? NULL,
-                $data['email'] !== '' ? $data['email'] : NULL,
-                $data['phone'] !== '' ? $data['phone'] : NULL,
+                $data['address'],
+                $data['email'],
+                $data['phone'],
+                $data['birthdate'],
             ]
         );
 
@@ -58,11 +64,30 @@ class StudentsModel
             [
                 $this->db->getPDO()->lastInsertId(),
                 $data['classeId'],
-                $data['annee_scolaire_id']
+                $data['yearId']
             ]
         );
 
         return $this->db->getPDO()->query('COMMIT');
+    }
+
+    public function editStudent(int $id, array $data)
+    {
+        return $this->db->pexec(
+            "UPDATE eleves SET prenom = ?, nom = ?, type = ?, numero = ?,
+            adresse = ?, email = ?, telephone = ?, naissance = ?
+            WHERE id = $id",
+            [
+                $data['firstname'],
+                $data['lastname'],
+                $data['studentType'],
+                $data['numero'],
+                $data['address'],
+                $data['email'],
+                $data['phone'],
+                $data['birthdate'],
+            ]
+        );
     }
 
     public function getAvailableNumber()
@@ -75,5 +100,21 @@ class StudentsModel
             ->fetch()['num'];
 
         return $num ? $num : 1;
+    }
+
+    public function deleteStudent(int $id)
+    {
+        return $this->db->pexec(
+            'UPDATE eleves SET supprime = 1 WHERE id = ?',
+            [$id]
+        );
+    }
+
+    public function restoreStudent(int $id)
+    {
+        return $this->db->pexec(
+            'UPDATE eleves SET supprime = 0 WHERE id = ?',
+            [$id]
+        );
     }
 }

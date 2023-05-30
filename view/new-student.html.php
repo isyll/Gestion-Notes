@@ -13,7 +13,7 @@
     <div class="row">
         <h5>
             Niveau :
-            <?= $niveau['libelle'] ?> <code class="fs-4 text-white">/</code>
+            <?= $niveau['libelle'] ?> <code class="fs-4">/</code>
             Classe :
             <?= $classe['libelle'] ?>
         </h5>

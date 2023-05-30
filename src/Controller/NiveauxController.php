@@ -19,11 +19,6 @@ class NiveauxController extends Controller
         echo $this->render('niveaux', $this->data);
     }
 
-    public function newNiveau()
-    {
-        echo $this->render('new-niveau', $this->data);
-    }
-
     public function createNiveau()
     {
         $this->loadValidationRules('create-niveau', $_POST);
@@ -60,6 +55,28 @@ class NiveauxController extends Controller
             if ($this->niveauxModel->niveauIdExists((int) $_POST['niveauId'])) {
                 if ($this->niveauxModel->deleteNiveau((int) $_POST['niveauId']))
                     $this->session->set('msg', $this->success('Le niveau a bien été supprimé'));
+                else
+                    $this->session->set('msg', $this->error('Une erreur inconnue est survenue lors de la suppression'));
+            } else {
+                $this->session->set('msg', $this->error('Le niveau sélectionné n\'existe pas'));
+            }
+        }
+
+        $this->redirect($_POST['current-url'] ?? '', false);
+    }
+
+    public function edit()
+    {
+        $this->loadValidationRules('edit-niveau', $_POST);
+        $this->fv->validate();
+
+        if ($errors = $this->fv->getErrors()) {
+            $this->session->set('msg', $this->error('Formulaire invalide'));
+            $this->session->set('form-errors', $errors);
+        } else {
+            if ($this->niveauxModel->niveauIdExists((int) $_POST['niveauId'])) {
+                if ($this->niveauxModel->editNiveau((int) $_POST['niveauId'], $_POST['newNiveauLibelle']))
+                    $this->session->set('msg', $this->success('Le niveau a bien été modifié'));
                 else
                     $this->session->set('msg', $this->error('Une erreur inconnue est survenue lors de la suppression'));
             } else {
