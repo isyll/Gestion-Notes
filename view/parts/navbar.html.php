@@ -12,7 +12,9 @@
                 <li class="nav-item me-4 align-self-center">
                     <a href="<?= $urls['school-years'] ?>" class="text-black text-decoration-none">
                         Année scolaire :
-                        <?= $currentYear ?>
+                        <span class="text-decoration-underline">
+                            <?= $currentYear ?>
+                        </span>
                     </a>
                 </li>
                 <li class="nav-item">
