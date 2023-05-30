@@ -10,7 +10,6 @@ use App\Model\StudentsModel;
 
 class Controller
 {
-    private string $userDataTableName = 'params';
     private array $httpResponseCodeMsg = [
         '200' => '200 OK',
         '204' => '204 No Content',
@@ -37,16 +36,16 @@ class Controller
 
     public function __construct()
     {
-        $this->request = Helpers::resolveRequest();
         $this->session = new SessionManager();
         $this->fv      = new FormValidator();
         $this->ac      = new AccessControl();
         $this->helpers = new Helpers();
+        $this->request = $this->helpers::resolveRequest();
 
         if (!$this->session->get('logged-in') && !isset($_POST['login-form'])) {
             $loginPage = Router::getURLs()['login-page'];
 
-            if ($loginPage != $_SERVER['REQUEST_URI']) {
+            if ($loginPage != $this->request['uri']) {
                 $this->redirect($loginPage);
             }
         }
@@ -72,7 +71,7 @@ class Controller
             'urls' => Router::getURLs(),
             'currentURL' => $this->currentURL(),
             'userInfos' => $this->session->get('log-infos'),
-            'title' => Router::$title ?? $GLOBALS['siteName']
+            'title' => Router::$title ?? $GLOBALS['siteName'],
         ];
 
         $this->data['urls']['baseURL']     = $this->helpers::getBaseURL();
