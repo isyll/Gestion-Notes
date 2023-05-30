@@ -10,4 +10,11 @@ class SchoolYearsController extends Controller
     {
         parent::__construct();
     }
+
+    public function list()
+    {
+        $this->data['years'] = $this->schoolYearsModel->getYears();
+
+        echo $this->render('years', $this->data);
+    }
 }
