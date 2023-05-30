@@ -32,9 +32,9 @@ class FormValidator
         foreach ($this->rules as $field) {
             $rules = $field['rules'];
             $name  = $field['name'];
-            $value = $this->values[$name] ?? '';
+            $value = $this->values[$name] ?? NULL;
 
-            if ($value === '') {
+            if (!$value) {
                 if (array_search('required', $rules) !== false)
                     $this->errors[$name] = $rules['error_msg'];
                 continue;
@@ -59,6 +59,9 @@ class FormValidator
                         if (!in_array($value, $v['set_values'], true)) {
                             $this->errors[$name] = $v['error_msg'];
                         }
+                    } elseif ($v['value'] === 'date') {
+                        if (strtotime($value) === false)
+                            $this->errors[$name] = $v['error_msg'];
                     } elseif (!$this->validateType($v['value'], $value))
                         $this->errors[$name] = $v['error_msg'];
                 }
@@ -105,6 +108,9 @@ class FormValidator
                 if (in_array('capitalize', $process))
                     $datas[$field['name']] = ucwords($datas[$field['name']]);
             }
+
+            if ($datas[$field['name']] == '')
+                $datas[$field['name']] = NULL;
         }
 
         return $datas;
