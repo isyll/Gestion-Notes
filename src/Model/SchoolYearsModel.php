@@ -13,16 +13,6 @@ class SchoolYearsModel
         $this->db = $db;
     }
 
-    public function yearExistsByLibelle(string $libelle): bool
-    {
-        return $this->getYearByLibelle($libelle) ? true : false;
-    }
-
-    public function yearExistsById(string $id): bool
-    {
-        return $this->getYearById($id) ? true : false;
-    }
-
     public function getYearByLibelle(string $libelle)
     {
         return $this->db->pexec(
