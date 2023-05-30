@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Model\AdminModel;
 use Core\Controller;
 
 class AdminController extends Controller
