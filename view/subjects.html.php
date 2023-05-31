@@ -8,6 +8,9 @@
                 <?= $msg['value'] ?>
             </div>
         <?php endif ?>
+        <small>
+            <?= $errors['groupName'] ?? '' ?>
+        </small>
     </div>
     <div class="row m-auto">
         <h2 class="text-start">
@@ -35,9 +38,15 @@
                     </div>
                     <div class="col-12 col-md-6 text-start">
                         <label for="subjectGroup" class="form-label">Groupe de disciplines</label>
-                        <select name="subjectGroup" id="subjectGroup" class="form-select border border-2">
-                            <option value="">Choisir...</option>
-                        </select>
+                        <div class="d-flex">
+                            <select name="subjectGroup" id="subjectGroup" class="form-select border border-2">
+                                <option value="">Choisir...</option>
+                            </select>
+                            <button class="ms-2 btn btn-link" type="button" data-bs-toggle="modal"
+                                data-bs-target="#newGroup">
+                                <i class="bi bi-plus-circle fs-4 text-black"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="col-12 col-md-6 text-start">
                         <label for="subject" class="form-label">Disciplines</label>
@@ -51,6 +60,17 @@
         </div>
     </div>
 </div>
-<script>
-
-</script>
+<div class="modal fade" tabindex="-1" role="dialog" id="newGroup">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title text-white" id="myModalLabel">Nouveau groupe de discipline
+                </h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-footer">
+                <?php include include 'parts/forms/subjectgroupform.html.php'; ?>
+            </div>
+        </div>
+    </div>
+</div>
