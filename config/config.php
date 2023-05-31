@@ -17,7 +17,7 @@ $routes = [
         'handler' => 'LoginController@connection',
         'title' => 'Connexion'
     ],
-    '/subjects' => [
+    '/disciplines' => [
         'name' => 'subjects',
         'handler' => 'SubjectsController@page',
         'title' => 'Disciplines'
