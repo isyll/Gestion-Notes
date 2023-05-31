@@ -8,8 +8,19 @@
                 <?= $msg['value'] ?>
             </div>
         <?php endif ?>
+        <small>
+            <?= $errors['libelle'] ?? '' ?>
+        </small>
+        <small>
+            <?= $errors['yearId'] ?? '' ?>
+        </small>
     </div>
-    <div class="row m-auto pt-2 col-10 col-lg-8">
+    <div class="row m-auto pt-2 col-10 col-lg-8 position-relative">
+        <div class="position-absolute w-auto h-auto end-0">
+            <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#createYear">
+                <i class="bi bi-plus fs-1"></i>
+            </button>
+        </div>
         <ul class="list-group w-75 m-auto" id="yearList">
             <?php if (isset($years)): ?>
                 <?php $i = 1;
@@ -32,38 +43,69 @@
                                 </button>
                                 <ul class="dropdown-menu shadow-lg">
                                     <?php if ($y['libelle'] != $currentYear): ?>
-                                        <li><a class="dropdown-item" href="#">
+                                        <li>
+                                            <button class="dropdown-item" href="#">
                                                 <i class="bi bi-toggle2-on"></i>
-                                                Activer</a>
+                                                Activer
+                                            </button>
                                         </li>
                                         <li>
                                             <hr class="dropdown-divider">
                                         </li>
-                                        <li><a class="dropdown-item text-danger" href="#">
-                                                <i class="text-danger bi bi-trash-fill"></i>
-                                                Supprimer</a>
+                                        <li>
+                                            <form action="<?= $urls['delete-year'] ?>" method="post">
+                                                <input type="hidden" name="current-url" value="<?= $currentURL ?>" />
+                                                <input type="hidden" name="yearId" value="<?= $y['id'] ?>" />
+                                                <button class="dropdown-item text-danger" type="submit">
+                                                    <i class="text-danger bi bi-trash-fill"></i>
+                                                    Supprimer
+                                                </button>
+                                            </form>
                                         </li>
                                     <?php endif ?>
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
-                                    <li><a class="dropdown-item" href="#">
+                                    <li>
+                                        <button class="modalBtnTransfer dropdown-item" href="#" dataToTransfer="<?= $y['id'] ?>"
+                                            dataTargetId="#yearId" data-bs-toggle="modal" data-bs-target="#editYear">
                                             <i class="bi bi-pencil-fill"></i>
-                                            Modifier</a></li>
+                                            Modifier
+                                        </button>
+                                    </li>
                                 </ul>
                             </div>
-
-                            <!-- <form action="" method="post">
-                                <input class="changeYearStateCheckbox form-check-input" type="checkbox" role="switch"
-                                    id="year-state-<?= ++$i ?>" <?= $y['libelle'] === $currentYear ? 'checked' : '' ?> />
-                                <label for="year-state-<?= $i ?>" class="form-label">
-                                    <?= $y['libelle'] === $currentYear ? 'Désactiver' : 'Activer' ?>
-                                </label>
-                            </form> -->
                         </div>
                     </li>
                 <?php endforeach ?>
             <?php endif ?>
         </ul>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="editYear">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="myModalLabel">Modifier une année</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-footer">
+                <?php include 'parts/forms/yeareditform.html.php'; ?>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" id="createYear">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="myModalLabel">Créer une année</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-footer">
+                <?php include 'parts/forms/yearform.html.php'; ?>
+            </div>
+        </div>
     </div>
 </div>
