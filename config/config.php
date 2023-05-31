@@ -12,10 +12,15 @@ $routes = [
         'handler' => 'HomeController@page404',
         'title' => 'Page non trouvée'
     ],
-    '/login' => [
+    '/connexion' => [
         'name' => 'login-page',
         'handler' => 'LoginController@connection',
         'title' => 'Connexion'
+    ],
+    '/subjects' => [
+        'name' => 'subjects',
+        'handler' => 'SubjectsController@page',
+        'title' => 'Disciplines'
     ],
     '/niveau/{niveauId}' => [
         'name' => 'list-classes',
