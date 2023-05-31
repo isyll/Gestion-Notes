@@ -58,6 +58,8 @@ class SchoolYearsController extends Controller
         if ($errors = $this->fv->getErrors()) {
             $this->session->set('msg', $this->error('Formulaire invalide'));
             $this->session->set('form-errors', $errors);
+        } elseif (!$this->schoolYearsModel->yearIdExists($_POST['yearId'])) {
+            $this->session->set('msg', $this->error('Année inexistante'));
         } else {
             $years = explode('-', $_POST['libelle']);
 
@@ -70,14 +72,19 @@ class SchoolYearsController extends Controller
                 $this->session->set('msg', $this->error('Formulaire invalide'));
                 $this->session->set('form-errors', ['libelle' => 'Le libellé ne répond pas aux critères']);
             } else {
+                $year = $this->schoolYearsModel->getYearById($_POST['yearId']);
                 $this->schoolYearsModel->deleteYearById($_POST['yearId']);
 
                 if ($this->schoolYearsModel->getYearByLibelle($_POST['libelle'])) {
                     $this->session->set('msg', $this->error('Cette année existe déjà'));
                 } else {
-                    if ($this->schoolYearsModel->editYear($_POST['yearId'], $_POST))
+                    if ($this->schoolYearsModel->editYear($_POST['yearId'], $_POST)) {
+                        if ($year['libelle'] === $this->getParam('annee-actuelle')) {
+                            $this->updateParam('annee-actuelle', $_POST['libelle']);
+                        }
+
                         $this->session->set('msg', $this->success("L'année a bien été enregistrée"));
-                    else
+                    } else
                         $this->session->set('msg', $this->error("Une erreur inconnue s'est produite"));
                 }
 
@@ -96,13 +103,17 @@ class SchoolYearsController extends Controller
         if ($errors = $this->fv->getErrors()) {
             $this->session->set('msg', $this->error('Formulaire invalide'));
             $this->session->set('form-errors', $errors);
-        } elseif (!$this->schoolYearsModel->yearIdExists($_POST['yearId'])) {
-            $this->session->set('msg', $this->error("Cette année n'existe pas"));
         } else {
-            if ($this->schoolYearsModel->deleteYearById($_POST['yearId']))
-                $this->session->set('msg', $this->success("L'année a bien été supprimée"));
-            else
-                $this->session->set('msg', $this->error("Une erreur inconnue est survenue"));
+            if (!$this->schoolYearsModel->yearIdExists($_POST['yearId'])) {
+                $this->session->set('msg', $this->error("Cette année n'existe pas"));
+            } else {
+                if ($this->schoolYearsModel->getYearById($_POST['yearId'])['libelle'] === $this->getParam('annee-actuelle')) {
+                    $this->session->set('msg', $this->error("Vous ne pouvez pas supprimer l'année courante"));
+                } elseif ($this->schoolYearsModel->deleteYearById($_POST['yearId']))
+                    $this->session->set('msg', $this->success("L'année a bien été supprimée"));
+                else
+                    $this->session->set('msg', $this->error("Une erreur inconnue est survenue"));
+            }
         }
 
         $this->redirect($_POST['current-url'] ?? '', false);
