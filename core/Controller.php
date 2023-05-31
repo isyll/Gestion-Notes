@@ -7,6 +7,7 @@ use App\Model\ClassesModel;
 use App\Model\NiveauxModel;
 use App\Model\SchoolYearsModel;
 use App\Model\StudentsModel;
+use App\Model\SubjectsModel;
 
 class Controller
 {
@@ -31,6 +32,7 @@ class Controller
     protected ClassesModel $classesModel;
     protected StudentsModel $studentsModel;
     protected AdminModel $adminModel;
+    protected SubjectsModel $subjectsModel;
     protected array $request;
     protected array $data;
     protected string $defaultLayout = 'layout';
@@ -62,6 +64,7 @@ class Controller
         $this->niveauxModel     = new NiveauxModel($this->db);
         $this->classesModel     = new ClassesModel($this->db);
         $this->adminModel       = new AdminModel($this->db);
+        $this->subjectsModel    = new SubjectsModel($this->db);
 
         $this->ac->loadFromDatabase($this->db, 'accesscontrol');
 
