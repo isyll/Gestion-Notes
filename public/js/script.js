@@ -7,12 +7,8 @@ $(".delete-btn").click(function (e) {
     });
 });
 
-$(".editNiveauBtn").click(function () {
-    let niveauId = $(this).attr("niveauId");
-    $("#editNiveauForm").find('[name="niveauId"]').val(niveauId);
-});
-
-$(".editClasseBtn").click(function () {
-    let classeId = $(this).attr("classeId");
-    $("#editClasseForm").find('[name="classeId"]').val(classeId);
+$(".modalBtnTransfer").click(function () {
+    let data = $(this).attr("dataToTransfer");
+    let id = $(this).attr("dataTargetId");
+    $(id).val(data);
 });
