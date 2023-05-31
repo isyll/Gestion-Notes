@@ -31,6 +31,30 @@ class StudentsModel
         return $this->getStudentBy('telephone', $phone);
     }
 
+    public function emailExists(string $email)
+    {
+        if ($email === '')
+            return false;
+
+        return $this->db->pexec(
+            "SELECT * FROM eleves WHERE email = ?",
+            [$email],
+            'fetch'
+        ) ? true : false;
+    }
+
+    public function phoneExists(string $phone)
+    {
+        if ($phone === '')
+            return false;
+
+        return $this->db->pexec(
+            "SELECT * FROM eleves WHERE phone = ?",
+            [$phone],
+            'fetch'
+        ) ? true : false;
+    }
+
     public function getStudentByEmail(string $email)
     {
         return $this->getStudentBy('email', $email);
