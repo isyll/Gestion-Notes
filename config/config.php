@@ -129,6 +129,11 @@ $routes = [
         'handler' => 'SchoolYearsController@deleteYear',
         'methods' => ['post']
     ],
+    '/create-subject-group' => [
+        'name' => 'create-subject-group',
+        'handler' => 'SubjectsController@createGroup',
+        'methods' => ['post']
+    ],
 
     /* Routes d'administration */
     '/admin/profile/{userId}' => [
