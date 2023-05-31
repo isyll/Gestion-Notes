@@ -50,12 +50,12 @@ class FormValidator
                 } elseif ($k === 'max_length') {
                     if (strlen($value) > $v['value'])
                         $this->errors[$name] = $v['error_msg'];
+                } elseif ($k === 'regex') {
+                    if (!preg_match($v['value'], $value)) {
+                        $this->errors[$name] = $v['error_msg'];
+                    }
                 } elseif ($k === 'type') {
-                    if ($v['value'] === 'regex') {
-                        if (!preg_match($v['regex'], $value)) {
-                            $this->errors[$name] = $v['error_msg'];
-                        }
-                    } elseif ($v['value'] === 'set') {
+                    if ($v['value'] === 'set') {
                         if (!in_array($value, $v['set_values'], true)) {
                             $this->errors[$name] = $v['error_msg'];
                         }
