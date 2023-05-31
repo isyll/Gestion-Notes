@@ -103,9 +103,9 @@ class StudentsController extends Controller
             $this->session->set('msg', $this->error('Formulaire invalide'));
             $this->session->set('form-errors', $errors);
         } else {
-            if ($_POST['email'] && $this->studentsModel->getStudentByEmail($_POST['email'])) {
+            if ($_POST['email'] && $this->studentsModel->emailExists($_POST['email'])) {
                 $this->session->set('msg', $this->error('Un autre élève possède le même email'));
-            } elseif ($_POST['phone'] && $this->studentsModel->getStudentByPhone($_POST['phone'])) {
+            } elseif ($_POST['phone'] && $this->studentsModel->phoneExists($_POST['phone'])) {
                 $this->session->set('msg', $this->error('Un autre élève possède le même numéro de téléphone'));
             } elseif (!$this->niveauxModel->hasClasseId((int) $_POST['niveauId'], (int) $_POST['classeId'])) {
                 $this->session->set('msg', $this->error('Les données sont invalides'));
