@@ -20,6 +20,8 @@ $(function () {
                 .fail(function () {
                     console.log("erreur recupération classes");
                 });
+        } else {
+            $("#classes").html('');
         }
     });
 });

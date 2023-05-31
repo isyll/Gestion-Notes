@@ -123,7 +123,7 @@ class Controller
     public function loadParams()
     {
         $datas = $this->db->pexec(
-            "SELECT * FROM params",
+            'SELECT * FROM params',
             [],
             'fetchAll'
         );
@@ -135,6 +135,17 @@ class Controller
         }
 
         $this->session->set('params', $params);
+    }
+
+    public function updateParam(string $name, $value): void
+    {
+        $this->db->pexec(
+            'UPDATE params SET valeur = ? WHERE nom = ?',
+            [$value, $name],
+            'fetchAll'
+        );
+
+        $this->loadParams();
     }
 
     public function getParam(string $name)
