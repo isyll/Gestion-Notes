@@ -56,7 +56,7 @@
                                             <form action="<?= $urls['delete-year'] ?>" method="post">
                                                 <input type="hidden" name="current-url" value="<?= $currentURL ?>" />
                                                 <input type="hidden" name="yearId" value="<?= $y['id'] ?>" />
-                                                <button class="dropdown-item text-danger" type="submit">
+                                                <button class="delete-btn dropdown-item text-danger" type="submit" data-bs-toggle="modal" data-bs-target="#deleteYear">
                                                     <i class="text-danger bi bi-trash-fill"></i>
                                                     Supprimer
                                                 </button>
@@ -105,6 +105,21 @@
             </div>
             <div class="modal-footer">
                 <?php include 'parts/forms/yearform.html.php'; ?>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" id="deleteYear">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content bg-danger">
+            <div class="modal-header">
+                <h6 class="modal-title text-white" id="myModalLabel">Souhaitez vous vraiment supprimer cette année ?
+                </h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="modal-btn-yes">Oui</button>
+                <button type="button" class="btn btn-danger" id="modal-btn-no" data-bs-dismiss="modal">Non</button>
             </div>
         </div>
     </div>
