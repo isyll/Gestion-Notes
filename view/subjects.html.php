@@ -17,14 +17,19 @@
             <form action="" method="post">
                 <div class="row">
                     <div class="col-12 col-md-6 text-start">
-                        <label for="niveau" class="form-label">Niveau</label>
-                        <select name="niveau" id="niveau" class="form-select border border-2">
+                        <label for="niveaux" class="form-label">Niveau</label>
+                        <select name="niveaux" id="niveaux" class="form-select border border-2">
                             <option value="">Choisir...</option>
+                            <?php if (isset($niveaux)): ?>
+                                <?php foreach ($niveaux as $n): ?>
+                                    <option value="<?= $n['id'] ?>"><?= $n['libelle'] ?></option>
+                                <?php endforeach ?>
+                            <?php endif ?>
                         </select>
                     </div>
                     <div class="col-12 col-md-6 text-start mb-3">
-                        <label for="classe" class="form-label">Classe</label>
-                        <select name="classe" id="classe" class="form-select border border-2">
+                        <label for="classes" class="form-label">Classe</label>
+                        <select name="classes" id="classes" class="form-select border border-2">
                             <option value="">Choisir...</option>
                         </select>
                     </div>
@@ -37,7 +42,7 @@
                     <div class="col-12 col-md-6 text-start">
                         <label for="subject" class="form-label">Disciplines</label>
                         <div class="d-flex">
-                            <input type="text" name="subject" id="subject" class="border border-2" />
+                            <input type="text" name="subject" id="subject" class="form-control border border-2" />
                             <button class="btn btn-primary ms-4" type="submit">OK</button>
                         </div>
                     </div>
@@ -46,3 +51,6 @@
         </div>
     </div>
 </div>
+<script>
+
+</script>
