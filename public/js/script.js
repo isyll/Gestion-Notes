@@ -7,7 +7,7 @@ $(".delete-btn").click(function (e) {
     });
 });
 
-$(".modalBtnTransfer").click(function () {
+$(".dataClickTransfer").click(function () {
     let data = $(this).attr("dataToTransfer");
     let id = $(this).attr("dataTargetId");
     $(id).val(data);

@@ -67,7 +67,7 @@
                                         <hr class="dropdown-divider">
                                     </li>
                                     <li>
-                                        <button class="modalBtnTransfer dropdown-item" href="#" dataToTransfer="<?= $y['id'] ?>"
+                                        <button class="dataClickTransfer dropdown-item" href="#" dataToTransfer="<?= $y['id'] ?>"
                                             dataTargetId="#yearId" data-bs-toggle="modal" data-bs-target="#editYear">
                                             <i class="bi bi-pencil-fill"></i>
                                             Modifier

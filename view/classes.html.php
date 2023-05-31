@@ -41,7 +41,7 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <button class="modalBtnTransfer btn btn-link" data-bs-toggle="modal"
+                                    <button class="dataClickTransfer btn btn-link" data-bs-toggle="modal"
                                         data-bs-target="#editClasse" dataToTransfer="<?= $c['id'] ?>" dataTargetId="#classeId">
                                         <a href="#" data-bs-toggle="tooltip" data-bs-title="Modifier">
                                             <i class="bi bi-pencil"></i>
