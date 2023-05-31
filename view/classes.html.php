@@ -27,14 +27,6 @@
                 <?= $niveau['libelle'] ?>
             </h4>
             <table class="table table-hover mt-4">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
                 <tbody>
                     <?php if (isset($classes)): ?>
                         <?php foreach ($classes as $c): ?>
@@ -49,8 +41,8 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <button class="editClasseBtn btn btn-link" data-bs-toggle="modal"
-                                        data-bs-target="#editClasse" classeId="<?= $c['id'] ?>">
+                                    <button class="modalBtnTransfer btn btn-link" data-bs-toggle="modal"
+                                        data-bs-target="#editClasse" dataToTransfer="<?= $c['id'] ?>" dataTargetId="#classeId">
                                         <a href="#" data-bs-toggle="tooltip" data-bs-title="Modifier">
                                             <i class="bi bi-pencil"></i>
                                         </a>
