@@ -148,8 +148,12 @@ $routes = [
     ],
 
     /* JSON API routes */
+    '/api/getniveaux' => [
+        'name' => 'get-all-niveaux',
+        'handler' => 'APIController@getNiveaux',
+    ],
     '/api/getclasses/{niveauId}' => [
-        'name' => 'get-classe-by-niveau',
-        'handler' => 'APIController@getClasses',
+        'name' => 'get-classes-by-niveau',
+        'handler' => 'APIController@getClassesByNiveauId',
     ],
 ];
