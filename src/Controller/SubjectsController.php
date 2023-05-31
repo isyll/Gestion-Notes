@@ -14,6 +14,7 @@ class SubjectsController extends Controller
     public function page()
     {
         $this->data['niveaux'] = $this->niveauxModel->getNiveaux();
+        $this->data['groups']  = $this->subjectsModel->getGroups();
 
         echo $this->render('subjects', $this->data, NULL, false, ['subjects']);
     }
