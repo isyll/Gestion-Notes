@@ -104,7 +104,9 @@ class FormValidator
                 if (in_array('del_multiple_spaces', $process))
                     $datas[$field['name']] = Helpers::rmms($datas[$field['name']]);
                 if (in_array('to_lower_case', $process))
-                    $datas[$field['name']] = Helpers::rms($datas[$field['name']]);
+                    $datas[$field['name']] = strtolower($datas[$field['name']]);
+                if (in_array('to_upper_case', $process))
+                    $datas[$field['name']] = strtoupper($datas[$field['name']]);
                 if (in_array('capitalize', $process))
                     $datas[$field['name']] = ucwords($datas[$field['name']]);
             }
