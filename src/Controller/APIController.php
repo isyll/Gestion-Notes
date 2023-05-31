@@ -11,37 +11,38 @@ class APIController extends Controller
         parent::__construct();
     }
 
-    public function getAllClasses()
+    public function getNiveaux()
     {
+        $code = '500';
 
+        if ($data = $this->niveauxModel->getNiveaux())
+            $code = '200';
+
+        echo $this->jsonResponse($code, $data);
     }
 
-    public function getClasses($niveauId)
+    public function getClassesByNiveauId($niveauId = NULL)
     {
-        if (is_numeric(($niveauId))) {
+        if (isset($niveauId) && is_numeric($niveauId)) {
             try {
                 $niveauId = (int) $niveauId;
                 $classes  = $this->classesModel->getClassesByNiveau($niveauId);
 
                 if (count($classes) === 0) {
                     $code = '204';
-                    $msg  = 'Aucune classe trouvée pour ce niveau';
                 } else {
                     $code = '200';
-                    $msg  = 'Traitement effectué';
                 }
             }
             catch (\Exception $e) {
                 $classes = [];
                 $code    = '400';
-                $msg     = 'Erreur dans la requête';
             }
         } else {
             $classes = [];
             $code    = '404';
-            $msg     = 'Aucune classe trouvée pour ce niveau';
         }
 
-        echo $this->jsonResponse($code, $msg, $classes);
+        echo $this->jsonResponse($code, $classes);
     }
 }
