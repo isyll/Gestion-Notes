@@ -13,7 +13,16 @@ class SubjectsModel
         $this->db = $db;
     }
 
-    public function groupNameExists(string $name)
+    public function getGroups()
+    {
+        return $this->db->pexec(
+            'SELECT * FROM groupes_disciplines',
+            [],
+            'fetchAll'
+        );
+    }
+
+    public function groupNameExists(string $name): bool
     {
         return $this->db->pexec(
             'SELECT 1 FROM groupes_disciplines WHERE nom = ?',
