@@ -8,6 +8,13 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-4">
+                <li class="nav-item">
+                    <a href="<?= $urls['subjects'] ?>" class="text-black text-decoration-none">
+                        Disciplines
+                    </a>
+                </li>
+            </ul>
             <ul class="navbar-nav ms-md-auto">
                 <li class="nav-item me-4 align-self-center">
                     <a href="<?= $urls['school-years'] ?>" class="text-black text-decoration-none">
