@@ -44,7 +44,7 @@
                                 <ul class="dropdown-menu shadow-lg">
                                     <?php if ($y['libelle'] != $currentYear): ?>
                                         <li>
-                                            <button class="dropdown-item" href="#">
+                                            <button class="dropdown-item">
                                                 <i class="bi bi-toggle2-on"></i>
                                                 Activer
                                             </button>
@@ -67,7 +67,7 @@
                                         <hr class="dropdown-divider">
                                     </li>
                                     <li>
-                                        <button class="dataClickTransfer dropdown-item" href="#" dataToTransfer="<?= $y['id'] ?>"
+                                        <button class="dataClickTransfer dropdown-item" dataToTransfer="<?= $y['id'] ?>"
                                             dataTargetId="#yearId" data-bs-toggle="modal" data-bs-target="#editYear">
                                             <i class="bi bi-pencil-fill"></i>
                                             Modifier
