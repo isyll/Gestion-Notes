@@ -26,14 +26,6 @@
         <div class="m-auto col-10 col-lg-6">
             <h4 class="my-4">Les niveaux</h4>
             <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
                 <tbody>
                     <?php if (isset($niveaux)): ?>
                         <?php foreach ($niveaux as $n): ?>
@@ -49,8 +41,8 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <button class="editNiveauBtn btn btn-link" data-bs-toggle="modal"
-                                        data-bs-target="#editNiveau" niveauId="<?= $n['id'] ?>">
+                                    <button class="modalBtnTransfer btn btn-link" data-bs-toggle="modal"
+                                        data-bs-target="#editNiveau" dataToTransfer="<?= $n['id'] ?>" dataTargetId="#niveauId">
                                         <a href="#" data-bs-toggle="tooltip" data-bs-title="Modifier">
                                             <i class="bi bi-pencil"></i>
                                         </a>
