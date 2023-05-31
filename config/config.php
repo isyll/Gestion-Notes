@@ -22,27 +22,27 @@ $routes = [
         'handler' => 'ClassesController@getClasses',
         'title' => 'Classes'
     ],
-    '/school-years' => [
+    '/annees' => [
         'name' => 'school-years',
         'handler' => 'SchoolYearsController@list',
         'title' => 'Années scolaires'
     ],
-    '/new-student/{niveauId}/{classeId}' => [
+    '/nouveau-eleve/{niveauId}/{classeId}' => [
         'name' => 'new-student',
         'handler' => 'StudentsController@newStudent',
         'title' => 'Créer une élève'
     ],
-    '/students/{niveauId}/{classeId}' => [
+    '/eleves/{niveauId}/{classeId}' => [
         'name' => 'list-students',
         'handler' => 'StudentsController@list',
         'title' => 'Elèves'
     ],
-    '/student-page/{niveauId}/{classeId}/{studentId}' => [
+    '/eleve-page/{niveauId}/{classeId}/{studentId}' => [
         'name' => 'student-page',
         'handler' => 'StudentsController@studentPage',
         'title' => 'Page élève'
     ],
-    '/edit-student/{niveauId}/{classeId}/{studentId}' => [
+    '/modifier-eleve/{niveauId}/{classeId}/{studentId}' => [
         'name' => 'edit-student-page',
         'handler' => 'StudentsController@editStudent',
         'title' => 'Modifier élève'
