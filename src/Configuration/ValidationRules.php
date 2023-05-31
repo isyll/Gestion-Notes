@@ -460,6 +460,56 @@ class ValidationRules
                 ],
                 'process' => ['del_all_spaces']
             ],
+        ],
+        'create-year' => [
+            [
+                'name' => 'libelle',
+                'rules' => [
+                    'required',
+                    'error_msg' => "Le libellé est requis",
+                    'regex' => [
+                        'value' => '/\d{4}-\d{4}/',
+                        'error_msg' => "Le format de l'année est invalide"
+                    ]
+                ],
+                'process' => ['del_all_spaces']
+            ],
+        ],
+        'edit-year' => [
+            [
+                'name' => 'libelle',
+                'rules' => [
+                    'required',
+                    'error_msg' => "Le libelle est requis",
+                    'regex' => [
+                        'value' => '/\d{4}-\d{4}/',
+                        'error_msg' => "Le format de l'année est invalide"
+                    ]
+                ],
+                'process' => ['del_all_spaces']
+            ],
+            [
+                'name' => 'yearId',
+                'rules' => [
+                    'required',
+                    'error_msg' => "L'id de l'année est requis",
+                    'type' => [
+                        'value' => 'number',
+                        'error_msg' => "L'id de l'année est invalide"
+                    ]
+                ],
+                'process' => ['del_all_spaces']
+            ],
+        ],
+        'delete-year' => [
+            [
+                'name' => 'yearId',
+                'rules' => [
+                    'required',
+                    'error_msg' => "L'id de l'année est requis",
+                ],
+                'process' => ['del_all_spaces']
+            ],
         ]
     ];
 }
