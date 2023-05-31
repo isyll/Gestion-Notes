@@ -13,6 +13,8 @@ class SubjectsController extends Controller
 
     public function page()
     {
-        echo $this->render('subjects', $this->data);
+        $this->data['niveaux'] = $this->niveauxModel->getNiveaux();
+
+        echo $this->render('subjects', $this->data, NULL, false, ['subjects']);
     }
 }
