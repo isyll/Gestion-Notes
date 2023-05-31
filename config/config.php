@@ -64,21 +64,6 @@ $routes = [
         'handler' => 'StudentsController@createStudent',
         'methods' => ['post']
     ],
-    '/create-year' => [
-        'name' => 'create-year',
-        'handler' => 'SchoolYearsController@createYear',
-        'methods' => ['post']
-    ],
-    '/remove-year' => [
-        'name' => 'remove-year',
-        'handler' => 'SchoolYearsController@removeYear',
-        'methods' => ['post']
-    ],
-    '/update-year' => [
-        'name' => 'update-year',
-        'handler' => 'SchoolYearsController@updateYear',
-        'methods' => ['post']
-    ],
     '/create-niveau' => [
         'name' => 'create-niveau',
         'handler' => 'NiveauxController@createNiveau',
@@ -122,6 +107,21 @@ $routes = [
     '/edit-student' => [
         'name' => 'edit-student',
         'handler' => 'StudentsController@edit',
+        'methods' => ['post']
+    ],
+    '/create-year' => [
+        'name' => 'create-year',
+        'handler' => 'SchoolYearsController@createYear',
+        'methods' => ['post']
+    ],
+    '/edit-year' => [
+        'name' => 'edit-year',
+        'handler' => 'SchoolYearsController@edit',
+        'methods' => ['post']
+    ],
+    '/delete-year' => [
+        'name' => 'delete-year',
+        'handler' => 'SchoolYearsController@deleteYear',
         'methods' => ['post']
     ],
 
