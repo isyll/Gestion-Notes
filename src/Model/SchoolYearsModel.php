@@ -16,7 +16,7 @@ class SchoolYearsModel
     public function getYearByLibelle(string $libelle)
     {
         return $this->db->pexec(
-            'SELECT * FROM annee_scolaire WHERE libelle = ? AND supprime=0',
+            'SELECT * FROM annees_scolaires WHERE libelle = ? AND supprime=0',
             [$libelle],
             'fetch'
         );
@@ -25,7 +25,7 @@ class SchoolYearsModel
     public function getYearById(int $id)
     {
         return $this->db->pexec(
-            'SELECT * FROM annee_scolaire WHERE id = ? AND supprime=0',
+            'SELECT * FROM annees_scolaires WHERE id = ? AND supprime=0',
             [$id],
             'fetch'
         );
@@ -34,7 +34,7 @@ class SchoolYearsModel
     public function updateYearById(int $id, string $newLibelle)
     {
         return $this->db->pexec(
-            "UPDATE annee_scolaire SET libelle = ? WHERE id = ?",
+            "UPDATE annees_scolaires SET libelle = ? WHERE id = ?",
             [$newLibelle, $id]
         );
     }
@@ -42,7 +42,7 @@ class SchoolYearsModel
     public function updateYearByLibelle(string $oldLibelle, string $newLibelle)
     {
         return $this->db->pexec(
-            "UPDATE annee_scolaire SET libelle = ? WHERE libelle = ?",
+            "UPDATE annees_scolaires SET libelle = ? WHERE libelle = ?",
             [$newLibelle, $oldLibelle]
         );
     }
@@ -50,7 +50,7 @@ class SchoolYearsModel
     public function getYears()
     {
         return $this->db->pexec(
-            "SELECT * FROM annee_scolaire WHERE supprime=0",
+            "SELECT * FROM annees_scolaires WHERE supprime=0",
             [],
             'fetchAll'
         );
@@ -59,7 +59,7 @@ class SchoolYearsModel
     public function yearLibelleExists(string $libelle): bool
     {
         return $this->db->pexec(
-            "SELECT 1 FROM annee_scolaire WHERE libelle = ?",
+            "SELECT 1 FROM annees_scolaires WHERE libelle = ?",
             [$libelle],
             'fetch'
         ) ? true : false;
@@ -68,7 +68,7 @@ class SchoolYearsModel
     public function yearIdExists(int $id): bool
     {
         return $this->db->pexec(
-            "SELECT 1 FROM annee_scolaire WHERE id = ?",
+            "SELECT 1 FROM annees_scolaires WHERE id = ?",
             [$id],
             'fetch'
         ) ? true : false;
@@ -77,7 +77,7 @@ class SchoolYearsModel
     public function deleteYearById(int $id)
     {
         return $this->db->pexec(
-            'UPDATE annee_scolaire SET supprime=1 WHERE id = ?',
+            'UPDATE annees_scolaires SET supprime=1 WHERE id = ?',
             [$id],
         );
     }
@@ -85,7 +85,7 @@ class SchoolYearsModel
     public function deleteYearByLibelle(string $libelle)
     {
         return $this->db->pexec(
-            'UPDATE annee_scolaire SET supprime=1 WHERE libelle = ?',
+            'UPDATE annees_scolaires SET supprime=1 WHERE libelle = ?',
             [$libelle],
         );
     }
@@ -93,7 +93,7 @@ class SchoolYearsModel
     public function restoreYearById(int $id)
     {
         return $this->db->pexec(
-            'UPDATE annee_scolaire SET supprime=0 WHERE id = ?',
+            'UPDATE annees_scolaires SET supprime=0 WHERE id = ?',
             [$id],
         );
     }
@@ -101,7 +101,7 @@ class SchoolYearsModel
     public function restoreYearByLibelle(string $libelle)
     {
         return $this->db->pexec(
-            'UPDATE annee_scolaire SET supprime=0 WHERE libelle = ?',
+            'UPDATE annees_scolaires SET supprime=0 WHERE libelle = ?',
             [$libelle],
         );
     }
@@ -109,7 +109,7 @@ class SchoolYearsModel
     public function saveYear(array $data): bool
     {
         return $this->db->pexec(
-            "INSERT INTO annee_scolaire(libelle) VALUES(?)",
+            "INSERT INTO annees_scolaires(libelle) VALUES(?)",
             [$data['libelle']],
         );
     }
@@ -117,7 +117,7 @@ class SchoolYearsModel
     public function editYear(int $id, array $data): bool
     {
         return $this->db->pexec(
-            "UPDATE annee_scolaire SET libelle = ? WHERE id = ?",
+            "UPDATE annees_scolaires SET libelle = ? WHERE id = ?",
             [$data['libelle'], $id],
         );
     }
