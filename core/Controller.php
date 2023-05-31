@@ -19,6 +19,7 @@ class Controller
         '400' => '400 Bad Request',
         '403' => '403 Forbidden',
         '404' => '404 Not Found',
+        '500' => '500 Internal Server Error'
     ];
     protected Database $db;
     protected FormValidator $fv;
@@ -170,7 +171,8 @@ class Controller
         string $file,
         array $data = [],
         string $layout = NULL,
-        bool $minify = false
+        bool $minify = false,
+        array $scripts = []
     ): string {
         if ($layout === NULL)
             $layout = $this->defaultLayout;
@@ -181,6 +183,13 @@ class Controller
         ob_start();
         require_once "{$GLOBALS['viewsPath']}/$file.html.php";
         $content = ob_get_clean();
+
+        if (count($scripts) > 0) {
+            $scriptTags = '';
+
+            foreach ($scripts as $s)
+                $scriptTags .= "<script src=\"/js/$s.js\"></script>\n";
+        }
 
         if ($minify)
             $content = $this->helpers::minifyHtml($content);
@@ -206,7 +215,6 @@ class Controller
 
     public function jsonResponse(
         int $code,
-        string $msg,
         array $datas = []
     ): bool|string {
         $codeMsg = $this->httpResponseCodeMsg[$code] ?? '200 OK';
@@ -214,7 +222,6 @@ class Controller
 
         $results = [
             "code" => $code,
-            "message" => $msg,
             "datas" => $datas
         ];
 
