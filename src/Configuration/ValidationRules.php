@@ -510,6 +510,24 @@ class ValidationRules
                 ],
                 'process' => ['del_all_spaces']
             ],
+        ],
+        'create-subject-group' => [
+            [
+                'name' => 'groupName',
+                'rules' => [
+                    'required',
+                    'error_msg' => "Le nom du groupe est obligatoire",
+                    'min_length' => [
+                        'value' => 1,
+                        'error_msg' => 'Le nom du groupe est trop court'
+                    ],
+                    'max_length' => [
+                        'value' => 25,
+                        'error_msg' => 'Le nom du groupe est trop long'
+                    ]
+                ],
+                'process' => ['del_multiple_spaces', 'to_upper_case']
+            ],
         ]
     ];
 }
