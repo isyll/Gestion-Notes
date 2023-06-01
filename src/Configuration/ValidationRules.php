@@ -528,6 +528,50 @@ class ValidationRules
                 ],
                 'process' => ['del_multiple_spaces', 'to_upper_case']
             ],
+        ],
+        'edit-subject-group' => [
+            [
+                'name' => 'groupName',
+                'rules' => [
+                    'required',
+                    'error_msg' => "Le nom du groupe est obligatoire",
+                    'min_length' => [
+                        'value' => 1,
+                        'error_msg' => 'Le nom du groupe est trop court'
+                    ],
+                    'max_length' => [
+                        'value' => 25,
+                        'error_msg' => 'Le nom du groupe est trop long'
+                    ]
+                ],
+                'process' => ['del_multiple_spaces', 'to_upper_case']
+            ],
+            [
+                'name' => 'groupId',
+                'rules' => [
+                    'required',
+                    'error_msg' => "Aucun groupe sélectionné",
+                    'type' => [
+                        'value' => 'number',
+                        'error_msg' => "L'id du groupe est invalide"
+                    ]
+                ],
+                'process' => ['del_multiple_spaces']
+            ],
+        ],
+        'delete-subject-group' => [
+            [
+                'name' => 'groupId',
+                'rules' => [
+                    'required',
+                    'error_msg' => "Aucun groupe sélectionné",
+                    'type' => [
+                        'value' => 'number',
+                        'error_msg' => "L'id du groupe est invalide"
+                    ]
+                ],
+                'process' => ['del_multiple_spaces']
+            ],
         ]
     ];
 }
