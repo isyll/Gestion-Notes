@@ -22,6 +22,15 @@ class SubjectsModel
         );
     }
 
+    public function subjectCodeExists(string $code): bool
+    {
+        return $this->db->pexec(
+            'SELECT 1 FROM disciplines WHERE code = ?',
+            [$code],
+            'fetch'
+        ) ? true : false;
+    }
+
     public function getGroupByName(string $name)
     {
         return $this->db->pexec(
