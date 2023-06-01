@@ -21,7 +21,30 @@ $(function () {
                     console.log("erreur recupération classes");
                 });
         } else {
-            $("#classes").html('');
+            $("#classes").html("");
         }
+    });
+
+    let subjGrpHandler = () => {
+        if ($("#subjectGroup").find(":selected").val() === "") {
+            $("#editGroupBtn").addClass("disabled");
+            $("#deleteGrpBtn").addClass("disabled");
+        } else {
+            $("#editGroupBtn").removeClass("disabled");
+            $("#deleteGrpBtn").removeClass("disabled");
+        }
+
+        $("#deleteGroupId").val($("#subjectGroup").find(":selected").val());
+
+        let id;
+        if ((id = $("#subjectGroup").find(":selected").val()) !== "") {
+            $("#groupId").val(id);
+        } else $("#groupId").val(id);
+    };
+
+    subjGrpHandler();
+
+    $("#subjectGroup").change(function () {
+        subjGrpHandler();
     });
 });
