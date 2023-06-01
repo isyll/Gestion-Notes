@@ -17,7 +17,8 @@
             Gestion des disciplines
         </h2>
         <div class="p-4 border border-2 rounded-2">
-            <form action="" method="post">
+            <form action="<?= $urls['add-subject'] ?>" method="post">
+                <input type="hidden" name="current-url" value="<?= $currentURL ?>" />
                 <div class="row">
                     <div class="col-12 col-md-6 text-start">
                         <label for="niveaux" class="form-label">Niveau</label>
@@ -29,19 +30,25 @@
                                 <?php endforeach ?>
                             <?php endif ?>
                         </select>
+                        <small class=" text-danger">
+                            <?= $errors['niveaux'] ?? '' ?>
+                        </small>
                     </div>
                     <div class="col-12 col-md-6 text-start mb-3">
                         <label for="classes" class="form-label">Classe</label>
                         <select name="classes" id="classes" class="form-select border border-2">
                             <option value="">Choisir...</option>
                         </select>
+                        <small class=" text-danger">
+                            <?= $errors['classes'] ?? '' ?>
+                        </small>
                     </div>
                     <div class="col-12 col-md-6 text-start">
-                        <label for="subjectGroup" class="form-label d-flex">
-                            <div class=" align-self-center">
+                        <div class="d-flex">
+                            <label for="subjectGroup" class="form-label align-self-center">
                                 Groupe de disciplines
-                            </div>
-                            <div class=" align-self-center">
+                            </label>
+                            <div class="align-self-center">
                                 <small>
                                     <button type="button" id="editGroupBtn"
                                         class="btn btn-link text-decoration-none ms-2 text-reset" data-bs-toggle="modal"
@@ -66,7 +73,7 @@
                                     </button>
                                 </small>
                             </div>
-                        </label>
+                        </div>
                         <div class="d-flex">
                             <select name="subjectGroup" id="subjectGroup" class="form-select border border-2">
                                 <option value="">Choisir...</option>
@@ -77,13 +84,19 @@
                                 <?php endif ?>
                             </select>
                         </div>
+                        <small class=" text-danger">
+                            <?= $errors['subjectGroup'] ?? '' ?>
+                        </small>
                     </div>
-                    <div class="col-12 col-md-6 text-start">
+                    <div class="col-12 col-md-6 text-start align-self-end">
                         <label for="subject" class="form-label">Disciplines</label>
                         <div class="d-flex">
                             <input type="text" name="subject" id="subject" class="form-control border border-2" />
                             <button class="btn btn-primary ms-4" type="submit">OK</button>
                         </div>
+                        <small class=" text-danger">
+                            <?= $errors['subject'] ?? '' ?>
+                        </small>
                     </div>
                 </div>
             </form>
