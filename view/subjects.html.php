@@ -37,15 +37,45 @@
                         </select>
                     </div>
                     <div class="col-12 col-md-6 text-start">
-                        <label for="subjectGroup" class="form-label">Groupe de disciplines</label>
+                        <label for="subjectGroup" class="form-label d-flex">
+                            <div class=" align-self-center">
+                                Groupe de disciplines
+                            </div>
+                            <div class=" align-self-center">
+                                <small>
+                                    <button type="button" id="editGroupBtn"
+                                        class="btn btn-link text-decoration-none ms-2 text-reset" data-bs-toggle="modal"
+                                        data-bs-target="#editGroup" style="font-size: x-small;">
+                                        <i class="bi bi-pencil-fill"></i>
+                                        Modifier
+                                    </button>
+                                </small>
+                                <small>
+                                    <button class="btn btn-link text-reset text-decoration-none" type="button"
+                                        data-bs-toggle="modal" data-bs-target="#newGroup" style="font-size: x-small;">
+                                        <i class="bi bi-plus-circle text-reset"></i>
+                                        Ajouter
+                                    </button>
+                                </small>
+                                <small>
+                                    <button id="deleteGrpBtn" class=" btn btn-link text-danger text-decoration-none"
+                                        type="button" data-bs-toggle="modal" data-bs-target="#deleteGroup"
+                                        style="font-size: x-small;">
+                                        <i class="bi bi-trash-fill text-reset"></i>
+                                        Supprimer
+                                    </button>
+                                </small>
+                            </div>
+                        </label>
                         <div class="d-flex">
                             <select name="subjectGroup" id="subjectGroup" class="form-select border border-2">
                                 <option value="">Choisir...</option>
+                                <?php if (isset($groups)): ?>
+                                    <?php foreach ($groups as $g): ?>
+                                        <option value="<?= $g['id'] ?>" <?= isset($selectedGroup) && $selectedGroup == $g['id'] ? 'selected' : '' ?>><?= $g['nom'] ?></option>
+                                    <?php endforeach ?>
+                                <?php endif ?>
                             </select>
-                            <button class="ms-2 btn btn-link" type="button" data-bs-toggle="modal"
-                                data-bs-target="#newGroup">
-                                <i class="bi bi-plus-circle fs-4 text-black"></i>
-                            </button>
                         </div>
                     </div>
                     <div class="col-12 col-md-6 text-start">
@@ -64,12 +94,46 @@
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
             <div class="modal-header">
-                <h6 class="modal-title text-white" id="myModalLabel">Nouveau groupe de discipline
+                <h6 class="modal-title" id="myModalLabel">Nouveau groupe de discipline
                 </h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-footer">
-                <?php include include 'parts/forms/subjectgroupform.html.php'; ?>
+                <?php include 'parts/forms/subjectgroupform.html.php'; ?>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" id="editGroup">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="myModalLabel">Modifier groupe de discipline
+                </h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-footer">
+                <?php include 'parts/forms/subjectgroupeditform.html.php'; ?>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" id="deleteGroup">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content bg-danger">
+            <div class="modal-header">
+                <h6 class="modal-title text-white" id="myModalLabel">Souhaitez vous vraiment supprimer ce groupe de
+                    disciplines ?
+                </h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-footer">
+                <form action="<?= $urls['delete-subject-group'] ?>" method="post">
+                    <input type="hidden" name="current-url" value="<?= $currentURL ?>" />
+                    <input type="hidden" name="groupId" id="deleteGroupId" value="" />
+                    <button type="submit" class="btn btn-danger" id="modal-btn-yes">Oui</button>
+                </form>
+                <button type="button" class="btn btn-danger" id="modal-btn-no" data-bs-dismiss="modal">Non</button>
             </div>
         </div>
     </div>
