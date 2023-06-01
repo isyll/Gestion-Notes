@@ -22,6 +22,19 @@ class SubjectsController extends Controller
         echo $this->render('subjects', $this->data, NULL, false, ['subjects']);
     }
 
+    public function addSubject()
+    {
+        $this->loadValidationRules('add-subject', $_POST);
+        $this->fv->validate();
+
+        if ($errors = $this->fv->getErrors()) {
+            $this->session->set('msg', $this->error('Formulaire invalide'));
+            $this->session->set('form-errors', $errors);
+        }
+
+        $this->redirect($_POST['current-url'] ?? '', false);
+    }
+
     public function createGroup()
     {
         $this->loadValidationRules('create-subject-group', $_POST);
@@ -90,5 +103,23 @@ class SubjectsController extends Controller
         }
 
         $this->redirect($_POST['current-url'] ?? '', false);
+    }
+
+    private function generateSubjectCode(string $name): string
+    {
+        $i      = 1;
+        $length = 3;
+        $code   = substr($name, 0, $length);
+
+        while ($this->subjectsModel->subjectCodeExists($code)) {
+            if ($length < strlen($name) - 1)
+                $code = substr($name, 0, ++$length);
+            else
+                $code .= $i;
+
+            $i++;
+        }
+
+        return strtoupper($code);
     }
 }
