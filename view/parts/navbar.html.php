@@ -30,7 +30,7 @@
                             <img src="<?= $userInfos['photo'] ?>" alt="photo" width="60px" class="rounded-circle">
                             <?= $userInfos['username'] ?>
                         </button>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu shadow-lg">
                             <li class="dropdown-item text-center">
                                 <a href="<?= $urls['profile-page'] ?><?= $userInfos['id'] ?>">Profil</a>
                             </li>
