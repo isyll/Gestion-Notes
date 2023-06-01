@@ -572,6 +572,52 @@ class ValidationRules
                 ],
                 'process' => ['del_multiple_spaces']
             ],
+        ],
+        'add-subject' => [
+            [
+                'name' => 'niveaux',
+                'rules' => [
+                    'required',
+                    'error_msg' => "Aucun niveau sélectionné",
+                    'type' => [
+                        'value' => 'number',
+                        'error_msg' => "L'id du niveau sélectionné est invalide"
+                    ]
+                ],
+                'process' => ['del_multiple_spaces']
+            ],
+            [
+                'name' => 'classes',
+                'rules' => [
+                    'required',
+                    'error_msg' => "Aucune classe sélectionnée",
+                    'type' => [
+                        'value' => 'number',
+                        'error_msg' => "L'id de la classe sélectionnée est invalide"
+                    ]
+                ],
+                'process' => ['del_multiple_spaces']
+            ],
+            [
+                'name' => 'subjectGroup',
+                'rules' => [
+                    'required',
+                    'error_msg' => 'Aucun groupe de disciplines sélectionné',
+                    'type' => [
+                        'value' => 'number',
+                        'error_msg' => "L'id du groupe sélectionné est invalide"
+                    ]
+                ],
+                'process' => ['del_multiple_spaces']
+            ],
+            [
+                'name' => 'subject',
+                'rules' => [
+                    'required',
+                    'error_msg' => 'Aucune discipline sélectionné',
+                ],
+                'process' => ['del_multiple_spaces', ]
+            ],
         ]
     ];
 }
