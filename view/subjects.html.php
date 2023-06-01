@@ -102,6 +102,12 @@
             </form>
         </div>
     </div>
+    <div class="row">
+        <h4 id="subjectsTitle" class=" text-start fw-semibold mb-4"></h4>
+        <div class="subjectsContainer p-4 bg-light">
+
+        </div>
+    </div>
 </div>
 <div class="modal fade" tabindex="-1" role="dialog" id="newGroup">
     <div class="modal-dialog modal-dialog-centered modal-sm">
