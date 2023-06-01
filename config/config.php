@@ -144,6 +144,11 @@ $routes = [
         'handler' => 'SubjectsController@deleteGroup',
         'methods' => ['post']
     ],
+    '/add-subject' => [
+        'name' => 'add-subject',
+        'handler' => 'SubjectsController@addSubject',
+        'methods' => ['post']
+    ],
 
     /* Routes d'administration */
     '/admin/profile/{userId}' => [
