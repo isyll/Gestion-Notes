@@ -228,9 +228,9 @@ class Controller
     }
 
     public function jsonResponse(
-        int $code,
-        array $datas = []
-    ): bool|string {
+        array $datas = [],
+        string $code = '200',
+    ) {
         $codeMsg = $this->httpResponseCodeMsg[$code] ?? '200 OK';
         header('HTTP/1.1 ' . $codeMsg);
 
@@ -240,7 +240,8 @@ class Controller
         ];
 
         header('content-type:application/json;charset=utf-8');
-        return json_encode($results);
+        echo json_encode($results);
+        exit;
     }
 
     public function success(string $value): array
