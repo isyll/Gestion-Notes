@@ -13,12 +13,7 @@ class APIController extends Controller
 
     public function getNiveaux()
     {
-        $code = '500';
-
-        if ($data = $this->niveauxModel->getNiveaux())
-            $code = '200';
-
-        echo $this->jsonResponse($code, $data);
+        $this->jsonResponse($this->niveauxModel->getNiveaux());
     }
 
     public function getClassesByNiveauId($niveauId = NULL)
@@ -43,6 +38,23 @@ class APIController extends Controller
             $code    = '404';
         }
 
-        echo $this->jsonResponse($code, $classes);
+        $this->jsonResponse($classes, $code);
+    }
+
+    public function getClasseSubjects($classeId)
+    {
+        $data = [];
+
+        if (is_numeric($classeId))
+            $data = $this->subjectsModel->getClasseSubjects($classeId);
+
+        $this->jsonResponse($data);
+    }
+
+    public function subjectExists($classeName)
+    {
+        $exists = $this->subjectsModel->subjectNameExists($classeName);
+
+        echo $this->jsonResponse([$exists]);
     }
 }
