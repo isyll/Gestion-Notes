@@ -176,4 +176,12 @@ $routes = [
         'name' => 'get-classes-by-niveau',
         'handler' => 'APIController@getClassesByNiveauId',
     ],
+    '/api/getclassesubjects/{classeId}' => [
+        'name' => 'get-classe-subjects',
+        'handler' => 'APIController@getClasseSubjects',
+    ],
+    '/api/subjectexists/{classeName}' => [
+        'name' => 'subject-exists',
+        'handler' => 'APIController@subjectExists',
+    ],
 ];
