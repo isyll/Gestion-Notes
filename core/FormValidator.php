@@ -4,11 +4,6 @@ namespace Core;
 
 class FormValidator
 {
-    public static int $DEL_MULTIPLE_SPACES = 1;
-    public static int $DEL_ALL_SPACES = 2;
-    public static int $TO_LOWER_CASE = 3;
-    public static bool $toLowerCase = true;
-
     private array $errors;
     private array $values;
     private array $rules;
@@ -98,6 +93,8 @@ class FormValidator
     private function process(array &$datas)
     {
         foreach ($this->rules as $field) {
+            $datas[$field['name']] = iconv('UTF-8', 'ASCII//TRANSLIT', $datas[$field['name']]);
+
             if ($process = $field['process'] ?? false) {
                 if (in_array('del_all_spaces', $process))
                     $datas[$field['name']] = Helpers::rms($datas[$field['name']]);
