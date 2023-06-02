@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="/css/custom.css" />
     <style>
         * {
-            font-family: 'Roboto';
+            font-family: 'Roboto', Calibri, sans-serif;
         }
     </style>
 </head>
