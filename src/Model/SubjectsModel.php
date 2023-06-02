@@ -22,6 +22,15 @@ class SubjectsModel
         );
     }
 
+    public function subjectNameExists(string $name): bool
+    {
+        return $this->db->pexec(
+            'SELECT 1 FROM disciplines WHERE nom = ?',
+            [$name],
+            'fetch'
+        ) ? true : false;
+    }
+
     public function subjectCodeExists(string $code): bool
     {
         return $this->db->pexec(
@@ -56,6 +65,18 @@ class SubjectsModel
             [$id],
             'fetch'
         ) ? true : false;
+    }
+
+    public function getClasseSubjects(int $classeId)
+    {
+        return $this->db->pexec(
+            'SELECT d.* FROM disciplines AS d
+            JOIN classes_disciplines AS cd ON cd.id_discipline = d.id
+            JOIN classes ON cd.id_classe = classes.id
+            AND classes.id = ?',
+            [$classeId],
+            'fetchAll'
+        );
     }
 
     public function saveGroup(array $data)
