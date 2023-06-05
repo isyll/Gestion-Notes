@@ -3,7 +3,7 @@ $(function () {
         e.preventDefault();
         const form = $(this).closest("form");
 
-        $("#modal-btn-yes").click(function () {
+        $(".modal-btn-yes").click(function () {
             form.submit();
         });
     });
