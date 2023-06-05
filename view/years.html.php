@@ -56,7 +56,8 @@
                                             <form action="<?= $urls['delete-year'] ?>" method="post">
                                                 <input type="hidden" name="current-url" value="<?= $currentURL ?>" />
                                                 <input type="hidden" name="yearId" value="<?= $y['id'] ?>" />
-                                                <button class="delete-btn dropdown-item text-danger" type="submit" data-bs-toggle="modal" data-bs-target="#deleteYear">
+                                                <button class="delete-btn dropdown-item text-danger" type="submit"
+                                                    data-bs-toggle="modal" data-bs-target="#deleteYear">
                                                     <i class="text-danger bi bi-trash-fill"></i>
                                                     Supprimer
                                                 </button>
@@ -118,8 +119,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" id="modal-btn-yes">Oui</button>
-                <button type="button" class="btn btn-danger" id="modal-btn-no" data-bs-dismiss="modal">Non</button>
+                <button type="button" class="modal-btn-yes btn btn-danger">Oui</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Non</button>
             </div>
         </div>
     </div>
