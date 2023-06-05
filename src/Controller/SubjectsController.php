@@ -104,22 +104,4 @@ class SubjectsController extends Controller
 
         $this->redirect($_POST['current-url'] ?? '', false);
     }
-
-    private function generateSubjectCode(string $name): string
-    {
-        $i      = 1;
-        $length = 3;
-        $code   = substr($name, 0, $length);
-
-        while ($this->subjectsModel->subjectCodeExists($code)) {
-            if ($length < strlen($name) - 1)
-                $code = substr($name, 0, ++$length);
-            else
-                $code .= $i;
-
-            $i++;
-        }
-
-        return strtoupper($code);
-    }
 }
