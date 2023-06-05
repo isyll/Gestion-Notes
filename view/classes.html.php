@@ -107,8 +107,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" id="modal-btn-yes">Oui</button>
-                <button type="button" class="btn btn-danger" id="modal-btn-no" data-bs-dismiss="modal">Non</button>
+                <button type="button" class="modal-btn-yes btn btn-danger">Oui</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Non</button>
             </div>
         </div>
     </div>
