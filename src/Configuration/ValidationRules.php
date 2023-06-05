@@ -616,7 +616,45 @@ class ValidationRules
                     'required',
                     'error_msg' => 'Aucune discipline sélectionné',
                 ],
-                'process' => ['del_multiple_spaces', ]
+                'process' => [
+                    'del_multiple_spaces',
+                ]
+            ],
+        ],
+        'create-subject' => [
+            [
+                'name' => 'groupId',
+                'rules' => [
+                    'required',
+                    'error_msg' => "Aucun groupe sélectionné",
+                    'type' => [
+                        'value' => 'number',
+                        'error_msg' => "L'id du groupe est invalide"
+                    ]
+                ],
+                'process' => ['del_multiple_spaces']
+            ],
+            [
+                'name' => 'subjectName',
+                'rules' => [
+                    'required',
+                    'error_msg' => "Le nom de la discipline est manquant"
+                ],
+                'process' => ['del_multiple_spaces', 'to_upper_case']
+            ],
+        ],
+        'update-classe-subjects' => [
+            [
+                'name' => 'classeId',
+                'rules' => [
+                    'required',
+                    'error_msg' => "Aucune classe sélectionnée",
+                    'type' => [
+                        'value' => 'number',
+                        'error_msg' => "L'id de la classe est invalide"
+                    ]
+                ],
+                'process' => ['del_multiple_spaces']
             ],
         ]
     ];
