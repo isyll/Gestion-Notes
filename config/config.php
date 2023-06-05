@@ -180,8 +180,26 @@ $routes = [
         'name' => 'get-classe-subjects',
         'handler' => 'APIController@getClasseSubjects',
     ],
-    '/api/subjectexists/{classeName}' => [
+    '/api/getsubjectbycode/{code}' => [
+        'name' => 'get-subject-by-code',
+        'handler' => 'APIController@getSubjectByCode',
+    ],
+    '/api/subjectexists/{sbjName}' => [
         'name' => 'subject-exists',
         'handler' => 'APIController@subjectExists',
+    ],
+    '/api/hassubject/{classeId}/{sbjName}/' => [
+        'name' => 'has-subject',
+        'handler' => 'APIController@hasSubject',
+    ],
+    '/api/create-subject' => [
+        'name' => 'create-subject',
+        'handler' => 'APIController@createSubject',
+        'methods' => ['post']
+    ],
+    '/api/update-subjects' => [
+        'name' => 'update-subjects',
+        'handler' => 'APIController@updateClasseSubjects',
+        'methods' => ['post']
     ],
 ];
