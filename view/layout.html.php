@@ -8,9 +8,6 @@
     <title>
         <?= $title ?? '' ?>
     </title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital@0;1&family=Roboto&display=swap" rel="stylesheet">
     <link rel="shortcut icon" href="/img/logo-site.png">
     <link rel="stylesheet" href="/css/new.css" />
     <link rel="stylesheet" href="/css/bootstrap-icons.css" />
