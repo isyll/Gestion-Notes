@@ -15,7 +15,7 @@ $(function () {
             let tmp = [];
 
             for (const e of this.removeds) {
-                if (e != sbj) tmp.push(sbj);
+                if (e != sbj) tmp.push(e);
             }
 
             this.removeds = tmp;
@@ -25,7 +25,7 @@ $(function () {
             let tmp = [];
 
             for (const e of this.addeds) {
-                if (e != sbj) tmp.push(sbj);
+                if (e != sbj) tmp.push(e);
             }
 
             this.addeds = tmp;
