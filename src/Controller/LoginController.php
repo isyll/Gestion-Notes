@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use Core\Controller;
+use App\BaseController;
 
-class LoginController extends Controller
+class LoginController extends BaseController
 {
     public function __construct()
     {

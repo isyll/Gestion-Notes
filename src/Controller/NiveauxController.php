@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use Core\Controller;
+use App\BaseController;
 
-class NiveauxController extends Controller
+class NiveauxController extends BaseController
 {
     public function __construct()
     {

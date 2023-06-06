@@ -2,13 +2,6 @@
 
 namespace Core;
 
-use App\Model\AdminModel;
-use App\Model\ClassesModel;
-use App\Model\NiveauxModel;
-use App\Model\SchoolYearsModel;
-use App\Model\StudentsModel;
-use App\Model\SubjectsModel;
-
 class Controller
 {
     private array $httpResponseCodeMsg = [
@@ -27,12 +20,6 @@ class Controller
     protected SessionManager $session;
     protected AccessControl $ac;
     protected Helpers $helpers;
-    protected SchoolYearsModel $schoolYearsModel;
-    protected NiveauxModel $niveauxModel;
-    protected ClassesModel $classesModel;
-    protected StudentsModel $studentsModel;
-    protected AdminModel $adminModel;
-    protected SubjectsModel $subjectsModel;
     protected array $request;
     protected array $data;
     protected string $defaultLayout = 'layout';
@@ -44,43 +31,6 @@ class Controller
         $this->ac      = new AccessControl();
         $this->helpers = new Helpers();
         $this->request = $this->helpers::resolveRequest();
-
-        if (!$this->session->get('logged-in') && !isset($_POST['login-form'])) {
-            $loginPage = Router::getURLs()['login-page'];
-
-            if ($loginPage != $this->request['uri']) {
-                $this->redirect($loginPage);
-            }
-        }
-
-        $this->db = new Database(
-            dbname: 'gnotes',
-            user: 'isyll',
-            password: 'xCplm_'
-        );
-
-        $this->schoolYearsModel = new SchoolYearsModel($this->db);
-        $this->studentsModel    = new StudentsModel($this->db);
-        $this->niveauxModel     = new NiveauxModel($this->db);
-        $this->classesModel     = new ClassesModel($this->db);
-        $this->adminModel       = new AdminModel($this->db);
-        $this->subjectsModel    = new SubjectsModel($this->db);
-
-        $this->ac->loadFromDatabase($this->db, 'accesscontrol');
-
-        $this->data = [
-            'currentYear' => $this->getParam('annee-actuelle'),
-            'msg' => $this->session->get('msg') ?? NULL,
-            'errors' => $this->session->get('form-errors') ?? NULL,
-            'urls' => Router::getURLs(),
-            'currentURL' => $this->currentURL(),
-            'userInfos' => $this->session->get('log-infos'),
-            'title' => Router::$title ?? $GLOBALS['siteName'],
-        ];
-
-        $this->data['urls']['baseURL']     = $this->helpers::getBaseURL();
-        $this->data['urls']['current-url'] = $this->currentURL();
-        $this->session->remove(['msg', 'form-errors']);
     }
 
     public function setLogInfo(string $name, mixed $value)
@@ -118,55 +68,8 @@ class Controller
 
     public function loadValidationRules(string $name, array &$values)
     {
-        $datas = \App\Configuration\ValidationRules::$datas[$name];
-
-        $this->fv->form($datas, $values);
-    }
-
-    public function loadParams()
-    {
-        $datas = $this->db->pexec(
-            'SELECT * FROM params',
-            [],
-            'fetchAll'
-        );
-
-        $params = [];
-
-        foreach ($datas as $param) {
-            $params[$param['nom']] = $param['valeur'];
-        }
-
-        $this->session->set('params', $params);
-    }
-
-    public function updateParam(string $name, $value): void
-    {
-        $this->db->pexec(
-            'UPDATE params SET valeur = ? WHERE nom = ?',
-            [$value, $name],
-            'fetchAll'
-        );
-
-        $this->loadParams();
-    }
-
-    public function getParam(string $name)
-    {
-        if (!$this->session->get('params'))
-            $this->loadParams();
-
-        $datas = $this->session->get('params');
-
-        if (isset($datas[$name]))
-            return $datas[$name];
-
-        return false;
-    }
-
-    public function setUserData(string $name, string $value)
-    {
-
+        $datas = require_once dirname(__DIR__) . '/config/validationRules.php';
+        $this->fv->form($datas[$name], $values);
     }
 
     public function redirect(string $location = '', bool $prependHost = true)

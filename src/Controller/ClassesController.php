@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
-use Core\Controller;
+use App\BaseController;
 use Core\Router;
 
-class ClassesController extends Controller
+class ClassesController extends BaseController
 {
     public function __construct()
     {
@@ -19,7 +19,8 @@ class ClassesController extends Controller
         if ($this->niveauxModel->niveauIdExists($this->data['niveauId'])) {
             $this->data['niveau']  = $this->niveauxModel->getNiveauById($this->data['niveauId']);
             $this->data['classes'] = $this->niveauxModel->getClasses($this->data['niveauId']);
-        } else Router::pageNotFound();
+        } else
+            Router::pageNotFound();
 
         echo $this->render('classes', $this->data);
     }

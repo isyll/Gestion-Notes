@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use Core\Controller;
+use App\BaseController;
 
-class ProfileController extends Controller
+class ProfileController extends BaseController
 {
     public function __construct()
     {

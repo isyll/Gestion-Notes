@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
-use Core\Controller;
+use App\BaseController;
 use Core\Router;
 
-class StudentsController extends Controller
+class StudentsController extends BaseController
 {
     public function __construct()
     {

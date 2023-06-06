@@ -20,11 +20,9 @@
 
             <input required type="text" class="form-control" placeholder="Nom de l'étudiant" name="lastname"
                 id="lastname" value="<?= $student['nom'] ?? '' ?>" />
-            <?php if (isset($errors['lastname'])): ?>
-                <div id="ln" class="form-text text-danger">
-                    <?= $errors['lastname'] ?>
-                </div>
-            <?php endif ?>
+            <div id="ln" class="form-text text-danger">
+                <?= $errors['lastname'] ?? '' ?>
+            </div>
         </div>
 
         <div class="col-12">
@@ -34,44 +32,39 @@
                 <option value="externe" <?= isset($student['type']) ? ($student['type'] === 'externe' ? 'selected' : '') : '' ?>>Externe</option>
                 <option value="interne" <?= isset($student['type']) ? ($student['type'] === 'interne' ? 'selected' : '') : '' ?>>Interne</option>
             </select>
+            <div id="ln" class="form-text text-danger">
+                <?= $errors['studentType'] ?? '' ?>
+            </div>
         </div>
         <div class="col-12">
             <label for="birthdate" class="form-label">Date de naissance</label>
             <input type="date" name="birthdate" class="form-control" value="<?= $student['naissance'] ?? '' ?>" />
-            <?php if (isset($errors['naissance'])): ?>
-                <div id="ln" class="form-text text-danger">
-                    <?= $errors['naissance'] ?>
-                </div>
-            <?php endif ?>
+            <div id="ln" class="form-text text-danger">
+                <?= $errors['birthdate'] ?? '' ?>
+            </div>
         </div>
 
         <div class="col-12">
             <label for="email" class="form-label">Adresse email</label>
             <input type="email" class="form-control" name="email" id="email" value="<?= $student['email'] ?? '' ?>" />
-            <?php if (isset($errors['email'])): ?>
-                <div id="em" class="form-text text-danger">
-                    <?= $errors['email'] ?>
-                </div>
-            <?php endif ?>
+            <div id="em" class="form-text text-danger">
+                <?= $errors['email'] ?? '' ?>
+            </div>
         </div>
         <div class="col-12">
             <label for="phone" class="form-label">Numéro de téléphone</label>
             <input type="tel" class="form-control" name="phone" id="phone" value="<?= $student['telephone'] ?? '' ?>" />
-            <?php if (isset($errors['phone'])): ?>
-                <div id="ph" class="form-text">
-                    <?= $errors['phone'] ?>
-                </div>
-            <?php endif ?>
+            <div id="ph" class="form-text">
+                <?= $errors['phone'] ?? '' ?>
+            </div>
         </div>
         <div class="col-12">
             <label for="address" class="form-label">Adresse</label>
             <input type="text" class="form-control" name="address" id="address"
                 value="<?= $student['adresse'] ?? '' ?>" />
-            <?php if (isset($errors['address'])): ?>
-                <div id="adr" class="form-text">
-                    <?= $errors['address'] ?>
-                </div>
-            <?php endif ?>
+            <div id="adr" class="form-text">
+                <?= $errors['address'] ?? '' ?>
+            </div>
         </div>
     </div>
 

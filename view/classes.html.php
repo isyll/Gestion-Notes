@@ -93,7 +93,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-footer">
-                <?php include include 'parts/forms/classeeditform.html.php'; ?>
+                <?php include 'parts/forms/classeeditform.html.php'; ?>
             </div>
         </div>
     </div>

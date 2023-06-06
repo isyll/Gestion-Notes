@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use Core\Controller;
+use App\BaseController;
 
-class HomeController extends Controller
+class HomeController extends BaseController
 {
     public function __construct()
     {

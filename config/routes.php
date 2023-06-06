@@ -1,6 +1,6 @@
 <?php
 
-$routes = [
+return [
     /* Web application routes */
     '/' => [
         'name' => 'list-niveaux',
