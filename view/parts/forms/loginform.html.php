@@ -1,5 +1,5 @@
 <form action="<?= $urls['login'] ?>" method="post">
-    <input type="hidden" name="current-url" value="<?= $urls['current-url'] ?>" />
+    <input type="hidden" name="current-url" value="<?= $currentURL ?>" />
     <div class="mb-3 form-floating">
         <input type="text" class="form-control" id="username" name="username" required>
         <label for="username">Nom d'utilisateur</label>

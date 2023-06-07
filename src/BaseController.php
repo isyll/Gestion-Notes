@@ -59,7 +59,6 @@ class BaseController extends Controller
         ];
 
         $this->data['urls']['baseURL']     = $this->helpers::getBaseURL();
-        $this->data['urls']['current-url'] = $this->currentURL();
         $this->session->remove(['msg', 'form-errors']);
     }
 
