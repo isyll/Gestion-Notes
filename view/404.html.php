@@ -9,7 +9,6 @@
         Page non trouvée
     </title>
     <link rel="shortcut icon" href="/img/logo-site.png">
-    <link rel="stylesheet" href="/css/bootstrap.css" />
     <link rel="stylesheet" href="/css/new.css" />
     <link rel="stylesheet" href="/css/custom.css" />
     <style>
