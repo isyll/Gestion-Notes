@@ -130,9 +130,15 @@ $(function () {
             $("#subjectsTitle").html(title + content + help);
 
             loadClasseSubjects(current);
+            $("#handleClasseSbjBtn").css("display", "block");
+
+            let a = $("#handleClasseSbjBtn").find("a");
+            a.attr("href", a.attr("href") + current);
         } else {
             $("#subjectsTitle").html("");
             $("#subjectsContainer").html("");
+
+            $("#handleClasseSbjBtn").css("display", "none");
         }
     }
 
@@ -356,4 +362,5 @@ $(function () {
     $("#updateSubjectsBtn").click(updateHandler);
 
     activity.updateBtnActivity();
+    $("#handleClasseSbjBtn").css("display", "none");
 });

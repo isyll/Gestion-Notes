@@ -19,6 +19,8 @@
         </h2>
         <div class="p-4 border border-2 rounded-2">
             <div class="row">
+                <p class=" ms-auto " id="handleClasseSbjBtn"><a href="<?= $urls['classe-coef'] ?>">Gérer les disciplines
+                        de la classe</a></p>
                 <div class="col-12 col-md-6 text-start">
                     <label for="niveaux" class="form-label">Niveau</label>
                     <select name="niveaux" id="niveaux" class="form-select border border-2">

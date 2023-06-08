@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\BaseController;
+use Core\Router;
 
 class SubjectsController extends BaseController
 {
@@ -24,6 +25,14 @@ class SubjectsController extends BaseController
 
     public function classeCoef($classeId = NULL)
     {
+        if (
+            $classeId
+            && $this->data['classe'] = $this->classesModel->getClasseById($classeId)
+        ) {
+            $this->data['subjects'] = $this->subjectsModel->getClasseSubjects($classeId);
+        } else
+            Router::pageNotFound();
+
         echo $this->render('classe-coef', $this->data);
     }
 

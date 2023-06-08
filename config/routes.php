@@ -40,7 +40,7 @@ return [
         'title' => 'Années scolaires'
     ],
     '/classe/coef/{classeId}' => [
-        'name' => 'new-student',
+        'name' => 'classe-coef',
         'handler' => 'SubjectsController@classeCoef',
         'title' => 'Coefficients et pondérateurs'
     ],
