@@ -58,8 +58,16 @@ class BaseController extends Controller
             'title' => Router::$title ?? $GLOBALS['siteName'],
         ];
 
-        $this->data['urls']['baseURL']     = $this->helpers::getBaseURL();
+        $this->data['urls']['baseURL'] = $this->helpers::getBaseURL();
         $this->session->remove(['msg', 'form-errors']);
+
+        $this->loadParams();
+        if (
+            empty($this->session->get('params')['annee-actuelle'])
+            && Router::getURLs()['school-years'] != $this->request['uri']
+        ) {
+            $this->redirect(Router::getURLs()['no-init-page']);
+        }
     }
 
     public function loadParams()
@@ -101,5 +109,15 @@ class BaseController extends Controller
             return $datas[$name];
 
         return false;
+    }
+
+    public function initParams(array $datas): void
+    {
+        $sql  = 'INSERT INTO params(nom, valeur) VALUES(?,?)';
+        $stmt = $this->db->getPDO()->prepare($sql);
+
+        foreach ($datas as $key => $value) {
+            $stmt->execute([$key, $value]);
+        }
     }
 }
