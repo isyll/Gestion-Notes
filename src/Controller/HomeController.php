@@ -16,6 +16,11 @@ class HomeController extends BaseController
         echo $this->render('404', $this->data, false, true);
     }
 
+    public function initPage()
+    {
+        echo $this->render('initpage', $this->data);
+    }
+
     public function test()
     {
         echo "test ok";

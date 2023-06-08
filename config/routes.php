@@ -12,10 +12,17 @@ return [
         'handler' => 'HomeController@page404',
         'title' => 'Page non trouvée'
     ],
+    '/no-conf' => [
+        'name' => 'init-page',
+        'handler' => 'HomeController@initPage',
+        'title' => 'Configuration manquante',
+        'restrict'
+    ],
     '/connexion' => [
         'name' => 'login-page',
         'handler' => 'LoginController@connection',
-        'title' => 'Connexion'
+        'title' => 'Connexion',
+        'restrict'
     ],
     '/disciplines' => [
         'name' => 'subjects',
@@ -31,6 +38,11 @@ return [
         'name' => 'school-years',
         'handler' => 'SchoolYearsController@list',
         'title' => 'Années scolaires'
+    ],
+    '/classe/coef/{classeId}' => [
+        'name' => 'new-student',
+        'handler' => 'SubjectsController@classeCoef',
+        'title' => 'Coefficients et pondérateurs'
     ],
     '/nouveau-eleve/{niveauId}/{classeId}' => [
         'name' => 'new-student',

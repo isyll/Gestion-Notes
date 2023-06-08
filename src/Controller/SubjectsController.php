@@ -22,6 +22,11 @@ class SubjectsController extends BaseController
         echo $this->render('subjects', $this->data, NULL, false, ['subjects']);
     }
 
+    public function classeCoef($classeId = NULL)
+    {
+        echo $this->render('classe-coef', $this->data);
+    }
+
     public function addSubject()
     {
         $this->loadValidationRules('add-subject', $_POST);
