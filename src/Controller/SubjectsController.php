@@ -29,11 +29,33 @@ class SubjectsController extends BaseController
             $classeId
             && $this->data['classe'] = $this->classesModel->getClasseById($classeId)
         ) {
+            $this->data['niveau']   = $this->classesModel->getClasseNiveau($classeId);
             $this->data['subjects'] = $this->subjectsModel->getClasseSubjects($classeId);
+
+            $this->data['subjects'] = array_map(function ($item) {
+                $item['coef'] = $this->subjectsModel->getSubjectCoef(
+                    $item['id'],
+                    $this->data['classe']['id'],
+                    $this->data['yearInfos']['id']
+                );
+
+                if (count($item['coef']) === 0)
+                    $item['coef'] = false;
+                else {
+                    $c = $item['coef'];
+                    $item['coef'] = [];
+
+                    foreach ($c as $coef) {
+                        $item['coef'][$coef['type_coef']] = $coef;
+                    }
+                }
+
+                return $item;
+            }, $this->data['subjects']);
         } else
             Router::pageNotFound();
 
-        echo $this->render('classe-coef', $this->data);
+        echo $this->render('classe-coef', $this->data, NULL, false, ['coefs']);
     }
 
     public function addSubject()
@@ -44,6 +66,26 @@ class SubjectsController extends BaseController
         if ($errors = $this->fv->getErrors()) {
             $this->session->set('msg', $this->error('Formulaire invalide'));
             $this->session->set('form-errors', $errors);
+        }
+
+        $this->redirect($_POST['current-url'] ?? '', false);
+    }
+
+    public function delClasseSubject()
+    {
+        $this->loadValidationRules('delete-classe-subject', $_POST);
+        $this->fv->validate();
+
+        if ($errors = $this->fv->getErrors()) {
+            $this->session->set('msg', $this->error('Formulaire invalide'));
+            $this->session->set('form-errors', $errors);
+        } elseif (!$this->classesModel->getClasseById($_POST['classeId'])) {
+            $this->session->set('msg', $this->error("Cette classe n'existe pas"));
+        } elseif (!$this->subjectsModel->getSubjectById($_POST['subjectId'])) {
+            $this->session->set('msg', $this->error("Cette discipline n'existe pas"));
+        } else {
+            $this->subjectsModel->delSubjectFromClasse($_POST['classeId'], $_POST['subjectId'], $this->data['yearInfos']['id']);
+            $this->session->set('msg', $this->success("Discipline supprimée avec succès"));
         }
 
         $this->redirect($_POST['current-url'] ?? '', false);

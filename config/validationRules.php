@@ -652,5 +652,45 @@ return [
             ],
             'process' => ['del_multiple_spaces']
         ],
-    ]
+    ],
+    'delete-classe-subject' => [
+        [
+            'name' => 'classeId',
+            'rules' => [
+                'required',
+                'error_msg' => "Aucune classe sélectionnée",
+                'type' => [
+                    'value' => 'number',
+                    'error_msg' => "L'id de la classe est invalide"
+                ]
+            ],
+            'process' => ['del_multiple_spaces']
+        ],
+        [
+            'name' => 'subjectId',
+            'rules' => [
+                'required',
+                'error_msg' => "Aucune discipline sélectionnée",
+                'type' => [
+                    'value' => 'number',
+                    'error_msg' => "L'id de la discipline est invalide"
+                ]
+            ],
+            'process' => ['del_multiple_spaces']
+        ],
+    ],
+    'update-coefs' => [
+        [
+            'name' => 'classeId',
+            'rules' => [
+                'required',
+                'error_msg' => "Aucune classe sélectionnée",
+                'type' => [
+                    'value' => 'number',
+                    'error_msg' => "L'id de la classe est invalide"
+                ]
+            ],
+            'process' => ['del_multiple_spaces']
+        ],
+    ],
 ];

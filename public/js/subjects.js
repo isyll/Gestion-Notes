@@ -119,7 +119,8 @@ $(function () {
             help =
                 '<br/><small class="text-danger fw-normal" style="font-size: 0.5em;"> Décochez une discipline pour la supprimer';
 
-        let current;
+        let current,
+            linkText = "Gérer les coefficients de la classe ";
 
         if (
             (current = $("#classes").find(":selected").val()) !== "" &&
@@ -133,7 +134,8 @@ $(function () {
             $("#handleClasseSbjBtn").css("display", "block");
 
             let a = $("#handleClasseSbjBtn").find("a");
-            a.attr("href", a.attr("href") + current);
+            a.attr("href", getUrls['classe-coef'] + current);
+            a.text(linkText + $("#classes").find(":selected").text());
         } else {
             $("#subjectsTitle").html("");
             $("#subjectsContainer").html("");

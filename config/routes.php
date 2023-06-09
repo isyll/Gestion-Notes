@@ -42,7 +42,7 @@ return [
     '/classe/coef/{classeId}' => [
         'name' => 'classe-coef',
         'handler' => 'SubjectsController@classeCoef',
-        'title' => 'Coefficients et pondérateurs'
+        'title' => 'Coefficients de pondération'
     ],
     '/nouveau-eleve/{niveauId}/{classeId}' => [
         'name' => 'new-student',
@@ -161,6 +161,11 @@ return [
         'handler' => 'SubjectsController@addSubject',
         'methods' => ['post']
     ],
+    '/delete-classe-subject' => [
+        'name' => 'delete-classe-subject',
+        'handler' => 'SubjectsController@delClasseSubject',
+        'methods' => ['post']
+    ],
 
     /* Routes d'administration */
     '/admin/profile/{userId}' => [
@@ -212,6 +217,11 @@ return [
     '/api/update-subjects' => [
         'name' => 'update-subjects',
         'handler' => 'APIController@updateClasseSubjects',
+        'methods' => ['post']
+    ],
+    '/api/update-coefs' => [
+        'name' => 'update-coefs',
+        'handler' => 'APIController@updateCoefs',
         'methods' => ['post']
     ],
 ];

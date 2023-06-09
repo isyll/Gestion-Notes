@@ -58,6 +58,7 @@ class BaseController extends Controller
             'title' => Router::$title ?? $GLOBALS['siteName'],
         ];
 
+        $this->data['yearInfos']       = $this->schoolYearsModel->getYearByLibelle($this->data['currentYear']);
         $this->data['urls']['baseURL'] = $this->helpers::getBaseURL();
         $this->session->remove(['msg', 'form-errors']);
 

@@ -108,6 +108,15 @@ class SubjectsModel
         ) ? true : false;
     }
 
+    public function getSubjectById(int $id)
+    {
+        return $this->db->pexec(
+            'SELECT * FROM disciplines WHERE id = ?',
+            [$id],
+            'fetch'
+        );
+    }
+
     public function getSubjectByCode(string $code)
     {
         return $this->db->pexec(
@@ -126,19 +135,30 @@ class SubjectsModel
         );
     }
 
-    public function addSubjectToClasse(int $classeId, int $sbjId)
+    public function getSubjectCoef(int $sbjId, int $classeId, int $yearId)
     {
         return $this->db->pexec(
-            'INSERT INTO classes_disciplines(id_classe, id_discipline) VALUES(?,?)',
-            [$classeId, $sbjId],
+            'SELECT * FROM disciplines_coefficients
+            WHERE id_discipline = ? AND id_classe = ? AND id_annee = ?',
+            [$sbjId, $classeId, $yearId],
+            'fetchAll'
         );
     }
 
-    public function delSubjectFromClasse(int $classeId, int $sbjId)
+    public function addSubjectToClasse(int $classeId, int $sbjId, int $yearId)
     {
         return $this->db->pexec(
-            'DELETE FROM classes_disciplines WHERE id_classe = ? AND id_discipline = ?',
-            [$classeId, $sbjId],
+            'INSERT INTO classes_disciplines(id_classe, id_discipline, id_annee) VALUES(?,?,?)',
+            [$classeId, $sbjId, $yearId],
+        );
+    }
+
+    public function delSubjectFromClasse(int $classeId, int $sbjId, int $yearId)
+    {
+        return $this->db->pexec(
+            'DELETE FROM classes_disciplines
+            WHERE id_classe = ? AND id_discipline = ? AND id_annee = ?',
+            [$classeId, $sbjId, $yearId],
         );
     }
 
@@ -184,6 +204,59 @@ class SubjectsModel
                 $data['groupId']
             ]
         );
+    }
+
+    public function updateClasseSubjectCoef(array $data)
+    {
+        return $this->db->pexec(
+            'UPDATE disciplines_coefficients
+            SET coefficient = ?
+            WHERE id_classe = ?
+            AND id_discipline = ?
+            AND id_annee = ?
+            AND type_coef = ?',
+            [
+                $data['coefficient'],
+                $data['classeId'],
+                $data['subjectId'],
+                $data['yearId'],
+                $data['typeCoef'],
+            ]
+        );
+    }
+
+    public function saveClasseSubjectCoef(array $data): bool
+    {
+        return $this->db->pexec(
+            'INSERT INTO disciplines_coefficients
+            (coefficient, id_classe, id_discipline, id_annee, type_coef)
+            VALUES(?, ?, ?, ?, ?)',
+            [
+                $data['coefficient'],
+                $data['classeId'],
+                $data['subjectId'],
+                $data['yearId'],
+                $data['typeCoef'],
+            ]
+        );
+    }
+
+    public function isClasseSubjectCoefExists(array $data)
+    {
+        return $this->db->pexec(
+            'SELECT 1 FROM disciplines_coefficients
+            WHERE id_classe = ?
+            AND id_discipline = ?
+            AND id_annee = ?
+            AND type_coef = ?',
+            [
+                $data['classeId'],
+                $data['subjectId'],
+                $data['yearId'],
+                $data['typeCoef'],
+            ],
+            'fetch'
+        ) ? true : false;
     }
 
     private function genSubjectCode(string $name): string

@@ -22,6 +22,17 @@ class ClassesModel
         ) ? true : false;
     }
 
+    public function getClasseNiveau(int $classeId)
+    {
+        return $this->db->pexec(
+            'SELECT n.* FROM niveaux AS n
+            JOIN classes AS c ON c.id_niveau = n.id
+            AND c.id = ?',
+            [$classeId],
+            'fetch'
+        );
+    }
+
     public function getClassesByNiveau(int $id)
     {
         return $this->db->pexec(

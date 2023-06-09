@@ -24,12 +24,20 @@
     <script id='datas' type="application/json">
         <?= json_encode(Core\Router::getAPIRoutes()); ?>
     </script>
+    <script id='getUrls' type="application/json">
+        <?= json_encode(Core\Router::getURLs()); ?>
+    </script>
     <script>
         const data = JSON.parse(document.getElementById("datas").textContent);
+        const getUrls = JSON.parse(document.getElementById("getUrls").textContent);
 
         const baseURL = '<?= Core\Helpers::getBaseURL(); ?>';
 
-    </script>
+        function process(s) {
+        return s.toLowerCase().trim().replace(/\s+/g, " ");
+    }
+
+</script>
 
     <script src="/js/jquery.js"></script>
     <script src="/js/bootstrap-bundle.js"></script>
