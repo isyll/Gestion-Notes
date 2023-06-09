@@ -135,13 +135,19 @@ class SubjectsModel
         );
     }
 
-    public function getSubjectCoef(int $sbjId, int $classeId, int $yearId)
+    public function getSubjectCoef(array $datas)
     {
         return $this->db->pexec(
-            'SELECT * FROM disciplines_coefficients
-            WHERE id_discipline = ? AND id_classe = ? AND id_annee = ?',
-            [$sbjId, $classeId, $yearId],
-            'fetchAll'
+            'SELECT max_ressource, max_examen FROM classes_disciplines
+            WHERE id_discipline = ?
+            AND id_classe = ?
+            AND id_annee = ?',
+            [
+                $datas['subjectId'],
+                $datas['classeId'],
+                $datas['yearId'],
+            ],
+            'fetch'
         );
     }
 
@@ -206,57 +212,21 @@ class SubjectsModel
         );
     }
 
-    public function updateClasseSubjectCoef(array $data)
+    public function updateClasseSubjectMax(array $data, string $type)
     {
         return $this->db->pexec(
-            'UPDATE disciplines_coefficients
-            SET coefficient = ?
+            "UPDATE classes_disciplines
+            SET $type = ?
             WHERE id_classe = ?
             AND id_discipline = ?
-            AND id_annee = ?
-            AND type_coef = ?',
+            AND id_annee = ?",
             [
-                $data['coefficient'],
+                $data[$type],
                 $data['classeId'],
                 $data['subjectId'],
                 $data['yearId'],
-                $data['typeCoef'],
             ]
         );
-    }
-
-    public function saveClasseSubjectCoef(array $data): bool
-    {
-        return $this->db->pexec(
-            'INSERT INTO disciplines_coefficients
-            (coefficient, id_classe, id_discipline, id_annee, type_coef)
-            VALUES(?, ?, ?, ?, ?)',
-            [
-                $data['coefficient'],
-                $data['classeId'],
-                $data['subjectId'],
-                $data['yearId'],
-                $data['typeCoef'],
-            ]
-        );
-    }
-
-    public function isClasseSubjectCoefExists(array $data)
-    {
-        return $this->db->pexec(
-            'SELECT 1 FROM disciplines_coefficients
-            WHERE id_classe = ?
-            AND id_discipline = ?
-            AND id_annee = ?
-            AND type_coef = ?',
-            [
-                $data['classeId'],
-                $data['subjectId'],
-                $data['yearId'],
-                $data['typeCoef'],
-            ],
-            'fetch'
-        ) ? true : false;
     }
 
     private function genSubjectCode(string $name): string

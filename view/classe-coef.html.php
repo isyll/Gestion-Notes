@@ -18,7 +18,7 @@
         </div>
         <div class=" row">
             <div class="col-8 m-auto">
-                <table class=" table table-hover">
+                <table class=" table table-hover" id="coefsTable">
                     <thead>
                         <tr>
                             <th scope="col">Disciplines</th>
@@ -35,13 +35,13 @@
                                 </td>
                                 <td>
                                     <input type="number" class="inputCoef form-control" name="<?= $s['code'] ?>"
-                                        typeCoef="ressource"
-                                        value="<?= $s['coef'] !== false && isset($s['coef']['ressource']) ? $s['coef']['ressource']['coefficient'] : '' ?>" />
+                                        typeMax="max_ressource"
+                                        value="<?= $s['coef']['max_ressource'] != 0 ? $s['coef']['max_ressource'] : '' ?>" />
                                 </td>
                                 <td>
                                     <input type="number" class="inputCoef form-control" name="<?= $s['code'] ?>"
-                                        typeCoef="examen"
-                                        value="<?= $s['coef'] !== false && isset($s['coef']['examen']) ? $s['coef']['examen']['coefficient'] : '' ?>" />
+                                        typeMax="max_examen"
+                                        value="<?= $s['coef']['max_examen'] != 0 ? $s['coef']['max_examen'] : '' ?>" />
                                 </td>
                                 <td>
                                     <form action="<?= $urls['delete-classe-subject'] ?>" method="post">

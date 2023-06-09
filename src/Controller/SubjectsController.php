@@ -34,21 +34,23 @@ class SubjectsController extends BaseController
 
             $this->data['subjects'] = array_map(function ($item) {
                 $item['coef'] = $this->subjectsModel->getSubjectCoef(
-                    $item['id'],
-                    $this->data['classe']['id'],
-                    $this->data['yearInfos']['id']
+                    [
+                        'subjectId' => $item['id'],
+                        'classeId' => $this->data['classe']['id'],
+                        'yearId' => $this->data['yearInfos']['id']
+                    ]
                 );
 
-                if (count($item['coef']) === 0)
-                    $item['coef'] = false;
-                else {
-                    $c = $item['coef'];
-                    $item['coef'] = [];
+                // if (count($item['coef']) === 0)
+                //     $item['coef'] = false;
+                // else {
+                //     $c = $item['coef'];
+                //     $item['coef'] = [];
 
-                    foreach ($c as $coef) {
-                        $item['coef'][$coef['type_coef']] = $coef;
-                    }
-                }
+                //     foreach ($c as $coef) {
+                //         $item['coef'][$coef['type_coef']] = $coef;
+                //     }
+                // }
 
                 return $item;
             }, $this->data['subjects']);

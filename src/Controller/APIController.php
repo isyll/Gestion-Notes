@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\BaseController;
+use Core\Helpers;
 
 class APIController extends BaseController
 {
@@ -190,22 +191,6 @@ class APIController extends BaseController
                     $exists        = false;
                     $result['msg'] = "La discipline $key est inexistante";
                     break;
-                } else {
-                    $out = false;
-
-                    foreach ($val as $type => $i) {
-                        $i = $this->helpers->rmms($i);
-
-                        if ($i !== '' && (!is_numeric($i) || (double) $i < 0)) {
-                            $out           = true;
-                            $result['msg'] = "La discipline $key contient un coefficient invalide ($i)";
-                            break;
-                        }
-                    }
-                    if ($out) {
-                        $exists = false;
-                        break;
-                    }
                 }
             }
 
@@ -214,27 +199,35 @@ class APIController extends BaseController
                     $sbj = $this->subjectsModel->getSubjectByCode($key);
 
                     foreach ($val as $type => $i) {
-                        if ($i != '') {
-                            $data = [
-                                'coefficient' => (double) $i,
-                                'typeCoef' => $type,
-                                'subjectId' => $sbj['id'],
-                                'classeId' => $datas['classeId'],
-                                'yearId' => $this->data['yearInfos']['id']
-                            ];
-
-                            if ($this->subjectsModel->isClasseSubjectCoefExists($data))
-                                $this->subjectsModel->updateClasseSubjectCoef($data);
-                            else
-                                $this->subjectsModel->saveClasseSubjectCoef($data);
-                        }
+                        if (Helpers::rmms($i) !== '')
+                            if (!is_numeric($i)) {
+                                $result['errors'][$key][] = [
+                                    'typeMax' => $type,
+                                    'msg' => "Le note maximale $i est invalide"
+                                ];
+                            } elseif ($i < 10) {
+                                $result['errors'][$key][] = [
+                                    'typeMax' => $type,
+                                    'msg' => "Le note maximale doit être supérieure à 10"
+                                ];
+                            } elseif (in_array($type, ['max_ressource', 'max_examen'])) {
+                                $this->subjectsModel->updateClasseSubjectMax(
+                                    [
+                                        $type => $i,
+                                        'subjectId' => $sbj['id'],
+                                        'classeId' => $datas['classeId'],
+                                        'yearId' => $this->data['yearInfos']['id']
+                                    ],
+                                    $type
+                                );
+                            }
                     }
                 }
 
-                $result = [
-                    'status' => 'done',
-                    'msg' => "Les coefficients ont été bien mises à jour",
-                ];
+                $result['status'] = isset($result['errors']) ? 'fail' : 'done';
+                $result['msg']    = isset($result['errors']) ?
+                    "Erreurs de validation" :
+                    "Les coefficients ont été bien mises à jour";
             } else
                 $result['status'] = 'fail';
         }
