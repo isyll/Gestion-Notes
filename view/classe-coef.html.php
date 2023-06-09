@@ -51,7 +51,7 @@
                                         <button type="submit" class="delete-btn btn btn-link" data-bs-toggle="modal"
                                             data-bs-target="#deleteClasseSubject">
                                             <a href="#" data-bs-toggle="tooltip" data-bs-title="Supprimer">
-                                                <i class="text-danger bi bi-trash-fill"></i>
+                                                <i class="text-danger bi bi-x fs-3 fw-bolder"></i>
                                             </a>
                                         </button>
                                     </form>
