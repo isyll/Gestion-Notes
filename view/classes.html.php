@@ -61,6 +61,9 @@
                                         </button>
                                     </form>
                                 </td>
+                                <td>
+                                    <a href="<?= $urls['classe-coef'] . $c['id'] ?>">Gérer les coefs</a>
+                                </td>
                             </tr>
                         <?php endforeach ?>
                     <?php endif ?>

@@ -1,15 +1,9 @@
 $(function () {
-    // function inputsHandler() {
-    //     $('.inputCoef').toArray().forEach(function(e) {
-    //         e.
-    //     });
-    // }
-
     $("#updateCoefsBtn").on("click", function () {
         let datas = {
             classeId: getClasseId,
+            coefs: {},
         };
-        datas.coefs = {};
 
         $(".inputCoef")
             .toArray()
@@ -31,7 +25,7 @@ $(function () {
             data: JSON.stringify(datas),
             dataType: "json",
         }).done(function (response) {
-            console.log(response);
+            response = response["datas"];
 
             if (response.status === "done")
                 $("#resultMsg").addClass("text-success");
