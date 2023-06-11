@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : mer. 31 mai 2023 à 19:34
+-- Généré le : dim. 11 juin 2023 à 16:56
 -- Version du serveur : 8.0.33-0ubuntu0.22.04.2
 -- Version de PHP : 8.1.2-1ubuntu2.11
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `gnotes`
 --
-CREATE DATABASE IF NOT EXISTS `gnotes` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
-USE `gnotes`;
 
 -- --------------------------------------------------------
 
@@ -60,21 +58,8 @@ CREATE TABLE `annees_scolaires` (
 -- Déchargement des données de la table `annees_scolaires`
 --
 
-INSERT INTO `annees_scolaires` (`libelle`, `supprime`) VALUES
--- (1, '2040-2041', 1),
--- (2, '2019-2020', 0),
--- (3, '2020-2021', 0),
--- (4, '2026-2027', 0),
--- (6, '2021-2022', 0),
--- (7, '2903-2904', 1),
--- (8, '2222-2223', 1),
--- (9, '2333-2334', 1),
--- (10, '2003-2004', 1),
--- (11, '2012-2013', 1),
--- (12, '2009-2010', 1),
--- (13, '2034-2035', 1),
--- (14, '3300-3301', 1),
-('2022-2023', 0);
+INSERT INTO `annees_scolaires` (`id`, `libelle`, `supprime`) VALUES
+(0, '2022-2023', 0);
 
 -- --------------------------------------------------------
 
@@ -93,27 +78,33 @@ CREATE TABLE `classes` (
 -- Déchargement des données de la table `classes`
 --
 
--- INSERT INTO `classes` (`id`, `libelle`, `id_niveau`, `supprime`) VALUES
--- (1, 'CI', 1, 0),
--- (2, 'CP', 1, 0),
--- (3, '6ème', 2, 0),
--- (4, '5ème', 2, 0),
--- (9, 'CE1', 1, 0),
--- (10, 'efefefefefsqd', 1, 1),
--- (11, 'fefefef', 1, 1),
--- (12, 'test', 1, 1),
--- (14, 'test', 1, 1),
--- (15, 'test', 1, 1),
--- (16, 'test', 1, 1),
--- (17, 'test', 1, 1),
--- (18, 'Badbitch', 1, 1),
--- (19, 'test', 2, 1),
--- (20, 'Brekh 1', 33, 0),
--- (21, 'Classe 2', 34, 0),
--- (22, 'classe R', 34, 1),
--- (23, 'Classe R', 34, 1),
--- (24, 'Kak', 1, 1),
--- (25, 'Brekh 2', 33, 0);
+INSERT INTO `classes` (`id`, `libelle`, `id_niveau`, `supprime`) VALUES
+(26, 'CI', 36, 0),
+(27, 'CP', 36, 0),
+(28, '6eme', 37, 0),
+(29, '5eme', 37, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `classes_disciplines`
+--
+
+CREATE TABLE `classes_disciplines` (
+  `id` int NOT NULL,
+  `id_classe` int NOT NULL,
+  `id_discipline` int NOT NULL,
+  `id_annee` int NOT NULL,
+  `max_ressource` float NOT NULL DEFAULT '0',
+  `max_examen` float NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `classes_disciplines`
+--
+
+INSERT INTO `classes_disciplines` (`id`, `id_classe`, `id_discipline`, `id_annee`, `max_ressource`, `max_examen`) VALUES
+(1, 26, 1, 0, 20, 20);
 
 -- --------------------------------------------------------
 
@@ -148,8 +139,17 @@ INSERT INTO `comptes` (`id`, `username`, `prenom`, `nom`, `email`, `telephone`, 
 
 CREATE TABLE `disciplines` (
   `id` int NOT NULL,
-  `nom` varchar(255) NOT NULL
+  `id_groupe` int NOT NULL,
+  `nom` varchar(255) NOT NULL,
+  `code` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `disciplines`
+--
+
+INSERT INTO `disciplines` (`id`, `id_groupe`, `nom`, `code`) VALUES
+(1, 1, 'ALGEBRE', 'ALG');
 
 -- --------------------------------------------------------
 
@@ -174,24 +174,8 @@ CREATE TABLE `eleves` (
 -- Déchargement des données de la table `eleves`
 --
 
--- INSERT INTO `eleves` (`id`, `numero`, `type`, `supprime`, `prenom`, `nom`, `telephone`, `adresse`, `email`, `naissance`) VALUES
--- (4, NULL, 'interne', 0, 'Ibrahima', 'Sylla', NULL, NULL, 'abre@goffr.com', '1999-11-04'),
--- (9, 7885, 'externe', 0, 'Assane', 'Faye', NULL, '', NULL, NULL),
--- (10, 8864, 'interne', 0, 'Amadou', 'Ba', NULL, '', NULL, NULL),
--- (11, 8814, 'interne', 0, 'Diop', 'Fall', NULL, '', NULL, NULL),
--- (12, 5253, 'interne', 0, 'Samba', 'Diouf', NULL, '', NULL, NULL),
--- (13, 5446, 'externe', 0, 'Samba', 'Dia', NULL, '', NULL, NULL),
--- (14, 7883, 'interne', 0, 'Ibeagiaez', 'Kfnefe', NULL, '', NULL, NULL),
--- (15, 9880, 'externe', 0, 'Ibeagiaez', 'Kfnefe', NULL, '', NULL, NULL),
--- (16, 6785, 'externe', 0, 'Ibrahima', 'Sylla', NULL, '', NULL, NULL),
--- (17, 3684, 'externe', 0, 'Ldvkndflkn', 'Fvelkndfmk', NULL, '', NULL, NULL),
--- (18, NULL, 'externe', 0, 'Absa', 'Diop', NULL, NULL, NULL, NULL),
--- (19, 9466, 'externe', 1, 'Assane', 'Faye', NULL, NULL, NULL, '2023-05-04'),
--- (20, 4565, 'interne', 1, 'Ibrahima', 'Sylla', NULL, NULL, 'isyll711@gmail.com', '1999-11-04'),
--- (21, NULL, 'interne', 0, 'Abdou', 'Mbow', '786758909', 'Sicap Mbao', 'abdoufaye@hotmail.com', '2023-05-07'),
--- (22, 277, 'interne', 0, 'Moussa', 'Doff', '767676767', 'eioedfe', 'ieihfe@gmail.com', '1984-06-06'),
--- (24, NULL, 'interne', 0, 'Ala', 'Djiby', NULL, NULL, NULL, '2023-05-01'),
--- (25, 1955, 'interne', 0, 'Dgrgfrfrf', 'Rfrfrfr', NULL, NULL, NULL, NULL);
+INSERT INTO `eleves` (`id`, `numero`, `type`, `supprime`, `prenom`, `nom`, `telephone`, `adresse`, `email`, `naissance`) VALUES
+(26, 4420, 'externe', 0, 'Ibrahima', 'Sylla', '785354479', 'Sicap Mbao Villa N?336', 'isyll711@gmail.com', '1999-11-04');
 
 -- --------------------------------------------------------
 
@@ -201,8 +185,17 @@ CREATE TABLE `eleves` (
 
 CREATE TABLE `groupes_disciplines` (
   `id` int NOT NULL,
-  `nom` varchar(255) NOT NULL
+  `nom` varchar(255) NOT NULL,
+  `supprime` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `groupes_disciplines`
+--
+
+INSERT INTO `groupes_disciplines` (`id`, `nom`, `supprime`) VALUES
+(1, 'MATHEMATIQUES', 0),
+(2, 'ACTIVITES NUMERIQUES', 0);
 
 -- --------------------------------------------------------
 
@@ -221,24 +214,8 @@ CREATE TABLE `inscriptions` (
 -- Déchargement des données de la table `inscriptions`
 --
 
--- INSERT INTO `inscriptions` (`id`, `id_eleve`, `id_classe`, `id_annee`) VALUES
--- (1, 4, 1, 3),
--- (2, 9, 1, 3),
--- (3, 10, 1, 3),
--- (4, 11, 1, 3),
--- (5, 12, 1, 3),
--- (6, 13, 1, 3),
--- (7, 14, 20, 3),
--- (8, 15, 20, 3),
--- (9, 16, 21, 3),
--- (10, 17, 21, 3),
--- (11, 18, 1, 3),
--- (12, 19, 1, 3),
--- (13, 20, 1, 3),
--- (14, 21, 9, 3),
--- (15, 22, 9, 3),
--- (16, 24, 25, 3),
--- (17, 25, 9, 3);
+INSERT INTO `inscriptions` (`id`, `id_eleve`, `id_classe`, `id_annee`) VALUES
+(18, 26, 26, 0);
 
 -- --------------------------------------------------------
 
@@ -256,37 +233,9 @@ CREATE TABLE `niveaux` (
 -- Déchargement des données de la table `niveaux`
 --
 
--- INSERT INTO `niveaux` (`id`, `libelle`, `supprime`) VALUES
--- (1, 'Elémentaire', 0),
--- (2, 'Secondaire', 0),
--- (8, 'Primaire', 1),
--- (9, 'test', 1),
--- (10, 'test', 1),
--- (11, 'test', 1),
--- (12, 'test', 1),
--- (13, 'test', 1),
--- (14, 'test', 1),
--- (15, 'test', 1),
--- (16, 'test', 1),
--- (17, 'test', 1),
--- (18, 'un niveau', 1),
--- (19, 'test', 1),
--- (20, 'test', 1),
--- (21, 'test', 1),
--- (22, 'test', 1),
--- (23, 'test', 1),
--- (24, 'test', 1),
--- (25, 'test', 1),
--- (26, 'Okok', 1),
--- (27, 'test', 1),
--- (28, 'est', 1),
--- (29, 'Baddddd', 1),
--- (30, 'test', 1),
--- (31, 'Badddd', 1),
--- (32, 'Test', 1),
--- (33, 'Brekh Niveau', 0),
--- (34, 'Etoile', 1),
--- (35, 'Test', 1);
+INSERT INTO `niveaux` (`id`, `libelle`, `supprime`) VALUES
+(36, 'Elementaire', 0),
+(37, 'Secondaire', 0);
 
 -- --------------------------------------------------------
 
@@ -333,6 +282,15 @@ ALTER TABLE `classes`
   ADD KEY `classes_ibfk_1` (`id_niveau`);
 
 --
+-- Index pour la table `classes_disciplines`
+--
+ALTER TABLE `classes_disciplines`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_classe` (`id_classe`),
+  ADD KEY `id_discipline` (`id_discipline`),
+  ADD KEY `id_annee` (`id_annee`);
+
+--
 -- Index pour la table `comptes`
 --
 ALTER TABLE `comptes`
@@ -346,7 +304,8 @@ ALTER TABLE `comptes`
 --
 ALTER TABLE `disciplines`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `nom` (`nom`);
+  ADD UNIQUE KEY `nom` (`nom`),
+  ADD KEY `id_groupe` (`id_groupe`);
 
 --
 -- Index pour la table `eleves`
@@ -405,7 +364,13 @@ ALTER TABLE `annees_scolaires`
 -- AUTO_INCREMENT pour la table `classes`
 --
 ALTER TABLE `classes`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+
+--
+-- AUTO_INCREMENT pour la table `classes_disciplines`
+--
+ALTER TABLE `classes_disciplines`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pour la table `comptes`
@@ -417,31 +382,31 @@ ALTER TABLE `comptes`
 -- AUTO_INCREMENT pour la table `disciplines`
 --
 ALTER TABLE `disciplines`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pour la table `eleves`
 --
 ALTER TABLE `eleves`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT pour la table `groupes_disciplines`
 --
 ALTER TABLE `groupes_disciplines`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pour la table `inscriptions`
 --
 ALTER TABLE `inscriptions`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT pour la table `niveaux`
 --
 ALTER TABLE `niveaux`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT pour la table `params`
@@ -460,6 +425,20 @@ ALTER TABLE `classes`
   ADD CONSTRAINT `classes_ibfk_1` FOREIGN KEY (`id_niveau`) REFERENCES `niveaux` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Contraintes pour la table `classes_disciplines`
+--
+ALTER TABLE `classes_disciplines`
+  ADD CONSTRAINT `classes_disciplines_ibfk_1` FOREIGN KEY (`id_classe`) REFERENCES `classes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `classes_disciplines_ibfk_2` FOREIGN KEY (`id_discipline`) REFERENCES `disciplines` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `classes_disciplines_ibfk_3` FOREIGN KEY (`id_annee`) REFERENCES `annees_scolaires` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Contraintes pour la table `disciplines`
+--
+ALTER TABLE `disciplines`
+  ADD CONSTRAINT `disciplines_ibfk_1` FOREIGN KEY (`id_groupe`) REFERENCES `groupes_disciplines` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Contraintes pour la table `inscriptions`
 --
 ALTER TABLE `inscriptions`
@@ -467,3 +446,7 @@ ALTER TABLE `inscriptions`
   ADD CONSTRAINT `inscriptions_ibfk_2` FOREIGN KEY (`id_eleve`) REFERENCES `eleves` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `inscriptions_ibfk_3` FOREIGN KEY (`id_annee`) REFERENCES `annees_scolaires` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
