@@ -12,8 +12,5 @@
             "name": "Ibrahima Sylla",
             "email": "syllaisa6@gmail.com"
         }
-    ],
-    "require-dev": {
-        "symfony/var-dumper": "^6.2"
-    }
+    ]
 }

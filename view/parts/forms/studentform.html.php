@@ -28,7 +28,7 @@
         <div class="col-12">
             <label for="studentType" class="form-label">Type</label>
             <select id="studentType" name="studentType" class="form-select" required>
-                <option>Choisir...</option>
+                <option value="">Choisir...</option>
                 <option value="externe" <?= isset($student['type']) ? ($student['type'] === 'externe' ? 'selected' : '') : '' ?>>Externe</option>
                 <option value="interne" <?= isset($student['type']) ? ($student['type'] === 'interne' ? 'selected' : '') : '' ?>>Interne</option>
             </select>
@@ -54,7 +54,7 @@
         <div class="col-12">
             <label for="phone" class="form-label">Numéro de téléphone</label>
             <input type="tel" class="form-control" name="phone" id="phone" value="<?= $student['telephone'] ?? '' ?>" />
-            <div id="ph" class="form-text">
+            <div id="ph" class="form-text text-danger">
                 <?= $errors['phone'] ?? '' ?>
             </div>
         </div>

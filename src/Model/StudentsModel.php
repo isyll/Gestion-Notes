@@ -49,7 +49,7 @@ class StudentsModel
             return false;
 
         return $this->db->pexec(
-            "SELECT * FROM eleves WHERE phone = ?",
+            "SELECT * FROM eleves WHERE telephone = ?",
             [$phone],
             'fetch'
         ) ? true : false;
