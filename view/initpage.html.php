@@ -12,7 +12,7 @@
 
     <div class="row position-relative">
         <div class="position-absolute w-auto h-auto end-0">
-            <a href="<?= $urls['new-student'] . $niveau['id'] . '/' . $classe['id'] ?>">
+            <a href="<?= $urls['new-student'] . $classe['id'] ?>">
                 <i class="bi bi-plus fs-1"></i>
             </a>
         </div>

@@ -11,10 +11,11 @@
     </div>
 
     <div class="row position-relative">
-        <div class="position-absolute w-auto h-auto end-0">
-            <a href="<?= $urls['new-student'] . $niveau['id'] . '/' . $classe['id'] ?>">
+        <div class="d-flex position-absolute w-auto h-auto end-0">
+            <a href="<?= $urls['new-student'] . $classe['id'] ?>">
                 <i class="bi bi-plus fs-1"></i>
             </a>
+            <a class="align-self-center" href="<?=$urls['classe-coef'] . $classe['id']?>">Gérer les coefs</a>
         </div>
         <div class="m-auto pt-2 col-10 col-lg-6">
             <div>
@@ -41,7 +42,7 @@
                         <?php foreach ($students as $s): ?>
                             <tr>
                                 <td>
-                                    <a href="<?= "{$urls['student-page']}{$niveau['id']}/{$classe['id']}/{$s['id']}" ?>"
+                                    <a href="<?= "{$urls['student-page']}{$s['id']}" ?>"
                                         class="text-reset text-decoration-none">
                                         <?= $s['prenom'] ?>
                                         <?= $s['nom'] ?>
@@ -51,7 +52,7 @@
                                     <?= $s['telephone'] ?>
                                 </td>
                                 <td>
-                                    <a href="<?= "{$urls['edit-student-page']}{$niveau['id']}/{$classe['id']}/{$s['id']}" ?>"
+                                    <a href="<?= "{$urls['edit-student-page']}{$s['id']}" ?>"
                                         data-bs-toggle="tooltip" data-bs-title="Modifier">
                                         <button class="btn btn-link">
                                             <i class="bi bi-pencil"></i>

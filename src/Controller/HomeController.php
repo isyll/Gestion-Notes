@@ -23,6 +23,6 @@ class HomeController extends BaseController
 
     public function test()
     {
-        echo "test ok";
+        // dd($this->studentsModel->getStudentNiveau(29));
     }
 }

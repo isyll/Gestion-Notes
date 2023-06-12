@@ -13,7 +13,7 @@
     <div>
         <div class="row">
             <h5 class="col-6 mx-auto text-center">Classe : <a class=" text-danger"
-                    href="<?= $urls['list-students'] . $niveau['id'] . '/' . $classe['id'] ?>"><code><?= $classe['libelle'] ?></code></a>
+                    href="<?= $urls['list-students'] . $classe['id'] ?>"><code><?= $classe['libelle'] ?></code></a>
             </h5>
         </div>
         <div class=" row">

@@ -14,6 +14,29 @@ class StudentsModel
         $this->db = $db;
     }
 
+    public function getStudentClasse(int $studentId)
+    {
+        return $this->db->pexec(
+            "SELECT cl.* FROM classes as cl
+            JOIN inscriptions as i ON i.id_classe = cl.id
+            AND i.id_eleve = ?",
+            [$studentId],
+            'fetch'
+        );
+    }
+
+    public function getStudentNiveau(int $studentId)
+    {
+        return $this->db->pexec(
+            "SELECT n.* FROM niveaux as n
+            JOIN classes as cl ON cl.id_niveau = n.id
+            JOIN inscriptions as i ON i.id_classe = cl.id
+            AND i.id_eleve = ?",
+            [$studentId],
+            'fetch'
+        );
+    }
+
     private function getStudentBy(string $column, mixed $value): array|bool
     {
         if ($value === '')

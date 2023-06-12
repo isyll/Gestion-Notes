@@ -12,6 +12,11 @@ return [
         'handler' => 'HomeController@page404',
         'title' => 'Page non trouvée'
     ],
+    // '/test' => [
+    //     'name' => 'test',
+    //     'handler' => 'HomeController@test',
+    //     'title' => 'Test'
+    // ],
     '/no-conf' => [
         'name' => 'init-page',
         'handler' => 'HomeController@initPage',
@@ -44,22 +49,22 @@ return [
         'handler' => 'SubjectsController@classeCoef',
         'title' => 'Coefficients de pondération'
     ],
-    '/nouveau-eleve/{niveauId}/{classeId}' => [
+    '/nouveau-eleve/{classeId}' => [
         'name' => 'new-student',
         'handler' => 'StudentsController@newStudent',
         'title' => 'Créer une élève'
     ],
-    '/eleves/{niveauId}/{classeId}' => [
+    '/eleves/{classeId}' => [
         'name' => 'list-students',
         'handler' => 'StudentsController@list',
         'title' => 'Elèves'
     ],
-    '/eleve-page/{niveauId}/{classeId}/{studentId}' => [
+    '/eleve/{studentId}' => [
         'name' => 'student-page',
         'handler' => 'StudentsController@studentPage',
         'title' => 'Page élève'
     ],
-    '/modifier-eleve/{niveauId}/{classeId}/{studentId}' => [
+    '/modifier-eleve/{studentId}' => [
         'name' => 'edit-student-page',
         'handler' => 'StudentsController@editStudent',
         'title' => 'Modifier élève'

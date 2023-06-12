@@ -13,16 +13,13 @@ class StudentsController extends BaseController
     }
 
     public function list(
-        $niveauId = NULL,
         $classeId = NULL
     ) {
-        if ($niveauId && $classeId) {
-            $niveauId = (int) $niveauId;
+        if ($classeId) {
             $classeId = (int) $classeId;
 
-            if ($this->niveauxModel->hasClasseId($niveauId, $classeId)) {
-                $this->data['niveau']   = $this->niveauxModel->getNiveauById($niveauId);
-                $this->data['classe']   = $this->classesModel->getClasseById($classeId);
+            if ($this->data['classe'] = $this->classesModel->getClasseById($classeId)) {
+                $this->data['niveau']   = $this->classesModel->getClasseNiveau($classeId);
                 $this->data['students'] = $this->classesModel->getStudents($classeId);
 
                 echo $this->render('students', $this->data);
@@ -33,15 +30,13 @@ class StudentsController extends BaseController
         Router::pageNotFound();
     }
 
-    public function newStudent($niveauId = NULL, $classeId = NULL)
+    public function newStudent($classeId = NULL)
     {
-        if ($niveauId && $classeId) {
-            $niveauId = (int) $niveauId;
+        if ($classeId) {
             $classeId = (int) $classeId;
 
-            if ($this->niveauxModel->hasClasseId($niveauId, $classeId)) {
-                $this->data['niveau']   = $this->niveauxModel->getNiveauById($niveauId);
-                $this->data['classe']   = $this->classesModel->getClasseById($classeId);
+            if ($this->data['classe'] = $this->classesModel->getClasseById($classeId)) {
+                $this->data['niveau']   = $this->classesModel->getClasseNiveau($classeId);
                 $this->data['students'] = $this->classesModel->getStudents($classeId);
 
                 echo $this->render('new-student', $this->data);
@@ -52,17 +47,13 @@ class StudentsController extends BaseController
         Router::pageNotFound();
     }
 
-    public function studentPage($niveauId = NULL, $classeId = NULL, $studentId = NULL)
+    public function studentPage($studentId = NULL)
     {
-        if ($studentId && $niveauId && $classeId) {
+        if ($studentId) {
 
-            if (
-                $this->niveauxModel->hasClasseId($niveauId, $classeId)
-                && $this->classesModel->hasStudent($classeId, $studentId)
-            ) {
-                $this->data['niveau']  = $this->niveauxModel->getNiveauById($niveauId);
-                $this->data['classe']  = $this->classesModel->getClasseById($classeId);
-                $this->data['student'] = $this->studentsModel->getStudentById($studentId);
+            if ($this->data['student'] = $this->studentsModel->getStudentById($studentId)) {
+                $this->data['niveau'] = $this->studentsModel->getStudentNiveau($studentId);
+                $this->data['classe'] = $this->studentsModel->getStudentClasse($studentId);
 
                 echo $this->render('student-page', $this->data);
                 return;
@@ -72,16 +63,12 @@ class StudentsController extends BaseController
         Router::pageNotFound();
     }
 
-    public function editStudent($niveauId = NULL, $classeId = NULL, $studentId = NULL)
+    public function editStudent($studentId = NULL)
     {
-        if ($studentId && $niveauId && $classeId) {
-            if (
-                $this->niveauxModel->hasClasseId($niveauId, $classeId)
-                && $this->classesModel->hasStudent($classeId, $studentId)
-            ) {
-                $this->data['niveau']  = $this->niveauxModel->getNiveauById($niveauId);
-                $this->data['classe']  = $this->classesModel->getClasseById($classeId);
-                $this->data['student'] = $this->studentsModel->getStudentById($studentId);
+        if ($studentId) {
+            if ($this->data['student'] = $this->studentsModel->getStudentById($studentId)) {
+                $this->data['niveau']  = $this->studentsModel->getStudentNiveau($studentId);
+                $this->data['classe']  = $this->studentsModel->getStudentClasse($studentId);
 
                 echo $this->render('edit-student', $this->data);
                 return;
@@ -121,7 +108,7 @@ class StudentsController extends BaseController
                 $this->studentsModel->saveStudent($_POST);
                 $this->session->set('msg', $this->success('Elève créé avec succès'));
 
-                $this->redirect($this->data['urls']['list-students'] . "{$_POST['niveauId']}/{$_POST['classeId']}", false);
+                $this->redirect($this->data['urls']['list-students'] . "/{$_POST['classeId']}", false);
             }
         }
 

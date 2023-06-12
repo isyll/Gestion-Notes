@@ -34,7 +34,7 @@
                                 <td>
                                 </td>
                                 <td>
-                                    <a href="<?= $urls['list-students'] ?><?= $c['id_niveau'] ?>/<?= $c['id'] ?>">
+                                    <a href="<?= $urls['list-students'] . $c['id'] ?>">
                                         <button class="btn btn-link p-0 fs-5 text-decoration-none text-black">
                                             <?= $c['libelle'] ?>
                                         </button>
