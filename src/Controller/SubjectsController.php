@@ -41,17 +41,6 @@ class SubjectsController extends BaseController
                     ]
                 );
 
-                // if (count($item['coef']) === 0)
-                //     $item['coef'] = false;
-                // else {
-                //     $c = $item['coef'];
-                //     $item['coef'] = [];
-
-                //     foreach ($c as $coef) {
-                //         $item['coef'][$coef['type_coef']] = $coef;
-                //     }
-                // }
-
                 return $item;
             }, $this->data['subjects']);
         } else

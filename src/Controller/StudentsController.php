@@ -12,17 +12,17 @@ class StudentsController extends BaseController
         parent::__construct();
     }
 
-    public function list(
-        $classeId = NULL
-    ) {
+    public function list($classeId = NULL)
+    {
         if ($classeId) {
             $classeId = (int) $classeId;
 
             if ($this->data['classe'] = $this->classesModel->getClasseById($classeId)) {
                 $this->data['niveau']   = $this->classesModel->getClasseNiveau($classeId);
                 $this->data['students'] = $this->classesModel->getStudents($classeId);
+                $this->data['subjects'] = $this->subjectsModel->getClasseSubjects($classeId);
 
-                echo $this->render('students', $this->data);
+                echo $this->render('students', $this->data, NULL, false, ['notes']);
                 return;
             }
         }
@@ -67,8 +67,8 @@ class StudentsController extends BaseController
     {
         if ($studentId) {
             if ($this->data['student'] = $this->studentsModel->getStudentById($studentId)) {
-                $this->data['niveau']  = $this->studentsModel->getStudentNiveau($studentId);
-                $this->data['classe']  = $this->studentsModel->getStudentClasse($studentId);
+                $this->data['niveau'] = $this->studentsModel->getStudentNiveau($studentId);
+                $this->data['classe'] = $this->studentsModel->getStudentClasse($studentId);
 
                 echo $this->render('edit-student', $this->data);
                 return;

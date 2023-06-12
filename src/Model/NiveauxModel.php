@@ -76,11 +76,15 @@ class NiveauxModel
         ) ? true : false;
     }
 
-    public function saveNiveau(string $libelle): bool
+    public function saveNiveau(array $datas): bool
     {
         return $this->db->pexec(
-            "INSERT INTO niveaux(libelle) VALUES(?)",
-            [$libelle]
+            "INSERT INTO niveaux(libelle, nom_cycle, nb_cycles) VALUES(?, ?, ?)",
+            [
+                $datas['niveauLibelle'],
+                $datas['cycleName'],
+                $datas['cyclesNumber'],
+            ]
         );
     }
 
@@ -92,11 +96,16 @@ class NiveauxModel
         );
     }
 
-    public function editNiveau(int $id, string $newLibelle): bool
+    public function editNiveau(array $datas): bool
     {
         return $this->db->pexec(
-            "UPDATE niveaux SET libelle = ? WHERE id = ?",
-            [$newLibelle, $id]
+            "UPDATE niveaux SET libelle = ?, nom_cycle = ?, nb_cycles = ? WHERE id = ?",
+            [
+                $datas['newNiveauLibelle'],
+                $datas['cycleName'],
+                $datas['cyclesNumber'],
+                $datas['niveauId'],
+            ]
         );
     }
 }

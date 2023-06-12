@@ -54,7 +54,7 @@ return [
         'handler' => 'StudentsController@newStudent',
         'title' => 'Créer une élève'
     ],
-    '/eleves/{classeId}' => [
+    '/classe/liste/{classeId}' => [
         'name' => 'list-students',
         'handler' => 'StudentsController@list',
         'title' => 'Elèves'

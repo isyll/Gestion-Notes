@@ -31,7 +31,7 @@ class NiveauxController extends BaseController
             if ($this->niveauxModel->niveauLibelleExists($_POST['niveauLibelle'])) {
                 $this->session->set('msg', $this->error('Ce niveau déjà'));
             } else {
-                if ($this->niveauxModel->saveNiveau($_POST['niveauLibelle'])) {
+                if ($this->niveauxModel->saveNiveau($_POST)) {
                     $this->session->set('msg', $this->success('Niveau créée avec succès'));
                     $this->redirect($this->data['urls']['list-niveaux'], false);
                 } else {
@@ -75,7 +75,7 @@ class NiveauxController extends BaseController
             $this->session->set('form-errors', $errors);
         } else {
             if ($this->niveauxModel->niveauIdExists((int) $_POST['niveauId'])) {
-                if ($this->niveauxModel->editNiveau((int) $_POST['niveauId'], $_POST['newNiveauLibelle']))
+                if ($this->niveauxModel->editNiveau($_POST))
                     $this->session->set('msg', $this->success('Le niveau a bien été modifié'));
                 else
                     $this->session->set('msg', $this->error('Une erreur inconnue est survenue lors de la suppression'));

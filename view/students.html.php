@@ -26,61 +26,99 @@
             <div>
                 <?= $niveau['libelle'] ?>
                 <code class="fs-5">/</code>
-                <?= $classe['libelle'] ?>
-                <code class="fs-5">/</code>
-                Nombre d'élèves :
-                <code class="text-black fs-5">
+                <?= $classe['libelle'] ?> (
+                <?= $yearInfos['libelle'] ?>)
+                <div>Effectif :
                     <?= count($students ?? []) ?>
-                </code>
+                </div>
+                <div>Moyenne classe :
+                </div>
             </div>
-            <table class="table table-hover mt-2 table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col"></th>
-                        <th scope="col"></th>
-                        <th scope="col"></th>
-                        <th scope="col"></th>
-                    </tr>
-                </thead>
-                <tbody class="text-start">
-                    <?php if (isset($students)): ?>
-                        <?php foreach ($students as $s): ?>
-                            <tr>
-                                <td>
-                                    <a href="<?= "{$urls['student-page']}{$s['id']}" ?>"
-                                        class="text-reset text-decoration-none">
-                                        <?= $s['prenom'] ?>
-                                        <?= $s['nom'] ?>
-                                    </a>
-                                </td>
-                                <td>
-                                    <?= $s['telephone'] ?>
-                                </td>
-                                <td>
-                                    <a href="<?= "{$urls['edit-student-page']}{$s['id']}" ?>" data-bs-toggle="tooltip"
-                                        data-bs-title="Modifier">
-                                        <button class="btn btn-link">
-                                            <i class="bi bi-pencil"></i>
-                                        </button>
-                                    </a>
-                                </td>
-                                <td>
-                                    <form class="delete-student-form" action="<?= $urls['delete-student'] ?>" method="post">
-                                        <input type="hidden" name="studentId" value="<?= $s['id'] ?>" />
-                                        <input type="hidden" name="current-url" value="<?= $currentURL ?>" />
-                                        <button type="submit" data-bs-toggle="modal" data-bs-target="#confirmDeleteStudent"
-                                            class="delete-btn btn btn-link text-danger">
-                                            <a href="#" data-bs-toggle="tooltip" data-bs-title="Supprimer">
-                                                <i class="text-danger bi bi-trash-fill"></i>
-                                            </a>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        <?php endforeach ?>
-                    <?php endif ?>
-                </tbody>
-            </table>
+            <div class="row">
+                <div class="d-flex justify-content-between mt-3">
+                    <div></div>
+                    <div class="d-flex">
+                        <div class="me-2">
+                            <label for="chooseSubject">Discipline</label>
+                            <select class="form-select" name="chooseSubject" id="chooseSubject">
+                                <option value="">Choisir</option>
+                                <?php if (isset($subjects)): ?>
+                                    <?php foreach ($subjects as $s): ?>
+                                        <option value="<?= $s['id'] ?>">
+                                            <?= $s['nom'] ?>
+                                        </option>
+                                    <?php endforeach ?>
+                                <?php endif ?>
+                            </select>
+                        </div>
+                        <div class="me-2">
+                            <label for="chooseSemester">Semestre</label>
+                            <select class=" form-select" name="chooseSemester" id="chooseSemester">
+                                <option value="">Choisir</option>
+                                <?php if (isset($niveau)): ?>
+                                    <?php for ($i = 1; $i <= $niveau['nb_cycles']; $i++): ?>
+                                        <option value="<?= $i ?>"><?= "{$niveau['nom_cycle']} $i" ?></option>
+                                    <?php endfor ?>
+                                <?php endif ?>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="chooseType">Note de</label>
+                            <select class=" form-select" name="chooseType" id="chooseType">
+                                <option value="">Choisir</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-hover mt-2 table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-start">
+                        <?php if (isset($students)): ?>
+                            <?php foreach ($students as $s): ?>
+                                <tr>
+                                    <td>
+                                        <a href="<?= "{$urls['student-page']}{$s['id']}" ?>"
+                                            class="text-reset text-decoration-none">
+                                            <?= $s['prenom'] ?>
+                                            <?= $s['nom'] ?>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="<?= "{$urls['edit-student-page']}{$s['id']}" ?>" data-bs-toggle="tooltip"
+                                            data-bs-title="Modifier">
+                                            <button class="btn btn-link">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <form class="delete-student-form" action="<?= $urls['delete-student'] ?>" method="post">
+                                            <input type="hidden" name="studentId" value="<?= $s['id'] ?>" />
+                                            <input type="hidden" name="current-url" value="<?= $currentURL ?>" />
+                                            <button type="submit" data-bs-toggle="modal" data-bs-target="#confirmDeleteStudent"
+                                                class="delete-btn btn btn-link text-danger">
+                                                <a href="#" data-bs-toggle="tooltip" data-bs-title="Supprimer">
+                                                    <i class="text-danger bi bi-trash-fill"></i>
+                                                </a>
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <input style="width:100px;" class="form-control" type="number" value="" />
+                                    </td>
+                                </tr>
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
