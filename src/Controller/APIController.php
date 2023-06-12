@@ -199,35 +199,42 @@ class APIController extends BaseController
                     $sbj = $this->subjectsModel->getSubjectByCode($key);
 
                     foreach ($val as $type => $i) {
-                        if (Helpers::rmms($i) !== '')
+                        if ($this->helpers::rmms($i) !== '') {
                             if (!is_numeric($i)) {
                                 $result['errors'][$key][] = [
                                     'typeMax' => $type,
                                     'msg' => "Le note maximale $i est invalide"
                                 ];
+
+                                continue;
                             } elseif ($i < 10) {
                                 $result['errors'][$key][] = [
                                     'typeMax' => $type,
                                     'msg' => "Le note maximale doit être supérieure à 10"
                                 ];
-                            } elseif (in_array($type, ['max_ressource', 'max_examen'])) {
-                                $this->subjectsModel->updateClasseSubjectMax(
-                                    [
-                                        $type => $i,
-                                        'subjectId' => $sbj['id'],
-                                        'classeId' => $datas['classeId'],
-                                        'yearId' => $this->data['yearInfos']['id']
-                                    ],
-                                    $type
-                                );
+
+                                continue;
                             }
+                        }
+
+                        if (in_array($type, ['max_ressource', 'max_examen'])) {
+                            $this->subjectsModel->updateClasseSubjectMax(
+                                [
+                                    $type => $i === '' ? 0 : $i,
+                                    'subjectId' => $sbj['id'],
+                                    'classeId' => $datas['classeId'],
+                                    'yearId' => $this->data['yearInfos']['id']
+                                ],
+                                $type
+                            );
+                        }
                     }
                 }
 
                 $result['status'] = isset($result['errors']) ? 'fail' : 'done';
                 $result['msg']    = isset($result['errors']) ?
                     "Erreurs de validation" :
-                    "Les coefficients ont été bien mises à jour";
+                    "Les données ont été bien mises à jour";
             } else
                 $result['status'] = 'fail';
         }
