@@ -9,7 +9,12 @@
             </div>
         <?php endif ?>
     </div>
-    <div class="row">
+    <div class="row position-relative">
+        <div class="position-absolute w-auto h-auto start-0 ms-5">
+            <a href="<?= $urls['list-students'] . $classe['id'] ?>">
+                <i class="bi bi-arrow-left fs-3 fw-bolder"></i>
+            </a>
+        </div>
         <h5>
             Niveau :
             <?= $niveau['libelle'] ?> <code class="fs-4">/</code>

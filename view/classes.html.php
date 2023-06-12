@@ -17,6 +17,11 @@
         </small>
     </div>
     <div class="row position-relative">
+        <div class="position-absolute w-auto h-auto start-0 ms-5">
+            <a href="<?= $urls['list-niveaux'] ?>">
+                <i class="bi bi-arrow-left fs-3 fw-bolder"></i>
+            </a>
+        </div>
         <div class="position-absolute w-auto h-auto end-0">
             <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#createClasse">
                 <i class="bi bi-plus fs-1"></i>

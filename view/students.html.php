@@ -11,11 +11,16 @@
     </div>
 
     <div class="row position-relative">
+        <div class="position-absolute w-auto h-auto start-0 ms-5">
+            <a href="<?= $urls['list-classes'] . $niveau['id'] ?>">
+                <i class="bi bi-arrow-left fs-3 fw-bolder"></i>
+            </a>
+        </div>
         <div class="d-flex position-absolute w-auto h-auto end-0">
             <a href="<?= $urls['new-student'] . $classe['id'] ?>">
                 <i class="bi bi-plus fs-1"></i>
             </a>
-            <a class="align-self-center" href="<?=$urls['classe-coef'] . $classe['id']?>">Gérer les coefs</a>
+            <a class="align-self-center" href="<?= $urls['classe-coef'] . $classe['id'] ?>">Gérer les coefs</a>
         </div>
         <div class="m-auto pt-2 col-10 col-lg-6">
             <div>
@@ -52,8 +57,8 @@
                                     <?= $s['telephone'] ?>
                                 </td>
                                 <td>
-                                    <a href="<?= "{$urls['edit-student-page']}{$s['id']}" ?>"
-                                        data-bs-toggle="tooltip" data-bs-title="Modifier">
+                                    <a href="<?= "{$urls['edit-student-page']}{$s['id']}" ?>" data-bs-toggle="tooltip"
+                                        data-bs-title="Modifier">
                                         <button class="btn btn-link">
                                             <i class="bi bi-pencil"></i>
                                         </button>

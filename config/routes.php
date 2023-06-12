@@ -34,7 +34,7 @@ return [
         'handler' => 'SubjectsController@page',
         'title' => 'Disciplines'
     ],
-    '/niveau/{niveauId}' => [
+    '/classes/{niveauId}' => [
         'name' => 'list-classes',
         'handler' => 'ClassesController@getClasses',
         'title' => 'Classes'
