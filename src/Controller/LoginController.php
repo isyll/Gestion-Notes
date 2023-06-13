@@ -28,7 +28,7 @@ class LoginController extends BaseController
                 $this->userLogin($datas);
                 $this->session->set('msg', $this->success('Connexion effectuée'));
             } else {
-                $this->session->set('msg', $this->error("Connexion refusée"));
+                $this->session->set('msg', $this->error("Identifiant/Mot de passe invalide"));
             }
         }
 

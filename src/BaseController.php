@@ -8,6 +8,7 @@ use Core\Router;
 use App\Model\AdminModel;
 use App\Model\ClassesModel;
 use App\Model\NiveauxModel;
+use App\Model\NotesModel;
 use App\Model\SchoolYearsModel;
 use App\Model\StudentsModel;
 use App\Model\SubjectsModel;
@@ -20,6 +21,7 @@ class BaseController extends Controller
     protected StudentsModel $studentsModel;
     protected AdminModel $adminModel;
     protected SubjectsModel $subjectsModel;
+    protected NotesModel $notesModel;
 
     public function __construct()
     {
@@ -45,6 +47,7 @@ class BaseController extends Controller
         $this->classesModel     = new ClassesModel($this->db);
         $this->adminModel       = new AdminModel($this->db);
         $this->subjectsModel    = new SubjectsModel($this->db);
+        $this->notesModel       = new NotesModel($this->db);
 
         $this->ac->loadFromDatabase($this->db, 'accesscontrol');
 

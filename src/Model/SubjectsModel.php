@@ -95,6 +95,22 @@ class SubjectsModel
         );
     }
 
+    public function getClasseDiscipline(array $data)
+    {
+        return $this->db->pexec(
+            'SELECT * FROM classes_disciplines
+            WHERE id_classe = ?
+            AND id_discipline = ?
+            AND id_annee = ?',
+            [
+                $data['classeId'],
+                $data['subjectId'],
+                $data['yearId'],
+            ],
+            'fetch'
+        );
+    }
+
     public function isClasseHasSubject(int $classeId, string $sbjName): bool
     {
         return $this->db->pexec(

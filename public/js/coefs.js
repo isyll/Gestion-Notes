@@ -1,11 +1,8 @@
 $(function () {
-    $("#updateCoefsBtn").on("click", function () {
-        let datas = {
-            classeId: getClasseId,
-            coefs: {},
-        };
+    let dbMaxNoteDatas = getMaxNoteDatas();
 
-        $("#resultMsg").removeClass("text-success text-danger").text("");
+    function getMaxNoteDatas() {
+        let datas = {};
 
         $(".inputCoef")
             .toArray()
@@ -15,43 +12,81 @@ $(function () {
                     name = input.attr("name"),
                     typeMax = input.attr("typeMax");
 
-                if (typeof datas.coefs[name] === "undefined")
-                    datas.coefs[name] = {};
+                if (val != "") {
+                    if (typeof datas[name] === "undefined") datas[name] = {};
 
-                datas.coefs[name][typeMax] = val;
-                input.removeClass("is-invalid");
+                    datas[name][typeMax] = val;
+                    input.removeClass("is-invalid");
+                }
             });
 
-        $.ajax({
-            type: "post",
-            url: baseURL + data["update-coefs"],
-            data: JSON.stringify(datas),
-            dataType: "json",
-        }).done(function (response) {
-            response = response["datas"];
-console.log(response);
-            if (response.status === "done")
-                $("#resultMsg").addClass("text-success");
-            else $("#resultMsg").addClass("text-danger");
+        return datas;
+    }
 
-            if (typeof response.errors !== "undefined") {
-                for (const e in response.errors) {
-                    for (const i of response.errors[e]) {
-                        let elem = $("*")
-                            .filter(`[name="${e}"][typeMax="${i.typeMax}"]`)
-                            .addClass("is-invalid");
+    function compareMaxNotes(a1, a2) {
+        return JSON.stringify(a1) === JSON.stringify(a2);
+    }
 
-                        if (elem.next().hasClass("invalid-feedback"))
-                            elem.next().text(i.msg);
-                        else
-                            $(
-                                `<div class="invalid-feedback">${i.msg}</div>`
-                            ).insertAfter(elem);
+    function updateBtnActivity() {
+        if (!compareMaxNotes(getMaxNoteDatas(), dbMaxNoteDatas))
+            $("#updateCoefsBtn").prop("disabled", false);
+        else $("#updateCoefsBtn").prop("disabled", true);
+    }
+
+    $(".inputCoef")
+        .toArray()
+        .some(function (e) {
+            e.addEventListener("input", updateBtnActivity);
+        });
+
+    $("#updateCoefsBtn").on("click", function () {
+        let datas = {
+            classeId: getClasseId,
+            coefs: {},
+        };
+
+        $("#resultMsg").removeClass("text-success text-danger").text("");
+
+        datas.coefs = getMaxNoteDatas();
+
+        if (Object.keys(datas.coefs) != 0) {
+            $("#updateCoefsBtn").prop("disabled", false);
+
+            $.ajax({
+                type: "post",
+                url: baseURL + data["update-coefs"],
+                data: JSON.stringify(datas),
+                dataType: "json",
+            }).done(function (response) {
+                response = response.datas;
+
+                if (response.status === "done") {
+                    $("#resultMsg").addClass("text-success");
+                    dbMaxNoteDatas = getMaxNoteDatas();
+                    updateBtnActivity();
+                } else $("#resultMsg").addClass("text-danger");
+
+                if (typeof response.errors !== "undefined") {
+                    for (const e in response.errors) {
+                        for (const i of response.errors[e]) {
+                            let elem = $("*")
+                                .filter(`[name="${e}"][typeMax="${i.typeMax}"]`)
+                                .addClass("is-invalid");
+
+                            if (elem.next().hasClass("invalid-feedback"))
+                                elem.next().text(i.msg);
+                            else
+                                $(
+                                    `<div class="invalid-feedback">${i.msg}</div>`
+                                ).insertAfter(elem);
+                        }
                     }
                 }
-            }
 
-            $("#resultMsg").text(response.msg);
-        });
+                $("#resultMsg").text(response.msg);
+            });
+        } else $("#updateCoefsBtn").prop("disabled", true);
     });
+
+    $("#updateCoefsBtn").prop("disabled", true);
 });

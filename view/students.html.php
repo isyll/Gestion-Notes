@@ -8,6 +8,7 @@
                 <?= $msg['value'] ?>
             </div>
         <?php endif ?>
+        <div id="resultMsg"></div>
     </div>
 
     <div class="row position-relative">
@@ -31,7 +32,7 @@
                 <div>Effectif :
                     <?= count($students ?? []) ?>
                 </div>
-                <div>Moyenne classe :
+                <div id="classAvg">Moyenne classe :
                 </div>
             </div>
             <div class="row">
@@ -40,7 +41,7 @@
                     <div class="d-flex">
                         <div class="me-2">
                             <label for="chooseSubject">Discipline</label>
-                            <select class="form-select" name="chooseSubject" id="chooseSubject">
+                            <select class="filterNotesSelect form-select" name="subjectId" id="chooseSubject">
                                 <option value="">Choisir</option>
                                 <?php if (isset($subjects)): ?>
                                     <?php foreach ($subjects as $s): ?>
@@ -52,8 +53,10 @@
                             </select>
                         </div>
                         <div class="me-2">
-                            <label for="chooseSemester">Semestre</label>
-                            <select class=" form-select" name="chooseSemester" id="chooseSemester">
+                            <label for="chooseCycle">
+                                <?= $niveau['nom_cycle'] ?? 'Cycle' ?>
+                            </label>
+                            <select class="filterNotesSelect form-select" name="cycle" id="chooseCycle">
                                 <option value="">Choisir</option>
                                 <?php if (isset($niveau)): ?>
                                     <?php for ($i = 1; $i <= $niveau['nb_cycles']; $i++): ?>
@@ -64,8 +67,10 @@
                         </div>
                         <div>
                             <label for="chooseType">Note de</label>
-                            <select class=" form-select" name="chooseType" id="chooseType">
+                            <select class="filterNotesSelect form-select" name="noteType" id="chooseType">
                                 <option value="">Choisir</option>
+                                <option value="ressource">Ressource</option>
+                                <option value="examen">Examen</option>
                             </select>
                         </div>
                     </div>
@@ -110,14 +115,21 @@
                                             </button>
                                         </form>
                                     </td>
-                                    <td>
-                                        <input style="width:100px;" class="form-control" type="number" value="" />
+                                    <td class=" d-flex">
+                                        <input data-student-id="<?= $s['id'] ?>" name="<?= 'notes-' . $s['id'] ?>"
+                                            style="width:100px;" class=" studentNote form-control" type="number" value="" />
+                                        <div class="max-note-sep fs-5 fw-bold">/</div>
+                                        <div class="max-note fs-5 fw-bold"></div>
                                     </td>
                                 </tr>
                             <?php endforeach ?>
                         <?php endif ?>
                     </tbody>
                 </table>
+            </div>
+
+            <div class="d-flex">
+                <button id="updateNotesBtn" type="button" class="btn btn-primary ms-auto me-3">Enregistrer</button>
             </div>
         </div>
     </div>
@@ -137,3 +149,6 @@
         </div>
     </div>
 </div>
+<script type="application/json" id="classeDatas">
+<?= json_encode($classe) ?>
+</script>

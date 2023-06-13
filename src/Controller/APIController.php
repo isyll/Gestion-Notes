@@ -73,6 +73,89 @@ class APIController extends BaseController
         $this->jsonResponse([$subject]);
     }
 
+    public function getStudentsNotes()
+    {
+        $datas = $this->jsonDecode();
+        $this->loadValidationRules('filter-notes', $datas);
+        $this->fv->validate();
+
+        if ($errors = $this->fv->getErrors()) {
+            $result = [
+                'status' => 'fail',
+                'msg' => 'Formulaire invalide',
+                'errors' => $errors
+            ];
+        } else {
+            $datas['yearId'] = (int) $this->data['yearInfos']['id'];
+            $d['notes']      = $this->notesModel->filterNotes($datas);
+            $d['cd']         = $this->subjectsModel->getClasseDiscipline($datas);
+
+            $result = [
+                'status' => 'done',
+                'msg' => 'test',
+                'datas' => $d
+            ];
+
+        }
+
+        $this->jsonResponse($result);
+    }
+
+    public function getClasseDiscipline()
+    {
+        $datas = $this->jsonDecode();
+        $this->loadValidationRules('cd', $datas);
+        $this->fv->validate();
+
+        if ($errors = $this->fv->getErrors()) {
+            $result = [
+                'status' => 'fail',
+                'msg' => 'Formulaire invalide',
+                'errors' => $errors
+            ];
+        } else {
+            $datas['yearId'] = (int) $this->data['yearInfos']['id'];
+
+            $result = [
+                'status' => 'done',
+                'msg' => 'test',
+                'datas' => $this->subjectsModel->getClasseDiscipline($datas)
+            ];
+
+        }
+
+        $this->jsonResponse($result);
+    }
+
+    public function updateStudentNotes()
+    {
+        $datas  = $this->jsonDecode();
+        $result = [];
+
+        foreach ($datas as $d) {
+            if (
+                array_key_exists('e_id', $d) &&
+                array_key_exists('note_type', $d) &&
+                array_key_exists('cycle', $d) &&
+                array_key_exists('note', $d)
+            ) {
+                $d['yearId'] = (int) $this->data['yearInfos']['id'];
+
+                if ($this->notesModel->getStudentNote($d))
+                    $this->notesModel->updateStudentNotes($d);
+                else
+                    $this->notesModel->insertStudentNotes($d);
+
+                $result = [
+                    'status' => 'done',
+                    'msg' => 'Les données ont été sauvegardées',
+                ];
+            }
+        }
+
+        $this->jsonResponse($result);
+    }
+
     public function createSubject()
     {
         $datas = $this->jsonDecode();
@@ -165,80 +248,83 @@ class APIController extends BaseController
     public function updateCoefs()
     {
         $datas = $this->jsonDecode();
-        $this->loadValidationRules('update-coefs', $datas);
 
-        if ($errors = $this->fv->getErrors()) {
-            $result = [
-                'status' => 'fail',
-                'msg' => 'Formulaire invalide',
-                'errors' => $errors
-            ];
-        } elseif (!$this->classesModel->getClasseById($datas['classeId'])) {
-            $result = [
-                'status' => 'fail',
-                'msg' => "La classe sélectionné n'existe pas",
-            ];
-        } elseif (empty($datas['coefs'])) {
-            $result = [
-                'status' => 'fail',
-                'msg' => "Les données envoyées sont invalides",
-            ];
-        } else {
-            $exists = true;
+        if ($datas) {
+            $this->loadValidationRules('update-coefs', $datas);
 
-            foreach ($datas['coefs'] as $key => $val) {
-                if (!$this->subjectsModel->getSubjectByCode($key)) {
-                    $exists        = false;
-                    $result['msg'] = "La discipline $key est inexistante";
-                    break;
-                }
-            }
+            if ($errors = $this->fv->getErrors()) {
+                $result = [
+                    'status' => 'fail',
+                    'msg' => 'Formulaire invalide',
+                    'errors' => $errors
+                ];
+            } elseif (!$this->classesModel->getClasseById($datas['classeId'])) {
+                $result = [
+                    'status' => 'fail',
+                    'msg' => "La classe sélectionné n'existe pas",
+                ];
+            } elseif (empty($datas['coefs'])) {
+                $result = [
+                    'status' => 'fail',
+                    'msg' => "Les données envoyées sont invalides",
+                ];
+            } else {
+                $exists = true;
 
-            if ($exists) {
                 foreach ($datas['coefs'] as $key => $val) {
-                    $sbj = $this->subjectsModel->getSubjectByCode($key);
-
-                    foreach ($val as $type => $i) {
-                        if ($this->helpers::rmms($i) !== '') {
-                            if (!is_numeric($i)) {
-                                $result['errors'][$key][] = [
-                                    'typeMax' => $type,
-                                    'msg' => "Le note maximale $i est invalide"
-                                ];
-
-                                continue;
-                            } elseif ($i < 10) {
-                                $result['errors'][$key][] = [
-                                    'typeMax' => $type,
-                                    'msg' => "Le note maximale doit être supérieure à 10"
-                                ];
-
-                                continue;
-                            }
-                        }
-
-                        if (in_array($type, ['max_ressource', 'max_examen'])) {
-                            $this->subjectsModel->updateClasseSubjectMax(
-                                [
-                                    $type => $i === '' ? 0 : $i,
-                                    'subjectId' => $sbj['id'],
-                                    'classeId' => $datas['classeId'],
-                                    'yearId' => $this->data['yearInfos']['id']
-                                ],
-                                $type
-                            );
-                        }
+                    if (!$this->subjectsModel->getSubjectByCode($key)) {
+                        $exists        = false;
+                        $result['msg'] = "La discipline $key est inexistante";
+                        break;
                     }
                 }
 
-                $result['status'] = isset($result['errors']) ? 'fail' : 'done';
-                $result['msg']    = isset($result['errors']) ?
-                    "Erreurs de validation" :
-                    "Les données ont été bien mises à jour";
-            } else
-                $result['status'] = 'fail';
-        }
+                if ($exists) {
+                    foreach ($datas['coefs'] as $key => $val) {
+                        $sbj = $this->subjectsModel->getSubjectByCode($key);
 
-        $this->jsonResponse($result);
+                        foreach ($val as $type => $i) {
+                            if ($this->helpers::rmms($i) !== '') {
+                                if (!is_numeric($i)) {
+                                    $result['errors'][$key][] = [
+                                        'typeMax' => $type,
+                                        'msg' => "Le note maximale $i est invalide"
+                                    ];
+
+                                    continue;
+                                } elseif ($i < 10) {
+                                    $result['errors'][$key][] = [
+                                        'typeMax' => $type,
+                                        'msg' => "Le note maximale doit être supérieure à 10"
+                                    ];
+
+                                    continue;
+                                }
+                            }
+
+                            if (in_array($type, ['max_ressource', 'max_examen'])) {
+                                $this->subjectsModel->updateClasseSubjectMax(
+                                    [
+                                        $type => $i === '' ? 0 : $i,
+                                        'subjectId' => $sbj['id'],
+                                        'classeId' => $datas['classeId'],
+                                        'yearId' => $this->data['yearInfos']['id']
+                                    ],
+                                    $type
+                                );
+                            }
+                        }
+                    }
+
+                    $result['status'] = isset($result['errors']) ? 'fail' : 'done';
+                    $result['msg']    = isset($result['errors']) ?
+                        "Erreurs de validation" :
+                        "Les données ont été bien mises à jour";
+                } else
+                    $result['status'] = 'fail';
+            }
+
+            $this->jsonResponse($result);
+        }
     }
 }

@@ -12,11 +12,6 @@ return [
         'handler' => 'HomeController@page404',
         'title' => 'Page non trouvée'
     ],
-    // '/test' => [
-    //     'name' => 'test',
-    //     'handler' => 'HomeController@test',
-    //     'title' => 'Test'
-    // ],
     '/no-conf' => [
         'name' => 'init-page',
         'handler' => 'HomeController@initPage',
@@ -201,6 +196,18 @@ return [
     '/api/getclassesubjects/{classeId}' => [
         'name' => 'get-classe-subjects',
         'handler' => 'APIController@getClasseSubjects',
+    ],
+    '/api/get-student-notes' => [
+        'name' => 'get-student-notes',
+        'handler' => 'APIController@getStudentsNotes',
+    ],
+    '/api/get-cd' => [
+        'name' => 'get-cd',
+        'handler' => 'APIController@getClasseDiscipline',
+    ],
+    '/api/update-student-notes' => [
+        'name' => 'update-student-notes',
+        'handler' => 'APIController@updateStudentNotes',
     ],
     '/api/getsubjectbycode/{code}' => [
         'name' => 'get-subject-by-code',

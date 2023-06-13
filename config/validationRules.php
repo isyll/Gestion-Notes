@@ -725,4 +725,76 @@ return [
             'process' => ['del_multiple_spaces']
         ],
     ],
+    'filter-notes' => [
+        [
+            'name' => 'classeId',
+            'rules' => [
+                'required',
+                'error_msg' => "Aucune classe sélectionnée",
+                'type' => [
+                    'value' => 'number',
+                    'error_msg' => "L'id de la classe est invalide"
+                ]
+            ],
+            'process' => ['del_multiple_spaces']
+        ],
+        [
+            'name' => 'subjectId',
+            'rules' => [
+                'required',
+                'error_msg' => "Aucune discipline sélectionnée",
+                'type' => [
+                    'value' => 'number',
+                    'error_msg' => "L'id de la discipline est invalide"
+                ]
+            ],
+            'process' => ['del_multiple_spaces']
+        ],
+        [
+            'name' => 'cycle',
+            'rules' => [
+                'required',
+                'error_msg' => "Aucun cycle sélectionné",
+                'type' => [
+                    'value' => 'number',
+                    'error_msg' => "Le cycle sélectionné est invalide"
+                ]
+            ],
+            'process' => ['del_multiple_spaces']
+        ],
+        [
+            'name' => 'noteType',
+            'rules' => [
+                'required',
+                'error_msg' => "Aucun type de note sélectionné",
+            ],
+            'process' => ['del_multiple_spaces']
+        ],
+    ],
+    'cd' => [
+        [
+            'name' => 'classeId',
+            'rules' => [
+                'required',
+                'error_msg' => "Aucune classe sélectionnée",
+                'type' => [
+                    'value' => 'number',
+                    'error_msg' => "L'id de la classe est invalide"
+                ]
+            ],
+            'process' => ['del_multiple_spaces']
+        ],
+        [
+            'name' => 'subjectId',
+            'rules' => [
+                'required',
+                'error_msg' => "Aucune discipline sélectionnée",
+                'type' => [
+                    'value' => 'number',
+                    'error_msg' => "L'id de la discipline est invalide"
+                ]
+            ],
+            'process' => ['del_multiple_spaces']
+        ],
+    ],
 ];

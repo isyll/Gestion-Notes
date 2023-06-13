@@ -108,7 +108,7 @@ class StudentsController extends BaseController
                 $this->studentsModel->saveStudent($_POST);
                 $this->session->set('msg', $this->success('Elève créé avec succès'));
 
-                $this->redirect($this->data['urls']['list-students'] . "/{$_POST['classeId']}", false);
+                $this->redirect($this->data['urls']['list-students'] . "{$_POST['classeId']}", false);
             }
         }
 
