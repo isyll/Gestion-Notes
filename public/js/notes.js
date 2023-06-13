@@ -332,7 +332,7 @@ $(function () {
                 let max = parseInt($(e).next().next().text().trim());
 
                 updateSaveBtnActivity();
-
+                removeColor(e);
                 if (!isNaN(max)) {
                     let val = $(e).val();
 
