@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : dim. 11 juin 2023 à 16:56
+-- Généré le : mar. 13 juin 2023 à 11:27
 -- Version du serveur : 8.0.33-0ubuntu0.22.04.2
 -- Version de PHP : 8.1.2-1ubuntu2.11
 
@@ -59,7 +59,7 @@ CREATE TABLE `annees_scolaires` (
 --
 
 INSERT INTO `annees_scolaires` (`id`, `libelle`, `supprime`) VALUES
-(0, '2022-2023', 0);
+(1, '2022-2023', 0);
 
 -- --------------------------------------------------------
 
@@ -104,7 +104,15 @@ CREATE TABLE `classes_disciplines` (
 --
 
 INSERT INTO `classes_disciplines` (`id`, `id_classe`, `id_discipline`, `id_annee`, `max_ressource`, `max_examen`) VALUES
-(1, 26, 1, 0, 20, 20);
+(1, 26, 1, 1, 0, 20),
+(2, 26, 3, 1, 0, 20),
+(3, 29, 4, 1, 20, 20),
+(4, 29, 6, 1, 10, 20),
+(5, 29, 9, 1, 20, 20),
+(6, 28, 9, 1, 10, 20),
+(7, 28, 6, 1, 10, 20),
+(8, 28, 10, 1, 10, 20),
+(9, 27, 10, 1, 10, 0);
 
 -- --------------------------------------------------------
 
@@ -149,7 +157,12 @@ CREATE TABLE `disciplines` (
 --
 
 INSERT INTO `disciplines` (`id`, `id_groupe`, `nom`, `code`) VALUES
-(1, 1, 'ALGEBRE', 'ALG');
+(1, 1, 'ALGEBRE', 'ALG'),
+(3, 1, 'MATHEMATIQUES', 'MAT'),
+(4, 3, 'FRANCAIS', 'FRA'),
+(6, 3, 'VOCABULAIRE', 'VOC'),
+(9, 3, 'GRAMMAIRE', 'GRA'),
+(10, 1, 'ARITHMETIQUE', 'ARI');
 
 -- --------------------------------------------------------
 
@@ -175,7 +188,14 @@ CREATE TABLE `eleves` (
 --
 
 INSERT INTO `eleves` (`id`, `numero`, `type`, `supprime`, `prenom`, `nom`, `telephone`, `adresse`, `email`, `naissance`) VALUES
-(26, 4420, 'externe', 0, 'Ibrahima', 'Sylla', '785354479', 'Sicap Mbao Villa N?336', 'isyll711@gmail.com', '1999-11-04');
+(26, 4420, 'externe', 0, 'Ibrahima', 'Sylla', '785354479', 'Sicap Mbao Villa N?336', 'isyll711@gmail.com', '1999-11-04'),
+(27, 9044, 'externe', 0, 'Assane', 'Ba', NULL, NULL, NULL, NULL),
+(28, 4678, 'interne', 0, 'Abdou', 'Bodian', NULL, NULL, NULL, '2023-06-01'),
+(29, NULL, 'externe', 0, 'Amadou', 'Ba', NULL, NULL, NULL, '2023-05-31'),
+(30, 146, 'interne', 0, 'Aliou', 'Ba', NULL, NULL, 'jay@gm.com', '2023-06-09'),
+(31, 4695, 'externe', 0, 'Samori', 'Samb', NULL, NULL, 'emxample@gmail.com', '2023-06-09'),
+(32, 80, 'externe', 0, 'Jason', 'Brown', NULL, NULL, 'odin@nido.com', '2023-06-09'),
+(33, 9001, 'externe', 0, 'Benoit', 'Prism', NULL, NULL, NULL, '2023-06-15');
 
 -- --------------------------------------------------------
 
@@ -195,7 +215,8 @@ CREATE TABLE `groupes_disciplines` (
 
 INSERT INTO `groupes_disciplines` (`id`, `nom`, `supprime`) VALUES
 (1, 'MATHEMATIQUES', 0),
-(2, 'ACTIVITES NUMERIQUES', 0);
+(2, 'ACTIVITES NUMERIQUES', 0),
+(3, 'LANGUES ET COMUNICATION', 0);
 
 -- --------------------------------------------------------
 
@@ -215,7 +236,14 @@ CREATE TABLE `inscriptions` (
 --
 
 INSERT INTO `inscriptions` (`id`, `id_eleve`, `id_classe`, `id_annee`) VALUES
-(18, 26, 26, 0);
+(18, 26, 26, 1),
+(19, 27, 26, 1),
+(20, 28, 29, 1),
+(21, 29, 29, 1),
+(22, 30, 26, 1),
+(23, 31, 26, 1),
+(24, 32, 26, 1),
+(25, 33, 26, 1);
 
 -- --------------------------------------------------------
 
@@ -226,16 +254,47 @@ INSERT INTO `inscriptions` (`id`, `id_eleve`, `id_classe`, `id_annee`) VALUES
 CREATE TABLE `niveaux` (
   `id` int NOT NULL,
   `libelle` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `supprime` tinyint(1) NOT NULL DEFAULT '0'
+  `supprime` tinyint(1) NOT NULL DEFAULT '0',
+  `nom_cycle` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `nb_cycles` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
 -- Déchargement des données de la table `niveaux`
 --
 
-INSERT INTO `niveaux` (`id`, `libelle`, `supprime`) VALUES
-(36, 'Elementaire', 0),
-(37, 'Secondaire', 0);
+INSERT INTO `niveaux` (`id`, `libelle`, `supprime`, `nom_cycle`, `nb_cycles`) VALUES
+(36, 'Elementaire', 0, 'Trimestre', 3),
+(37, 'Secondaire', 0, 'Semestre', 2),
+(38, 'Ed', 1, 'Edede', 12);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `notes_eleves`
+--
+
+CREATE TABLE `notes_eleves` (
+  `id` int NOT NULL,
+  `id_cd` int NOT NULL,
+  `id_insc` int NOT NULL,
+  `cycle` int NOT NULL,
+  `type_note` varchar(255) NOT NULL,
+  `note` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `notes_eleves`
+--
+
+INSERT INTO `notes_eleves` (`id`, `id_cd`, `id_insc`, `cycle`, `type_note`, `note`) VALUES
+(1, 3, 20, 1, 'ressource', 18.93),
+(2, 3, 21, 1, 'ressource', 11.95),
+(3, 4, 21, 1, 'ressource', 0),
+(4, 4, 20, 1, 'ressource', 17.63),
+(5, 5, 20, 1, 'ressource', 18.0067),
+(6, 5, 21, 1, 'ressource', 14.44),
+(7, 3, 20, 2, 'examen', 11.22);
 
 -- --------------------------------------------------------
 
@@ -338,6 +397,14 @@ ALTER TABLE `niveaux`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Index pour la table `notes_eleves`
+--
+ALTER TABLE `notes_eleves`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_cd` (`id_cd`),
+  ADD KEY `id_insc` (`id_insc`);
+
+--
 -- Index pour la table `params`
 --
 ALTER TABLE `params`
@@ -370,7 +437,7 @@ ALTER TABLE `classes`
 -- AUTO_INCREMENT pour la table `classes_disciplines`
 --
 ALTER TABLE `classes_disciplines`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT pour la table `comptes`
@@ -382,31 +449,37 @@ ALTER TABLE `comptes`
 -- AUTO_INCREMENT pour la table `disciplines`
 --
 ALTER TABLE `disciplines`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT pour la table `eleves`
 --
 ALTER TABLE `eleves`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT pour la table `groupes_disciplines`
 --
 ALTER TABLE `groupes_disciplines`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pour la table `inscriptions`
 --
 ALTER TABLE `inscriptions`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT pour la table `niveaux`
 --
 ALTER TABLE `niveaux`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+
+--
+-- AUTO_INCREMENT pour la table `notes_eleves`
+--
+ALTER TABLE `notes_eleves`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT pour la table `params`
@@ -445,6 +518,13 @@ ALTER TABLE `inscriptions`
   ADD CONSTRAINT `inscriptions_ibfk_1` FOREIGN KEY (`id_classe`) REFERENCES `classes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `inscriptions_ibfk_2` FOREIGN KEY (`id_eleve`) REFERENCES `eleves` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `inscriptions_ibfk_3` FOREIGN KEY (`id_annee`) REFERENCES `annees_scolaires` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Contraintes pour la table `notes_eleves`
+--
+ALTER TABLE `notes_eleves`
+  ADD CONSTRAINT `notes_eleves_ibfk_1` FOREIGN KEY (`id_cd`) REFERENCES `classes_disciplines` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `notes_eleves_ibfk_2` FOREIGN KEY (`id_insc`) REFERENCES `inscriptions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
