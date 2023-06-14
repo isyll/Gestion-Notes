@@ -1,5 +1,5 @@
 <form action="<?= $studentFormTarget ?? $urls['create-student'] ?>" method="post" id="formAnnee"
-    class="text-start m-auto">
+    class="text-start m-auto" enctype="multipart/form-data">
     <input type="hidden" name="current-url" value="<?= $currentURL ?>" />
     <input type="hidden" name="niveauId" value="<?= $niveau['id'] ?? '' ?>" />
     <input type="hidden" name="classeId" value="<?= $classe['id'] ?? '' ?>" />
@@ -22,6 +22,18 @@
                 id="lastname" value="<?= $student['nom'] ?? '' ?>" />
             <div id="ln" class="form-text text-danger">
                 <?= $errors['lastname'] ?? '' ?>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <label for="gender" class="form-label">Sexe</label>
+            <select id="gender" name="gender" class="form-select" required>
+                <option value="">Choisir...</option>
+                <option value="homme" <?= isset($student['sexe']) ? ($student['sexe'] === 'homme' ? 'selected' : '') : '' ?>>Homme</option>
+                <option value="femme" <?= isset($student['sexe']) ? ($student['sexe'] === 'femme' ? 'selected' : '') : '' ?>>Femme</option>
+            </select>
+            <div id="ln" class="form-text text-danger">
+                <?= $errors['gender'] ?? '' ?>
             </div>
         </div>
 
@@ -65,6 +77,10 @@
             <div id="adr" class="form-text">
                 <?= $errors['address'] ?? '' ?>
             </div>
+        </div>
+        <div class="col-12 mb-3">
+            <label for="photo" class="form-label">Photo de profil</label>
+            <input class="form-control" type="file" id="photo" name="photo">
         </div>
     </div>
 

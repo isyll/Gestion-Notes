@@ -12,6 +12,11 @@ return [
         'handler' => 'HomeController@page404',
         'title' => 'Page non trouvée'
     ],
+    // 'testt' => [
+    //     'name' => 'test',
+    //     'handler' => 'HomeController@test',
+    //     'title' => 'okk'
+    // ],
     '/no-conf' => [
         'name' => 'init-page',
         'handler' => 'HomeController@initPage',
@@ -208,6 +213,14 @@ return [
     '/api/update-student-notes' => [
         'name' => 'update-student-notes',
         'handler' => 'APIController@updateStudentNotes',
+    ],
+    '/api/remove-subject-to-student' => [
+        'name' => 'remove-subject-to-student',
+        'handler' => 'APIController@removeSubjectToStudent',
+    ],
+    '/api/restore-subject-to-student' => [
+        'name' => 'restore-subject-to-student',
+        'handler' => 'APIController@restoreSubjectToStudent',
     ],
     '/api/getsubjectbycode/{code}' => [
         'name' => 'get-subject-by-code',

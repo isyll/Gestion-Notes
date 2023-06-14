@@ -31,7 +31,7 @@ class FormValidator
 
             if (!$value) {
                 if (array_search('required', $rules) !== false)
-                    $this->errors[$name] = $rules['error_msg'];
+                    $this->errors['missing'] = $rules['error_msg'];
                 continue;
             }
 
@@ -105,7 +105,7 @@ class FormValidator
                 if (in_array('to_upper_case', $process))
                     $datas[$field['name']] = strtoupper($datas[$field['name']]);
                 if (in_array('capitalize', $process))
-                    $datas[$field['name']] = ucwords($datas[$field['name']]);
+                    $datas[$field['name']] = ucwords(strtolower($datas[$field['name']]));
             }
 
             if ($datas[$field['name']] == '')

@@ -16,7 +16,7 @@ class NiveauxController extends BaseController
         $this->data['current'] = 'niveaux';
         $this->data['niveaux'] = $this->niveauxModel->getNiveaux();
 
-        echo $this->render('niveaux', $this->data);
+        echo $this->render('niveaux', $this->data, scripts: ['niveaux']);
     }
 
     public function createNiveau()
@@ -74,7 +74,7 @@ class NiveauxController extends BaseController
             $this->session->set('msg', $this->error('Formulaire invalide'));
             $this->session->set('form-errors', $errors);
         } else {
-            if ($this->niveauxModel->niveauIdExists((int) $_POST['niveauId'])) {
+            if (isset($_POST['niveauId']) && $this->niveauxModel->niveauIdExists((int) $_POST['niveauId'])) {
                 if ($this->niveauxModel->editNiveau($_POST))
                     $this->session->set('msg', $this->success('Le niveau a bien été modifié'));
                 else

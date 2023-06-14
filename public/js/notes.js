@@ -1,5 +1,7 @@
 $(function () {
-    let dbNotes = getNotes();
+    let dbNotes = getNotes(),
+        notDoThisSubject = "Ne fait pas cette discipline",
+        faireDisc;
 
     function getFilterData() {
         let datas = {};
@@ -61,6 +63,22 @@ $(function () {
         enableStudentNotes();
     }
 
+    function enableSubjectStudentStates() {
+        $(".hasThisSubject")
+            .toArray()
+            .some(function (e) {
+                $(e).prop("disabled", false);
+            });
+    }
+
+    function disableSubjectStudentStates() {
+        $(".hasThisSubject")
+            .toArray()
+            .some(function (e) {
+                $(e).prop("disabled", true);
+            });
+    }
+
     clearMaxNoteSep();
 
     function notesFilterHandler() {
@@ -80,6 +98,8 @@ $(function () {
         clearNotes();
 
         if (given) {
+            enableSubjectStudentStates();
+
             $.ajax({
                 method: "post",
                 url: baseURL + data["get-student-notes"],
@@ -91,7 +111,27 @@ $(function () {
                 studentNoteColorHandler();
                 if (response.status === "done") {
                     for (const r of response.datas.notes) {
-                        $('[data-student-id="' + r.e_id + '"]').val(r.note);
+                        $('.studentNote[data-student-id="' + r.e_id + '"]').val(
+                            r.note
+                        );
+                    }
+
+                    faireDisc = response.datas.cde;
+
+                    for (const r of faireDisc) {
+                        $(
+                            '.hasThisSubject[data-student-id="' + r.e_id + '"]'
+                        ).prop("checked", r.faire_disc ? true : false);
+
+                        $('.studentNote[data-student-id="' + r.e_id + '"]')
+                            .prop("disabled", r.faire_disc ? false : true)
+                            .addClass(r.faire_disc ? "" : "do-not-subject");
+
+                        $(
+                            '.notDoThisSubject[data-student-id="' +
+                                r.e_id +
+                                '"]'
+                        ).text(r.faire_disc ? "" : notDoThisSubject);
                     }
 
                     if (response.datas.notes.length) {
@@ -142,6 +182,7 @@ $(function () {
             });
         } else {
             disableStudentNotes();
+            disableSubjectStudentStates();
         }
     }
 
@@ -216,7 +257,8 @@ $(function () {
         $(".studentNote")
             .toArray()
             .some(function (element) {
-                $(element).prop("disabled", false);
+                if (!$(element).hasClass("do-not-subject"))
+                    $(element).prop("disabled", false);
             });
     }
 
@@ -343,6 +385,81 @@ $(function () {
                         if (parseInt($(e).val()) < max / 2) color(e, "danger");
                         else color(e, "success");
                     }
+                }
+            });
+        });
+
+    $(".hasThisSubject")
+        .toArray()
+        .some(function (e) {
+            $(e).on("click", function (event) {
+                const currentCheck = this;
+
+                if ($(this).is(":checked")) {
+                    $(
+                        '.studentNote[data-student-id="' +
+                            $(currentCheck).attr("data-student-id") +
+                            '"]'
+                    ).prop("disabled", false);
+
+                    $(
+                        '.notDoThisSubject[data-student-id="' +
+                            $(currentCheck).attr("data-student-id") +
+                            '"]'
+                    ).text("");
+
+                    let datas = {
+                        e_id: $(currentCheck).attr("data-student-id"),
+                        subjectId: $("#chooseSubject").val(),
+                        classeId: getClasseDatas().id,
+                    };
+
+                    $.ajax({
+                        method: "post",
+                        url: baseURL + data["restore-subject-to-student"],
+                        data: JSON.stringify(datas),
+                        dataType: "json",
+                    }).done(function (response) {
+                        // console.log(response["datas"]);
+                    });
+                } else {
+                    $(
+                        '.studentNote[data-student-id="' +
+                            $(currentCheck).attr("data-student-id") +
+                            '"]'
+                    )
+                        .val("")
+                        .prop("disabled", true);
+
+                    classAverage();
+                    removeColor(
+                        document.querySelector(
+                            '.studentNote[data-student-id="' +
+                                $(currentCheck).attr("data-student-id") +
+                                '"]'
+                        )
+                    );
+
+                    $(
+                        '.notDoThisSubject[data-student-id="' +
+                            $(currentCheck).attr("data-student-id") +
+                            '"]'
+                    ).text(notDoThisSubject);
+
+                    let datas = {
+                        e_id: $(currentCheck).attr("data-student-id"),
+                        subjectId: $("#chooseSubject").val(),
+                        classeId: getClasseDatas().id,
+                    };
+
+                    $.ajax({
+                        method: "post",
+                        url: baseURL + data["remove-subject-to-student"],
+                        data: JSON.stringify(datas),
+                        dataType: "json",
+                    }).done(function (response) {
+                        // console.log(response["datas"]);
+                    });
                 }
             });
         });

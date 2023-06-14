@@ -35,6 +35,19 @@ return [
             'process' => ['del_multiple_spaces', 'capitalize']
         ],
         [
+            'name' => 'gender',
+            'rules' => [
+                'required',
+                'error_msg' => 'Le sexe est manquant',
+                'type' => [
+                    'value' => 'set',
+                    'error_msg' => 'Le sexe ne répond pas aux citères',
+                    'set_values' => ['homme', 'femme']
+                ],
+            ],
+            'process' => ['del_multiple_spaces', 'to_lower_case']
+        ],
+        [
             'name' => 'email',
             'rules' => [
                 'min_length' => [
@@ -116,42 +129,42 @@ return [
     ],
 
     'edit-niveau' => [
-        [
-            'name' => 'niveauId',
-            'rules' => [
-                'required',
-                'type' => [
-                    'value' => 'number',
-                    'error_msg' => 'Le niveau choisi est invalide'
-                ],
-                'error_msg' => 'Le niveau est requis'
-            ],
-            'process' => ['del_all_spaces']
-        ],
-        [
-            'name' => 'newNiveauLibelle',
-            'rules' => [
-                'required',
-                'error_msg' => 'Le libellé est requis'
-            ],
-            'process' => ['del_multiple_spaces', 'capitalize']
-        ],
-        [
-            'name' => 'cycleName',
-            'rules' => [
-                'required',
-                'error_msg' => 'Le nom du cycle est requis'
-            ],
-            'process' => ['del_multiple_spaces', 'capitalize']
-        ],
-        [
-            'name' => 'cyclesNumber',
-            'rules' => [
-                'required',
-                'error_msg' => 'Le nom de cycles est requis'
-            ],
-            'process' => ['del_multiple_spaces']
-        ],
+        // [
+        //     'name' => 'niveauId',
+        //     'rules' => [
+        //         'required',
+        //         'type' => [
+        //             'value' => 'number',
+        //             'error_msg' => 'Le niveau choisi est invalide'
+        //         ],
+        //         'error_msg' => 'Le niveau est requis'
+        //     ],
+        //     'process' => ['del_all_spaces']
+        // ],
+        // [
+        //     'name' => 'newNiveauLibelle',
+        //     'rules' => [
+        //         'required',
+        //         'error_msg' => 'Le libellé est requis'
+        //     ],
+        //     'process' => ['del_multiple_spaces', 'capitalize']
+        // ],
+        // [
+        //     'name' => 'cycleName',
+        //     'rules' => [
+        //         'required',
+        //         'error_msg' => 'Le nom du cycle est requis'
+        //     ],
+        //     'process' => ['del_multiple_spaces', 'capitalize']
+        // ],
+        // [
+        //     'name' => 'cyclesNumber',
+        //     'rules' => [
+        //         'required',
+        //         'error_msg' => 'Le nom de cycles est requis'
+        //     ],
+        //     'process' => ['del_multiple_spaces']
+        // ],
     ],
 
     'edit-classe' => [
@@ -260,11 +273,11 @@ return [
             'name' => 'niveauId',
             'rules' => [
                 'required',
+                'error_msg' => 'Le niveau est requis',
                 'type' => [
                     'value' => 'number',
                     'error_msg' => 'Le niveau choisi est invalide'
                 ],
-                'error_msg' => 'Le niveau est requis'
             ],
             'process' => ['del_all_spaces']
         ],

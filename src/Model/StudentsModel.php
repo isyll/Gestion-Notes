@@ -93,7 +93,7 @@ class StudentsModel
         $this->db->getPDO()->query('BEGIN');
 
         $result = $this->db->pexec(
-            'INSERT INTO eleves(numero,type,prenom,nom,adresse,email,telephone,naissance) VALUES(?,?,?,?,?,?,?,?)',
+            'INSERT INTO eleves(numero,type,prenom,nom,adresse,email,telephone,naissance,photo) VALUES(?,?,?,?,?,?,?,?,?)',
             [
                 $data['numero'],
                 $data['studentType'],
@@ -103,6 +103,7 @@ class StudentsModel
                 $data['email'],
                 $data['phone'],
                 $data['birthdate'],
+                $data['photo'],
             ]
         );
 
@@ -115,7 +116,107 @@ class StudentsModel
             ]
         );
 
+        $this->db->pexec(
+            'INSERT INTO cd_eleves(id_cd, id_insc)
+            SELECT cd.id, ? FROM classes_disciplines as cd
+            JOIN classes as cl ON cl.id = cd.id_classe
+            AND cl.id = ? WHERE cd.id_annee = ?',
+            [
+                $this->db->getPDO()->lastInsertId(),
+                $data['classeId'],
+                $data['yearId']
+            ]
+        );
+
         return $this->db->getPDO()->query('COMMIT');
+    }
+
+    public function removeSubjectToStudent(array $data)
+    {
+        $this->removeStudentNotes($data);
+
+        return $this->db->pexec(
+            'UPDATE cd_eleves as cde
+            JOIN inscriptions as i
+            ON i.id = cde.id_insc
+            AND i.id_eleve = ?
+            JOIN classes_disciplines as cd
+            ON cd.id = cde.id_cd
+            AND cd.id_discipline = ?
+            AND cd.id_classe = ?
+            AND cd.id_annee = ?
+            SET cde.faire_disc = 0',
+            [
+                $data['e_id'],
+                $data['subjectId'],
+                $data['classeId'],
+                $data['yearId']
+            ]
+        );
+    }
+
+    public function removeStudentNotes(array $data)
+    {
+        return $this->db->pexec(
+            'DELETE ne FROM notes_eleves ne
+            JOIN inscriptions as i
+            ON i.id = ne.id_insc
+            JOIN eleves as e
+            ON e.id = i.id_eleve AND e.id = ?
+            JOIN classes_disciplines as cd
+            ON cd.id = ne.id_cd
+            AND cd.id_discipline = ?
+            AND cd.id_annee = ?',
+            [
+                $data['e_id'],
+                $data['subjectId'],
+                $data['yearId'],
+            ],
+            'fetch'
+        );
+    }
+
+    public function restoreSubjectToStudent(array $data)
+    {
+        return $this->db->pexec(
+            'UPDATE cd_eleves as cde
+            JOIN inscriptions as i
+            ON i.id = cde.id_insc
+            AND i.id_eleve = ?
+            JOIN classes_disciplines as cd
+            ON cd.id = cde.id_cd
+            AND cd.id_discipline = ?
+            AND cd.id_classe = ?
+            AND cd.id_annee = ?
+            SET cde.faire_disc = 1',
+            [
+                $data['e_id'],
+                $data['subjectId'],
+                $data['classeId'],
+                $data['yearId']
+            ]
+        );
+    }
+
+    public function getCDE(array $data)
+    {
+        return $this->db->pexec(
+            'SELECT cde.*, i.id_eleve as e_id
+            FROM cd_eleves as cde
+            JOIN inscriptions as i
+            ON i.id = cde.id_insc
+            JOIN classes_disciplines as cd
+            ON cd.id = cde.id_cd
+            AND cd.id_discipline = ?
+            AND cd.id_classe = ?
+            AND cd.id_annee = ?',
+            [
+                $data['subjectId'],
+                $data['classeId'],
+                $data['yearId']
+            ],
+            'fetchAll'
+        );
     }
 
     public function editStudent(int $id, array $data)
@@ -164,4 +265,27 @@ class StudentsModel
             [$id]
         );
     }
+
+    // public function updateupdatestudentsnotes()
+    // {
+    //     $allStudents = $this->db->pexec(
+    //         'SELECT * FROM eleves WHERE supprime = 0',
+    //         [],
+    //         'fetchAll'
+    //     );
+
+    //     $sql = 'INSERT INTO cd_eleves(id_cd, id_insc)
+    //         SELECT cd.id, i.id FROM classes_disciplines as cd
+    //         JOIN inscriptions as i
+    //         ON i.id_annee = cd.id_annee
+    //         AND i.id_classe = cd.id_classe
+    //         AND i.id_eleve = ?';
+
+    //     $stmt = $this->db->getPDO()->prepare($sql);
+
+    //     foreach ($allStudents as $s)
+    //         $stmt->execute([
+    //             $s['id']
+    //         ]);
+    // }
 }

@@ -89,6 +89,7 @@ class APIController extends BaseController
             $datas['yearId'] = (int) $this->data['yearInfos']['id'];
             $d['notes']      = $this->notesModel->filterNotes($datas);
             $d['cd']         = $this->subjectsModel->getClasseDiscipline($datas);
+            $d['cde']        = $this->studentsModel->getCDE($datas);
 
             $result = [
                 'status' => 'done',
@@ -151,6 +152,42 @@ class APIController extends BaseController
                     'msg' => 'Les données ont été sauvegardées',
                 ];
             }
+        }
+
+        $this->jsonResponse($result);
+    }
+
+    public function removeSubjectToStudent()
+    {
+        $datas  = $this->jsonDecode();
+        $result = [];
+
+        if (
+            array_key_exists('e_id', $datas) &&
+            array_key_exists('subjectId', $datas) &&
+            array_key_exists('classeId', $datas)
+        ) {
+            $datas['yearId'] = (int) $this->data['yearInfos']['id'];
+
+            $this->studentsModel->removeSubjectToStudent($datas);
+        }
+
+        $this->jsonResponse($result);
+    }
+
+    public function restoreSubjectToStudent()
+    {
+        $datas  = $this->jsonDecode();
+        $result = [];
+
+        if (
+            array_key_exists('e_id', $datas) &&
+            array_key_exists('subjectId', $datas) &&
+            array_key_exists('classeId', $datas)
+        ) {
+            $datas['yearId'] = (int) $this->data['yearInfos']['id'];
+
+            $this->studentsModel->restoreSubjectToStudent($datas);
         }
 
         $this->jsonResponse($result);

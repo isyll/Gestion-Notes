@@ -105,8 +105,19 @@ class StudentsController extends BaseController
             } else {
                 $_POST['yearId'] = $this->schoolYearsModel->getYearByLibelle($this->data['currentYear'])['id'];
 
-                $this->studentsModel->saveStudent($_POST);
-                $this->session->set('msg', $this->success('Elève créé avec succès'));
+                $_POST['photo'] = null;
+
+                if (array_key_exists('photo', $_FILES) && array_key_exists('error', $_FILES['photo']))
+                    if ($_FILES['photo']['size'] < 500000 && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+                        $content        = file_get_contents($_FILES['photo']['tmp_name']);
+                        $_POST['photo'] = $content;
+                    }
+
+                if ($this->studentsModel->saveStudent($_POST))
+                    $this->session->set('msg', $this->success('Elève créé avec succès'));
+                else
+                    $this->session->set('msg', $this->error("Erreur lors de l'insertion"));
+
 
                 $this->redirect($this->data['urls']['list-students'] . "{$_POST['classeId']}", false);
             }
@@ -137,6 +148,15 @@ class StudentsController extends BaseController
                 $this->session->set('msg', $this->error('Un autre élève possède le même email'));
             } else {
                 $this->session->set('msg', $this->success('Eléve modifié avec succès'));
+
+                $_POST['photo'] = null;
+
+                if (array_key_exists('photo', $_FILES) && array_key_exists('error', $_FILES['photo']))
+                    if ($_FILES['photo']['size'] < 500000 && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+                        $content        = file_get_contents($_FILES['photo']['tmp_name']);
+                        $_POST['photo'] = $content;
+                    }
+
                 $this->studentsModel->editStudent($_POST['studentId'], $_POST);
             }
 

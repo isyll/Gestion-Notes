@@ -75,9 +75,11 @@
                         </div>
                     </div>
                 </div>
-                <table class="table table-hover mt-2 table-striped">
+                <table class="table table-hover mt-2">
                     <thead>
                         <tr>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
                             <th scope="col"></th>
                             <th scope="col"></th>
                             <th scope="col"></th>
@@ -89,6 +91,13 @@
                             <?php foreach ($students as $s): ?>
                                 <tr>
                                     <td>
+                                        <?php if (isset($s['photo'])): ?>
+                                            <?php $img = base64_encode($s['photo']) ?>
+                                            <img style="width: 60px;" class=" rounded-circle img-thumbnail"
+                                                src="data:image/jpeg;base64,<?= $img; ?>" alt="Image profil">
+                                        <?php endif ?>
+                                    </td>
+                                    <td class="pt-2">
                                         <a href="<?= "{$urls['student-page']}{$s['id']}" ?>"
                                             class="text-reset text-decoration-none">
                                             <?= $s['prenom'] ?>
@@ -115,11 +124,22 @@
                                             </button>
                                         </form>
                                     </td>
-                                    <td class=" d-flex">
-                                        <input data-student-id="<?= $s['id'] ?>" name="<?= 'notes-' . $s['id'] ?>"
-                                            style="width:100px;" class=" studentNote form-control" type="number" value="" />
-                                        <div class="max-note-sep fs-5 fw-bold">/</div>
-                                        <div class="max-note fs-5 fw-bold"></div>
+                                    <td class=" d-flex flex-column">
+                                        <div class="d-flex">
+                                            <input data-student-id="<?= $s['id'] ?>" name="<?= 'notes-' . $s['id'] ?>"
+                                                style="width:100px;" class=" studentNote form-control" type="number" value="" />
+                                            <div class="max-note-sep fs-5 fw-bold">/</div>
+                                            <div class="max-note fs-5 fw-bold"></div>
+                                        </div>
+                                        <small style="font-size: 83%;" class="text-danger notDoThisSubject"
+                                            data-student-id="<?= $s['id'] ?>"></small>
+                                    </td>
+                                    <td>
+                                        <div class="form-check form-switch">
+                                            <input name="<?= 'do-this-sbj-' . $s['id'] ?>" data-student-id="<?= $s['id'] ?>"
+                                                type="checkbox" class="hasThisSubject form-check-input" disabled checked
+                                                role="switch" />
+                                        </div>
                                     </td>
                                 </tr>
                             <?php endforeach ?>
@@ -144,6 +164,22 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="modal-btn-yes btn btn-danger">Oui</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Non</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="confirmDeleteStudentSubject">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content bg-danger">
+            <div class="modal-header">
+                <h6 class="modal-title text-white" id="myModalLabel">Voulez-vous retirer cette discipline à cet élève ?
+                </h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="modal-btn-yes btn btn-danger" data-bs-dismiss="modal">Oui</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Non</button>
             </div>
         </div>
