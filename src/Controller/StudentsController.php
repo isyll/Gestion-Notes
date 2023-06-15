@@ -81,9 +81,7 @@ class StudentsController extends BaseController
     public function createStudent()
     {
         $_POST['numero'] = rand(1, 10000);
-
         $this->loadValidationRules('create-student', $_POST);
-
         $this->fv->validate();
 
         if ($errors = $this->fv->getErrors()) {
@@ -147,20 +145,19 @@ class StudentsController extends BaseController
             } elseif ($_POST['email'] && $this->studentsModel->getStudentByEmail($_POST['email'])) {
                 $this->session->set('msg', $this->error('Un autre élève possède le même email'));
             } else {
-                $this->session->set('msg', $this->success('Eléve modifié avec succès'));
-
                 $_POST['photo'] = null;
 
                 if (array_key_exists('photo', $_FILES) && array_key_exists('error', $_FILES['photo']))
                     if ($_FILES['photo']['size'] < 500000 && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-                        $content        = file_get_contents($_FILES['photo']['tmp_name']);
-                        $_POST['photo'] = $content;
+                        $_POST['photo'] = file_get_contents($_FILES['photo']['tmp_name']);
                     }
 
                 $this->studentsModel->editStudent($_POST['studentId'], $_POST);
+                $this->session->set('msg', $this->success('Eléve modifié avec succès'));
             }
 
             $this->studentsModel->restoreStudent($_POST['studentId']);
+            $this->redirect($this->data['urls']['list-students'] . "{$_POST['classeId']}", false);
         }
 
         $this->redirect($_POST['current-url'] ?? '', false);

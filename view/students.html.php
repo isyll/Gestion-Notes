@@ -4,11 +4,11 @@
 <div class="container">
     <div class="row">
         <?php if (isset($msg)): ?>
-            <div class="text-<?= $msg['type'] ?>">
+            <div class="alert alert-<?= $msg['type'] ?>" role="alert">
                 <?= $msg['value'] ?>
             </div>
         <?php endif ?>
-        <div id="resultMsg"></div>
+        <div id="resultMsg" class="alert"></div>
     </div>
 
     <div class="row position-relative">
@@ -32,7 +32,7 @@
                 <div>Effectif :
                     <?= count($students ?? []) ?>
                 </div>
-                <div id="classAvg">Moyenne classe :
+                <div id="classAvg" class="fw-bold">Moyenne classe :
                 </div>
             </div>
             <div class="row">
@@ -93,8 +93,11 @@
                                     <td>
                                         <?php if (isset($s['photo'])): ?>
                                             <?php $img = base64_encode($s['photo']) ?>
-                                            <img style="width: 60px;" class=" rounded-circle img-thumbnail"
+                                            <img style="width: 80px;" class=" rounded-circle img-thumbnail"
                                                 src="data:image/jpeg;base64,<?= $img; ?>" alt="Image profil">
+                                        <?php else: ?>
+                                            <img style="width: 80px;" class=" disabled rounded-circle img-thumbnail"
+                                                src="/img/profiles/placeholderprofile.jpg">
                                         <?php endif ?>
                                     </td>
                                     <td class="pt-2">
@@ -131,7 +134,7 @@
                                             <div class="max-note-sep fs-5 fw-bold">/</div>
                                             <div class="max-note fs-5 fw-bold"></div>
                                         </div>
-                                        <small style="font-size: 83%;" class="text-danger notDoThisSubject"
+                                        <small style="font-size: 74%;" class=" notDoThisSubject"
                                             data-student-id="<?= $s['id'] ?>"></small>
                                     </td>
                                     <td>
@@ -149,7 +152,11 @@
             </div>
 
             <div class="d-flex">
-                <button id="updateNotesBtn" type="button" class="btn btn-primary ms-auto me-3">Enregistrer</button>
+                <button id="updateNotesBtn" type="button" class="btn btn-primary ms-auto me-3" onclick="modal()">
+                    <a href="#" class="text-reset text-decoration-none">
+                        Enregistrer
+                    </a>
+                </button>
             </div>
         </div>
     </div>
@@ -181,6 +188,15 @@
             <div class="modal-footer">
                 <button type="button" class="modal-btn-yes btn btn-danger" data-bs-dismiss="modal">Oui</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Non</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modalSpinner" class="modal bd-example-modal-lg" data-backdrop="static" data-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content" style="width: 48px">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
             </div>
         </div>
     </div>

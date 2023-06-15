@@ -36,7 +36,16 @@ $(function () {
     $(".inputCoef")
         .toArray()
         .some(function (e) {
-            e.addEventListener("input", updateBtnActivity);
+            e.addEventListener("input", function () {
+                let val = $(e).val();
+
+                updateBtnActivity();
+
+                if (parseInt(val) < 10)
+                    $("#updateCoefsBtn").prop("disabled", true);
+                else if (!compareMaxNotes(getMaxNoteDatas(), dbMaxNoteDatas))
+                    $("#updateCoefsBtn").prop("disabled", false);
+            });
         });
 
     $("#updateCoefsBtn").on("click", function () {

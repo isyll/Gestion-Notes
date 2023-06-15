@@ -15,6 +15,7 @@
     <style>
         * {
             font-family: 'Roboto', Calibri, sans-serif;
+            font-size: 102.3%;
         }
     </style>
 </head>

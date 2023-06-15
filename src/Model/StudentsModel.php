@@ -221,20 +221,31 @@ class StudentsModel
 
     public function editStudent(int $id, array $data)
     {
+        $p = $data['photo'] ?? null;
+
+        $sql = "UPDATE eleves SET prenom = ?, nom = ?, type = ?, numero = ?,
+        adresse = ?, email = ?, telephone = ?, naissance = ? ";
+        $sql .= $p ? ', photo = ? ' : '';
+
+        $sql .= "WHERE id = $id";
+
+        $d = [
+            $data['firstname'],
+            $data['lastname'],
+            $data['studentType'],
+            $data['numero'],
+            $data['address'],
+            $data['email'],
+            $data['phone'],
+            $data['birthdate'],
+        ];
+
+        if ($p)
+            $d[] = $p;
+
         return $this->db->pexec(
-            "UPDATE eleves SET prenom = ?, nom = ?, type = ?, numero = ?,
-            adresse = ?, email = ?, telephone = ?, naissance = ?
-            WHERE id = $id",
-            [
-                $data['firstname'],
-                $data['lastname'],
-                $data['studentType'],
-                $data['numero'],
-                $data['address'],
-                $data['email'],
-                $data['phone'],
-                $data['birthdate'],
-            ]
+            $sql,
+            $d
         );
     }
 

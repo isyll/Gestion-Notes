@@ -50,7 +50,7 @@
         </div>
         <div class="col-12">
             <label for="birthdate" class="form-label">Date de naissance</label>
-            <input type="date" name="birthdate" class="form-control" value="<?= $student['naissance'] ?? '' ?>" />
+            <input type="date" id="birthdate" name="birthdate" class="form-control" value="<?= $student['naissance'] ?? '' ?>" />
             <div id="ln" class="form-text text-danger">
                 <?= $errors['birthdate'] ?? '' ?>
             </div>
@@ -58,7 +58,9 @@
 
         <div class="col-12">
             <label for="email" class="form-label">Adresse email</label>
-            <input type="email" class="form-control" name="email" id="email" value="<?= $student['email'] ?? '' ?>" />
+            <input type="email" class="form-control" name="email" id="email" value="<?= $student['email'] ?? '' ?>
+
+            " />
             <div id="em" class="form-text text-danger">
                 <?= $errors['email'] ?? '' ?>
             </div>

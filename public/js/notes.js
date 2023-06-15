@@ -98,6 +98,7 @@ $(function () {
         clearNotes();
 
         if (given) {
+            classAverage();
             enableSubjectStudentStates();
 
             $.ajax({
@@ -234,13 +235,13 @@ $(function () {
                     updateSaveBtnActivity();
                     classAverage();
 
-                    $("#resultMsg").removeClass("text-danger");
-                    $("#resultMsg").addClass("text-success");
+                    $("#resultMsg").removeClass("alert-danger");
+                    $("#resultMsg").addClass("alert-success");
                     $("#resultMsg").text(response.datas.msg);
                 })
                 .fail(function (response) {
-                    $("#resultMsg").removeClass("text-success");
-                    $("#resultMsg").addClass("text-danger");
+                    $("#resultMsg").removeClass("alert-success");
+                    $("#resultMsg").addClass("alert-danger");
                     $("#resultMsg").text(response.datas.msg);
                 });
     }
@@ -331,11 +332,11 @@ $(function () {
 
                 if (val != "" && !isNaN(val)) {
                     total++;
-                    sum += parseInt(val);
+                    sum += parseFloat(val);
                 }
             });
 
-        avg = sum / total;
+        avg = total !== 0 ? Math.floor((sum / total) * 100) / 100 : "";
         $("#classAvg").text("Moyenne classe : " + avg);
     }
 
@@ -378,7 +379,7 @@ $(function () {
                 if (!isNaN(max)) {
                     let val = $(e).val();
 
-                    if (val > max) $(e).val(max);
+                    if (val > max) $(e).val(String(val).slice(0, -1));
                     else if (val < 0) $(e).val(0);
 
                     if (process($(e).val()) != "") {
@@ -464,3 +465,10 @@ $(function () {
             });
         });
 });
+
+function modal() {
+    $("#modalSpinner").modal("show");
+    setTimeout(function () {
+        $("#modalSpinner").modal("hide");
+    }, 600);
+}
