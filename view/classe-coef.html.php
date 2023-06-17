@@ -4,11 +4,11 @@
 <div class="container">
     <div class="row">
         <?php if (isset($msg)): ?>
-            <div class="text-<?= $msg['type'] ?>">
+            <div class="alert alert-<?= $msg['type'] ?>">
                 <?= $msg['value'] ?>
             </div>
         <?php endif ?>
-        <div id="resultMsg"></div>
+        <div id="resultMsg" class="alert p-0"></div>
     </div>
     <div>
         <div class="row">
@@ -22,8 +22,11 @@
                     <thead>
                         <tr>
                             <th scope="col">Disciplines</th>
-                            <th scope="col">Ressource</th>
-                            <th scope="col">Examen</th>
+                            <?php foreach ($noteTypes as $nt): ?>
+                                <th scope="col">
+                                    <?= $nt['nom_type'] ?>
+                                </th>
+                            <?php endforeach ?>
                             <th scope="col"></th>
                         </tr>
                     </thead>
@@ -33,16 +36,15 @@
                                 <td>
                                     <?= $s['nom'] ?>
                                 </td>
-                                <td>
-                                    <input type="number" class="inputCoef form-control" name="<?= $s['code'] ?>"
-                                        typeMax="max_ressource"
-                                        value="<?= $s['coef']['max_ressource'] != 0 ? $s['coef']['max_ressource'] : '' ?>" />
-                                </td>
-                                <td>
-                                    <input type="number" class="inputCoef form-control" name="<?= $s['code'] ?>"
-                                        typeMax="max_examen"
-                                        value="<?= $s['coef']['max_examen'] != 0 ? $s['coef']['max_examen'] : '' ?>" />
-                                </td>
+                                <?php foreach ($noteMax as $nm): ?>
+                                    <?php if ($nm['id_discipline'] == $s['id']): ?>
+                                        <td>
+                                            <input type="number" class="inputCoef form-control"
+                                                data-noteType="<?= $nm['nom_type'] ?>" name="<?= $s['code'] ?>"
+                                                value="<?= $nm['max_note'] ?: '' ?>" />
+                                        </td>
+                                    <?php endif ?>
+                                <?php endforeach ?>
                                 <td>
                                     <form action="<?= $urls['delete-classe-subject'] ?>" method="post">
                                         <input type="hidden" name="classeId" value="<?= $classe['id'] ?>" />

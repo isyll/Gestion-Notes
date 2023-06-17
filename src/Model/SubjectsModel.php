@@ -151,22 +151,6 @@ class SubjectsModel
         );
     }
 
-    public function getSubjectCoef(array $datas)
-    {
-        return $this->db->pexec(
-            'SELECT max_ressource, max_examen FROM classes_disciplines
-            WHERE id_discipline = ?
-            AND id_classe = ?
-            AND id_annee = ?',
-            [
-                $datas['subjectId'],
-                $datas['classeId'],
-                $datas['yearId'],
-            ],
-            'fetch'
-        );
-    }
-
     public function addSubjectToClasse(int $classeId, int $sbjId, int $yearId)
     {
         return $this->db->pexec(
@@ -228,19 +212,69 @@ class SubjectsModel
         );
     }
 
-    public function updateClasseSubjectMax(array $data, string $type)
+    public function getClasseSubjectMax(array $data)
     {
         return $this->db->pexec(
-            "UPDATE classes_disciplines
-            SET $type = ?
-            WHERE id_classe = ?
-            AND id_discipline = ?
-            AND id_annee = ?",
+            "SELECT * FROM cd_typesnote as cdtn
+            JOIN classes_disciplines as cd
+            ON cd.id = cdtn.id_cd
+            AND cd.id_classe = ?
+            AND cd.id_discipline = ?
+            AND cd.id_annee = ?
+            JOIN typesnote_classes as tn
+            ON tn.id = cdtn.id_typesnote
+            AND tn.nom_type = ?",
             [
-                $data[$type],
                 $data['classeId'],
                 $data['subjectId'],
                 $data['yearId'],
+                $data['nom_type'],
+            ],
+            'fetch'
+        );
+    }
+
+    public function insertClasseSubjectMax(array $data)
+    {
+        return $this->db->pexec(
+            "INSERT INTO cd_typesnote(id_cd, id_typesnote, max_note)
+            SELECT cd.id, tn.id, ?
+            FROM classes_disciplines as cd
+            JOIN typesnote_classes as tn
+            ON tn.nom_type = ?
+            AND tn.id_classe = cd.id_classe
+            WHERE cd.id_classe = ?
+            AND cd.id_discipline = ?
+            AND cd.id_annee = ?",
+            [
+                $data['max_note'],
+                $data['nom_type'],
+                $data['classeId'],
+                $data['subjectId'],
+                $data['yearId'],
+            ]
+        );
+    }
+
+    public function updateClasseSubjectMax(array $data)
+    {
+        return $this->db->pexec(
+            "UPDATE cd_typesnote as cdtn
+            JOIN classes_disciplines as cd
+            ON cd.id = cdtn.id_cd
+            AND cd.id_classe = ?
+            AND cd.id_discipline = ?
+            AND cd.id_annee = ?
+            JOIN typesnote_classes as tn
+            ON tn.id = cdtn.id_typesnote
+            AND tn.nom_type = ?
+            SET max_note = ?",
+            [
+                $data['classeId'],
+                $data['subjectId'],
+                $data['yearId'],
+                $data['nom_type'],
+                $data['max_note'],
             ]
         );
     }

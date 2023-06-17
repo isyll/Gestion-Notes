@@ -16,23 +16,26 @@ class NotesModel
     public function filterNotes(array $data)
     {
         return $this->db->pexec(
-            'SELECT ne.*, e.id as e_id,
-            e.prenom, e.nom,
-            cd.max_ressource, cd.max_examen
+            'SELECT ne.*, e.id as e_id, e.prenom, e.nom, cdtn.max_note
             FROM notes_eleves as ne
+            JOIN cd_typesnote as cdtn
+            ON cdtn.id = ne.id_cd_typesnote
+            JOIN typesnote_classes as tn
+            ON tn.id = cdtn.id_typesnote
+            AND tn.nom_type = ?
             JOIN classes_disciplines as cd
-            ON cd.id = ne.id_cd
+            ON cd.id = cdtn.id_cd
             AND cd.id_discipline = ?
             AND cd.id_classe = ?
             JOIN inscriptions as i
             ON i.id = ne.id_insc
             JOIN eleves as e
             ON e.id = i.id_eleve
-            WHERE ne.type_note = ? AND ne.cycle = ?',
+            WHERE ne.cycle = ?',
             [
+                $data['noteType'],
                 $data['subjectId'],
                 $data['classeId'],
-                $data['noteType'],
                 $data['cycle']
             ],
             'fetchAll'

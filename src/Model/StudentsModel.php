@@ -163,8 +163,10 @@ class StudentsModel
             ON i.id = ne.id_insc
             JOIN eleves as e
             ON e.id = i.id_eleve AND e.id = ?
+            JOIN cd_typesnote as cdtn
+            ON cdtn.id = ne.id_cd_typesnote
             JOIN classes_disciplines as cd
-            ON cd.id = ne.id_cd
+            ON cd.id = cdtn.id_cd
             AND cd.id_discipline = ?
             AND cd.id_annee = ?',
             [
@@ -201,7 +203,7 @@ class StudentsModel
     public function getCDE(array $data)
     {
         return $this->db->pexec(
-            'SELECT cde.*, i.id_eleve as e_id
+            'SELECT cde.faire_disc, i.id_eleve as e_id
             FROM cd_eleves as cde
             JOIN inscriptions as i
             ON i.id = cde.id_insc

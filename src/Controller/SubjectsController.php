@@ -29,20 +29,11 @@ class SubjectsController extends BaseController
             $classeId
             && $this->data['classe'] = $this->classesModel->getClasseById($classeId)
         ) {
-            $this->data['niveau']   = $this->classesModel->getClasseNiveau($classeId);
-            $this->data['subjects'] = $this->subjectsModel->getClasseSubjects($classeId);
+            $this->data['niveau']    = $this->classesModel->getClasseNiveau($classeId);
+            $this->data['noteTypes'] = $this->classesModel->getClasseNoteTypes($this->data['classe']['id']);
+            $this->data['subjects']  = $this->subjectsModel->getClasseSubjects($classeId);
 
-            $this->data['subjects'] = array_map(function ($item) {
-                $item['coef'] = $this->subjectsModel->getSubjectCoef(
-                    [
-                        'subjectId' => $item['id'],
-                        'classeId' => $this->data['classe']['id'],
-                        'yearId' => $this->data['yearInfos']['id']
-                    ]
-                );
-
-                return $item;
-            }, $this->data['subjects']);
+            $this->data['noteMax'] = $this->classesModel->getClasseNotesMax($this->data['classe']['id']);
         } else
             Router::pageNotFound();
 

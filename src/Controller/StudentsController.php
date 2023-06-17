@@ -21,6 +21,7 @@ class StudentsController extends BaseController
                 $this->data['niveau']   = $this->classesModel->getClasseNiveau($classeId);
                 $this->data['students'] = $this->classesModel->getStudents($classeId);
                 $this->data['subjects'] = $this->subjectsModel->getClasseSubjects($classeId);
+                $this->data['noteTypes'] = $this->classesModel->getClasseNoteTypes($classeId);
 
                 echo $this->render('students', $this->data, NULL, false, ['notes']);
                 return;

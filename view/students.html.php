@@ -8,7 +8,7 @@
                 <?= $msg['value'] ?>
             </div>
         <?php endif ?>
-        <div id="resultMsg" class="alert"></div>
+        <div id="resultMsg" class="alert p-0"></div>
     </div>
 
     <div class="row position-relative">
@@ -69,8 +69,9 @@
                             <label for="chooseType">Note de</label>
                             <select class="filterNotesSelect form-select" name="noteType" id="chooseType">
                                 <option value="">Choisir</option>
-                                <option value="ressource">Ressource</option>
-                                <option value="examen">Examen</option>
+                                <?php foreach ($noteTypes as $nt): ?>
+                                    <option value="<?= $nt['nom_type'] ?>"><?= $nt['nom_type'] ?></option>
+                                <?php endforeach ?>
                             </select>
                         </div>
                     </div>

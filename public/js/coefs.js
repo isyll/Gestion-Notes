@@ -10,12 +10,12 @@ $(function () {
                 input = $(input);
                 let val = process(input.val()),
                     name = input.attr("name"),
-                    typeMax = input.attr("typeMax");
+                    type = input.attr("data-noteType");
 
                 if (val != "") {
                     if (typeof datas[name] === "undefined") datas[name] = {};
 
-                    datas[name][typeMax] = val;
+                    datas[name][type] = val;
                     input.removeClass("is-invalid");
                 }
             });
@@ -54,7 +54,10 @@ $(function () {
             coefs: {},
         };
 
-        $("#resultMsg").removeClass("text-success text-danger").text("");
+        $("#resultMsg")
+            .removeClass("alert-success alert-danger")
+            .addClass("p-0")
+            .text("");
 
         datas.coefs = getMaxNoteDatas();
 
@@ -68,12 +71,15 @@ $(function () {
                 dataType: "json",
             }).done(function (response) {
                 response = response.datas;
+                console.log(response);
 
                 if (response.status === "done") {
-                    $("#resultMsg").addClass("text-success");
+                    $("#resultMsg")
+                        .addClass("alert-success")
+                        .removeClass("p-0");
                     dbMaxNoteDatas = getMaxNoteDatas();
                     updateBtnActivity();
-                } else $("#resultMsg").addClass("text-danger");
+                } else $("#resultMsg").addClass("alert-danger").removeClass("p-0");
 
                 if (typeof response.errors !== "undefined") {
                     for (const e in response.errors) {

@@ -108,8 +108,10 @@ $(function () {
                 dataType: "json",
             }).done(function (response) {
                 response = response.datas;
+                console.log(response);
 
                 studentNoteColorHandler();
+
                 if (response.status === "done") {
                     for (const r of response.datas.notes) {
                         $('.studentNote[data-student-id="' + r.e_id + '"]').val(
@@ -139,10 +141,7 @@ $(function () {
                         dbNotes = getNotes();
                         classAverage();
 
-                        let maxNote =
-                            response.datas.notes[0][
-                                "max_" + $("#chooseType").val()
-                            ];
+                        let maxNote = response.datas.notes[0]["max_note"];
 
                         clearMaxNote();
                         clearMaxNoteSep();
@@ -155,24 +154,12 @@ $(function () {
                         clearMaxNote();
                         clearMaxNoteSep();
 
-                        if (typeof response.datas.cd !== "undefined") {
+                        if (typeof response.datas.max_note !== "undefined") {
                             enableStudentNotes();
 
-                            if (response.status == "done") {
-                                if (
-                                    response.datas.cd[
-                                        "max_" + $("#chooseType").val()
-                                    ] == 0
-                                )
-                                    disableStudentNotes();
-                                else {
-                                    fillMaxNote(
-                                        response.datas.cd[
-                                            "max_" + $("#chooseType").val()
-                                        ]
-                                    );
-                                }
-                            }
+                            if (response.datas.max_note.max_note == 0)
+                                disableStudentNotes();
+                            else fillMaxNote(response.datas.max_note.max_note);
                         }
                     }
 
@@ -201,6 +188,18 @@ $(function () {
 
     function compareNotesDatas(a1, a2) {
         return JSON.stringify(a1) === JSON.stringify(a2);
+    }
+
+    function success(msg) {
+        $("#resultMsg").removeClass("alert-danger p-0");
+        $("#resultMsg").addClass("alert-success");
+        $("#resultMsg").text(msg);
+    }
+
+    function error(msg) {
+        $("#resultMsg").removeClass("alert-success p-0");
+        $("#resultMsg").addClass("alert-danger");
+        $("#resultMsg").text(msg);
     }
 
     function saveNotesHandler() {
@@ -234,15 +233,10 @@ $(function () {
                     dbNotes = getNotes();
                     updateSaveBtnActivity();
                     classAverage();
-
-                    $("#resultMsg").removeClass("alert-danger");
-                    $("#resultMsg").addClass("alert-success");
-                    $("#resultMsg").text(response.datas.msg);
+                    success(response.datas.msg)
                 })
-                .fail(function (response) {
-                    $("#resultMsg").removeClass("alert-success");
-                    $("#resultMsg").addClass("alert-danger");
-                    $("#resultMsg").text(response.datas.msg);
+                .fail(function () {
+                    error("Une erreur s'est produite veuillez réessayez");
                 });
     }
 
@@ -393,7 +387,7 @@ $(function () {
     $(".hasThisSubject")
         .toArray()
         .some(function (e) {
-            $(e).on("click", function (event) {
+            $(e).on("click", function () {
                 const currentCheck = this;
 
                 if ($(this).is(":checked")) {

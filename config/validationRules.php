@@ -129,42 +129,42 @@ return [
     ],
 
     'edit-niveau' => [
-        // [
-        //     'name' => 'niveauId',
-        //     'rules' => [
-        //         'required',
-        //         'type' => [
-        //             'value' => 'number',
-        //             'error_msg' => 'Le niveau choisi est invalide'
-        //         ],
-        //         'error_msg' => 'Le niveau est requis'
-        //     ],
-        //     'process' => ['del_all_spaces']
-        // ],
-        // [
-        //     'name' => 'newNiveauLibelle',
-        //     'rules' => [
-        //         'required',
-        //         'error_msg' => 'Le libellé est requis'
-        //     ],
-        //     'process' => ['del_multiple_spaces', 'capitalize']
-        // ],
-        // [
-        //     'name' => 'cycleName',
-        //     'rules' => [
-        //         'required',
-        //         'error_msg' => 'Le nom du cycle est requis'
-        //     ],
-        //     'process' => ['del_multiple_spaces', 'capitalize']
-        // ],
-        // [
-        //     'name' => 'cyclesNumber',
-        //     'rules' => [
-        //         'required',
-        //         'error_msg' => 'Le nom de cycles est requis'
-        //     ],
-        //     'process' => ['del_multiple_spaces']
-        // ],
+        [
+            'name' => 'niveauId',
+            'rules' => [
+                'required',
+                'type' => [
+                    'value' => 'number',
+                    'error_msg' => 'Le niveau choisi est invalide'
+                ],
+                'error_msg' => 'Le niveau est requis'
+            ],
+            'process' => ['del_all_spaces']
+        ],
+        [
+            'name' => 'newNiveauLibelle',
+            'rules' => [
+                'required',
+                'error_msg' => 'Le libellé est requis'
+            ],
+            'process' => ['del_multiple_spaces', 'capitalize']
+        ],
+        [
+            'name' => 'cycleName',
+            'rules' => [
+                'required',
+                'error_msg' => 'Le nom du cycle est requis'
+            ],
+            'process' => ['del_multiple_spaces', 'capitalize']
+        ],
+        [
+            'name' => 'cyclesNumber',
+            'rules' => [
+                'required',
+                'error_msg' => 'Le nom de cycles est requis'
+            ],
+            'process' => ['del_multiple_spaces']
+        ],
     ],
 
     'edit-classe' => [

@@ -71,7 +71,7 @@ class ClassesModel
         );
     }
 
-    public function hasStudent(int $classeId, int $studentId) : bool
+    public function hasStudent(int $classeId, int $studentId): bool
     {
         return $this->db->pexec(
             "SELECT e.id FROM eleves AS e
@@ -114,6 +114,77 @@ class ClassesModel
         return $this->db->pexec(
             "UPDATE classes SET libelle = ? WHERE id = ?",
             [$newLibelle, $id]
+        );
+    }
+
+    public function addNoteType(int $classeId, string $noteType, int $yearId)
+    {
+        $result = $this->db->pexec(
+            'INSERT INTO typesnote_classes(id_classe, nom_type)
+            VALUES(?, ?)',
+            [
+                $classeId,
+                $noteType
+            ]
+        );
+
+        $subjectModel = new SubjectsModel($this->db);
+        $subjects     = $subjectModel->getClasseSubjects($classeId);
+
+        foreach ($subjects as $s)
+            $subjectModel->insertClasseSubjectMax([
+                'max_note' => 0,
+                'nom_type' => $noteType,
+                'classeId' => $classeId,
+                'subjectId' => $s['id'],
+                'yearId' => $yearId
+            ]);
+
+        return $result;
+    }
+
+    public function delNoteType(int $niveauId, string $noteType)
+    {
+        return $this->db->pexec(
+            'DELETE FROM typesnote_classes
+            WHERE id_classe = ?
+            AND nom_type = ?',
+            [
+                $niveauId,
+                $noteType
+            ]
+        );
+    }
+
+    public function getClasseNoteTypes(int $classeId)
+    {
+        return $this->db->pexec(
+            'SELECT * FROM typesnote_classes
+            WHERE id_classe = ?',
+            [
+                $classeId
+            ],
+            'fetchAll'
+        );
+    }
+
+    public function getClasseNotesMax(int $classeId)
+    {
+        return $this->db->pexec(
+            'SELECT tn.*, cdtn.max_note, d.id as id_discipline
+            FROM typesnote_classes as tn
+            JOIN cd_typesnote as cdtn
+            ON tn.id = cdtn.id_typesnote
+            JOIN classes_disciplines as cd
+            ON cd.id_classe = tn.id_classe
+            AND cd.id = cdtn.id_cd
+            JOIN disciplines as d
+            ON d.id = cd.id_discipline
+            WHERE tn.id_classe = ?',
+            [
+                $classeId
+            ],
+            'fetchAll'
         );
     }
 }

@@ -87,16 +87,17 @@ class APIController extends BaseController
             ];
         } else {
             $datas['yearId'] = (int) $this->data['yearInfos']['id'];
-            $d['notes']      = $this->notesModel->filterNotes($datas);
-            $d['cd']         = $this->subjectsModel->getClasseDiscipline($datas);
-            $d['cde']        = $this->studentsModel->getCDE($datas);
+            $datas['nom_type'] = $datas['noteType'];
+
+            $d['notes'] = $this->notesModel->filterNotes($datas);
+            $d['max_note']    = $this->subjectsModel->getClasseSubjectMax($datas);
+            $d['cde']   = $this->studentsModel->getCDE($datas);
 
             $result = [
                 'status' => 'done',
-                'msg' => 'test',
+                'msg' => '',
                 'datas' => $d
             ];
-
         }
 
         $this->jsonResponse($result);
@@ -300,65 +301,53 @@ class APIController extends BaseController
                     'status' => 'fail',
                     'msg' => "La classe sélectionné n'existe pas",
                 ];
-            } elseif (empty($datas['coefs'])) {
-                $result = [
-                    'status' => 'fail',
-                    'msg' => "Les données envoyées sont invalides",
-                ];
             } else {
-                $exists = true;
+                if (array_key_exists('coefs', $datas)) {
+                    foreach ($datas['coefs'] as $sbjCode => $maxNotes) {
+                        $sbj = $this->subjectsModel->getSubjectByCode($sbjCode);
 
-                foreach ($datas['coefs'] as $key => $val) {
-                    if (!$this->subjectsModel->getSubjectByCode($key)) {
-                        $exists        = false;
-                        $result['msg'] = "La discipline $key est inexistante";
-                        break;
-                    }
-                }
-
-                if ($exists) {
-                    foreach ($datas['coefs'] as $key => $val) {
-                        $sbj = $this->subjectsModel->getSubjectByCode($key);
-
-                        foreach ($val as $type => $i) {
-                            if ($this->helpers::rmms($i) !== '') {
-                                if (!is_numeric($i)) {
-                                    $result['errors'][$key][] = [
+                        if ($sbj) {
+                            foreach ($maxNotes as $type => $note) {
+                                if (!is_numeric($note)) {
+                                    $result['errors'][$sbjCode][] = [
                                         'typeMax' => $type,
-                                        'msg' => "Le note maximale $i est invalide"
+                                        'msg' => "Le note maximale $note est invalide"
                                     ];
-
-                                    continue;
-                                } elseif ($i < 10) {
-                                    $result['errors'][$key][] = [
+                                } elseif ($note < 10) {
+                                    $result['errors'][$sbjCode][] = [
                                         'typeMax' => $type,
                                         'msg' => "Le note maximale doit être supérieure à 10"
                                     ];
-
-                                    continue;
-                                }
-                            }
-
-                            if (in_array($type, ['max_ressource', 'max_examen'])) {
-                                $this->subjectsModel->updateClasseSubjectMax(
-                                    [
-                                        $type => $i === '' ? 0 : $i,
+                                } else {
+                                    $data = [
+                                        'max_note' => $note,
+                                        'nom_type' => $type,
                                         'subjectId' => $sbj['id'],
                                         'classeId' => $datas['classeId'],
                                         'yearId' => $this->data['yearInfos']['id']
-                                    ],
-                                    $type
-                                );
+                                    ];
+
+                                    if ($this->subjectsModel->getClasseSubjectMax($data))
+                                        $this->subjectsModel->updateClasseSubjectMax($data);
+                                    else
+                                        $this->subjectsModel->insertClasseSubjectMax($data);
+                                }
                             }
-                        }
+                        } else
+                            ;
                     }
 
-                    $result['status'] = isset($result['errors']) ? 'fail' : 'done';
-                    $result['msg']    = isset($result['errors']) ?
+                    $err = isset($result['errors']);
+
+                    $result['status'] = $err ? 'fail' : 'done';
+                    $result['msg']    = $err ?
                         "Erreurs de validation" :
                         "Les données ont été bien mises à jour";
                 } else
-                    $result['status'] = 'fail';
+                    $result = [
+                        'status' => 'fail',
+                        'msg' => "Les données envoyées sont invalides",
+                    ];
             }
 
             $this->jsonResponse($result);

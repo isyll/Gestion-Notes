@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\BaseController;
+use Core\Helpers;
 
 class NiveauxController extends BaseController
 {
@@ -16,7 +17,7 @@ class NiveauxController extends BaseController
         $this->data['current'] = 'niveaux';
         $this->data['niveaux'] = $this->niveauxModel->getNiveaux();
 
-        echo $this->render('niveaux', $this->data, scripts: ['niveaux']);
+        echo $this->render('niveaux', $this->data);
     }
 
     public function createNiveau()

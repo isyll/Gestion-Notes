@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row">
         <?php if (isset($msg)): ?>
-            <div class="text-<?= $msg['type'] ?>">
+            <div class="alert alert-<?= $msg['type'] ?>">
                 <?= $msg['value'] ?>
             </div>
         <?php endif ?>
@@ -69,6 +69,12 @@
                                 <td>
                                     <a href="<?= $urls['classe-coef'] . $c['id'] ?>">Gérer les coefs</a>
                                 </td>
+                                <td>
+                                    <button class="dataClickTransfer manageNiveauBtn btn btn-link" data-bs-toggle="modal"
+                                        data-bs-target="#manageNoteTypes" dataToTransfer="<?= $c['id'] ?>"
+                                        dataTargetId="#classeManageId"
+                                        data-noteTypes='<?= json_encode($c['noteTypes']) ?>'>Types de note</button>
+                                </td>
                             </tr>
                         <?php endforeach ?>
                     <?php endif ?>
@@ -117,6 +123,19 @@
             <div class="modal-footer">
                 <button type="button" class="modal-btn-yes btn btn-danger">Oui</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Non</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" id="manageNoteTypes">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="myModalLabel">Gérer classe</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-footer">
+                <?php include 'parts/forms/classemanageform.html.php'; ?>
             </div>
         </div>
     </div>

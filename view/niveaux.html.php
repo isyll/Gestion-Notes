@@ -4,7 +4,7 @@
 <div class="container w-100">
     <div class="row">
         <?php if (isset($msg)): ?>
-            <div class="text-<?= $msg['type'] ?>">
+            <div class="alert alert-<?= $msg['type'] ?>">
                 <?= $msg['value'] ?>
             </div>
         <?php endif ?>
@@ -77,7 +77,6 @@
             </div>
             <div class="modal-footer">
                 <?php include 'parts/forms/niveauform.html.php'; ?>
-
             </div>
         </div>
     </div>

@@ -98,4 +98,12 @@ class Helpers
             explode('/', $url)
         );
     }
+
+    public static function processArray(array $ar): array
+    {
+        return array_map(function ($item) {
+            return self::rmms(strtolower($item));
+        }, $ar);
+    }
+
 }

@@ -101,6 +101,11 @@ return [
         'handler' => 'NiveauxController@edit',
         'methods' => ['post']
     ],
+    '/manage-classe' => [
+        'name' => 'manage-classe',
+        'handler' => 'ClassesController@manage',
+        'methods' => ['post']
+    ],
     '/create-classe' => [
         'name' => 'create-classe',
         'handler' => 'ClassesController@createClasse',
