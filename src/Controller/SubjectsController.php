@@ -34,10 +34,26 @@ class SubjectsController extends BaseController
             $this->data['subjects']  = $this->subjectsModel->getClasseSubjects($classeId);
 
             $this->data['noteMax'] = $this->classesModel->getClasseNotesMax($this->data['classe']['id']);
+            $this->data['filter']  = $this->filterFunction();
         } else
             Router::pageNotFound();
 
         echo $this->render('classe-coef', $this->data, NULL, false, ['coefs']);
+    }
+
+    private function filterFunction()
+    {
+        return function (array $notes, int $subjectId, string $noteType) {
+            foreach ($notes as $n) {
+                if (
+                    $n['nom_type'] == $noteType &&
+                    $n['id_discipline'] == $subjectId
+                )
+                    return $n['max_note'];
+            }
+
+            return false;
+        };
     }
 
     public function addSubject()

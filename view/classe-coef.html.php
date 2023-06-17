@@ -22,11 +22,14 @@
                     <thead>
                         <tr>
                             <th scope="col">Disciplines</th>
+                            <?php $types = []; ?>
                             <?php foreach ($noteTypes as $nt): ?>
+                                <?php $types[] = $nt['nom_type']; ?>
                                 <th scope="col">
                                     <?= $nt['nom_type'] ?>
                                 </th>
                             <?php endforeach ?>
+                            <?php $nbTypes = count($types); ?>
                             <th scope="col"></th>
                         </tr>
                     </thead>
@@ -36,14 +39,14 @@
                                 <td>
                                     <?= $s['nom'] ?>
                                 </td>
-                                <?php foreach ($noteMax as $nm): ?>
-                                    <?php if ($nm['id_discipline'] == $s['id']): ?>
-                                        <td>
-                                            <input type="number" class="inputCoef form-control"
-                                                data-noteType="<?= $nm['nom_type'] ?>" name="<?= $s['code'] ?>"
-                                                value="<?= $nm['max_note'] ?: '' ?>" />
-                                        </td>
-                                    <?php endif ?>
+                                <?php $i = 0; ?>
+                                <?php foreach ($noteTypes as $nt): ?>
+                                    <td>
+                                        <input type="number" class="inputCoef form-control"
+                                            data-noteType="<?= $nt['nom_type'] ?>" name="<?= $s['code'] ?>"
+                                            value="<?= $filter($noteMax, $s['id'], $nt['nom_type']) ?: '' ?>" />
+                                    </td>
+                                    <?php $i++; ?>
                                 <?php endforeach ?>
                                 <td>
                                     <form action="<?= $urls['delete-classe-subject'] ?>" method="post">

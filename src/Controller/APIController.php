@@ -86,12 +86,12 @@ class APIController extends BaseController
                 'errors' => $errors
             ];
         } else {
-            $datas['yearId'] = (int) $this->data['yearInfos']['id'];
+            $datas['yearId']   = (int) $this->data['yearInfos']['id'];
             $datas['nom_type'] = $datas['noteType'];
 
-            $d['notes'] = $this->notesModel->filterNotes($datas);
-            $d['max_note']    = $this->subjectsModel->getClasseSubjectMax($datas);
-            $d['cde']   = $this->studentsModel->getCDE($datas);
+            $d['notes']    = $this->notesModel->filterNotes($datas);
+            $d['max_note'] = $this->subjectsModel->getClasseSubjectMax($datas);
+            $d['cde']      = $this->studentsModel->getCDE($datas);
 
             $result = [
                 'status' => 'done',

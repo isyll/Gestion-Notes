@@ -108,7 +108,6 @@ $(function () {
                 dataType: "json",
             }).done(function (response) {
                 response = response.datas;
-                console.log(response);
 
                 studentNoteColorHandler();
 
@@ -233,7 +232,7 @@ $(function () {
                     dbNotes = getNotes();
                     updateSaveBtnActivity();
                     classAverage();
-                    success(response.datas.msg)
+                    success(response.datas.msg);
                 })
                 .fail(function () {
                     error("Une erreur s'est produite veuillez réessayez");
